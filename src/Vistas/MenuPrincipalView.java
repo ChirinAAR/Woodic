@@ -10,9 +10,8 @@ import Controlador.*;
  */
 public class MenuPrincipalView extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MenuPrincipalView
-     */
+    MenuPrincipalController controlador = new MenuPrincipalController();
+    
     public MenuPrincipalView() {
         initComponents();
     }
@@ -43,6 +42,11 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         jLabel1.setText("Bienvenido");
 
         jButton1.setText("Generar Pedido");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Lista de Pedidos");
 
@@ -106,7 +110,7 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -115,6 +119,11 @@ public class MenuPrincipalView extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        CrearPedidoView pedido = new CrearPedidoView(this,true);
+        pedido.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
