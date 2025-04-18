@@ -3,14 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vistas;
-import Controlador.*;
 /**
  *
  * @author Alumno
  */
 public class MenuPrincipalView extends javax.swing.JFrame {
 
-    MenuPrincipalController controlador = new MenuPrincipalController();
     
     public MenuPrincipalView() {
         initComponents();

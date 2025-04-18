@@ -1,7 +1,7 @@
 
 package Controlador;
 
-import Vistas.MenuPrincipalView;
+import Vistas.*;
 
 public class Woodic {
 
