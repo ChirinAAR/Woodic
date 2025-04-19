@@ -1,23 +1,14 @@
 
 package Modelo;
+import java.time.LocalDateTime;
 
-
-public class Pedido extends Cliente
+public class Pedido
 {
    private int id_pedido;
    private int precio;
    private int cantidadmod;
-
-   private Fecha fecha;
-
-       public Pedido(int id_pedido, int precio, int cantidadmod, Fecha fecha, String nombreapellido, String direccion, int contacto) {
-        super(nombreapellido, direccion, contacto); // constructor de Cliente
-        this.id_pedido = id_pedido;
-        this.precio = precio;
-        this.cantidadmod = cantidadmod;
-        this.fecha = fecha;
-    }
-
+   private LocalDateTime fecha = LocalDateTime.now();
+   
     public int getId_pedido() {
         return id_pedido;
     }
@@ -42,21 +33,11 @@ public class Pedido extends Cliente
         this.cantidadmod = cantidadmod;
     }
 
-    public Fecha getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(Fecha fecha) {
-        this.fecha = fecha;
-    }
 
-    @Override
-    public String toString() {
-        return "Pedido{" + "id_pedido=" + id_pedido + ", precio=" + precio + ", cantidadmod=" + cantidadmod + ", fecha=" + fecha + '}';
-    }
 
-   
-   
-    
-    
-}
+
+    }

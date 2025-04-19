@@ -3,19 +3,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package Vistas;
+import java.sql.*;
 import Controlador.*;
+import Modelo.*;
+import java.time.LocalDateTime;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 /**
  *
  * @author Alumno
  */
 public class CrearPedidoView extends javax.swing.JDialog {
 
-    /**
-     * Creates new form CrearPedidoView
-     */
+    Placa plac = new Placa();
+    private CrearPedidoController controlador;
+    
     public CrearPedidoView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        controlador = new CrearPedidoController(this, plac);
+        cargarLineasInicial();
     }
 
     /**
@@ -47,6 +55,11 @@ public class CrearPedidoView extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(0, 51, 102));
         jPanel1.setForeground(new java.awt.Color(0, 0, 102));
@@ -73,24 +86,54 @@ public class CrearPedidoView extends javax.swing.JDialog {
 
         jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox1.setText("Aglomerado");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
 
         jCheckBox2.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox2.setText("MDF");
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Linea");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Color");
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jComboBox2MouseClicked(evt);
+            }
+        });
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
 
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Cantidad de Modulos");
 
         jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -103,10 +146,6 @@ public class CrearPedidoView extends javax.swing.JDialog {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
@@ -123,8 +162,12 @@ public class CrearPedidoView extends javax.swing.JDialog {
                             .addComponent(jLabel7)))
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(jButton1))
-                .addContainerGap(76, Short.MAX_VALUE))
+                    .addComponent(jButton1)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,7 +205,7 @@ public class CrearPedidoView extends javax.swing.JDialog {
                 .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -178,6 +221,61 @@ public class CrearPedidoView extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        controlador.guardar();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+
+        if (jCheckBox1.isSelected()) { // Verifica si el checkbox está seleccionado
+            plac.setCompuesto("Aglomerado");
+            controlador.cargarLinea(); // Llama a cargarLinea después de setear el compuesto
+            if (jCheckBox2.isSelected()) {
+                jCheckBox2.setSelected(false); // Deselecciona el otro checkbox si está seleccionado
+            }
+        } else if (!jCheckBox2.isSelected()) {
+            // Si se deselecciona Aglomerado y MDF no está seleccionado, podrías querer limpiar el ComboBox
+            this.getjComboBox1().removeAllItems();
+        }
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    if (jCheckBox2.isSelected()) { // Verifica si el checkbox está seleccionado
+            plac.setCompuesto("MDF");
+            controlador.cargarLinea(); // Llama a cargarLinea después de setear el compuesto
+            if (jCheckBox1.isSelected()) {
+                jCheckBox1.setSelected(false); // Deselecciona el otro checkbox si está seleccionado
+            }
+        } else if (!jCheckBox1.isSelected()) {
+            // Si se deselecciona MDF y Aglomerado no está seleccionado, podrías querer limpiar el ComboBox
+            this.getjComboBox1().removeAllItems();
+        }
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        controlador.cargarColor();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        jCheckBox2.setSelected(true);
+        plac.setCompuesto("MDF"); // Establecer un compuesto inicial
+        controlador.cargarLinea(); // Cargar líneas iniciales basadas en el compuesto por defecto
+        if (jComboBox1.getItemCount() > 0) {
+        String opcion = jComboBox1.getSelectedItem().toString();
+        cargarColoresInicial(opcion); // Llama a un nuevo método para cargar colores inicialmente
+    }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jComboBox2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox2MouseClicked
+        //CrearPedidoController controlador = new CrearPedidoController(this);
+        //controlador.cargarColor();
+    }//GEN-LAST:event_jComboBox2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -241,4 +339,71 @@ public class CrearPedidoView extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarColoresInicial(String lineaSeleccionada) {
+    jComboBox2.removeAllItems();
+    try {
+        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodic", "root", "");
+        PreparedStatement ps = c.prepareStatement("SELECT color FROM Placa WHERE linea = ?");
+        ps.setString(1, lineaSeleccionada);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            jComboBox2.addItem(rs.getString("color"));
+        }
+
+        rs.close();
+        ps.close();
+        c.close();
+    } catch (Exception e) {
+        System.out.println("Error al cargar colores inicialmente: " + e.getMessage());
+    }
+}
+    
+    private void cargarLineasInicial() {
+        try {
+            Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodic", "root", "");
+            String sql = "SELECT DISTINCT linea FROM Placa";
+            PreparedStatement ps = c.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            jComboBox1.removeAllItems(); // Limpiar items previos
+            while (rs.next()) {
+                jComboBox1.addItem(rs.getString("linea"));
+            }
+
+            rs.close();
+            ps.close();
+            c.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    public JTextField getjTextField1() {
+        return jTextField1;
+    }
+
+    public JTextField getjTextField2() {
+        return jTextField2;
+    }
+
+    public JTextField getjTextField3() {
+        return jTextField3;
+    }
+
+    public JTextField getjTextField4() {
+        return jTextField4;
+    }
+
+    public JComboBox<String> getjComboBox1() {
+        return jComboBox1;
+    }
+
+    public JComboBox<String> getjComboBox2() {
+        return jComboBox2;
+    }
+
+    
+    
 }
