@@ -13,11 +13,24 @@ import javax.swing.JOptionPane;
 public class CrearPedidoController {
     private CrearPedidoView vista;
     private Placa modeloPlaca;
+
+    public CrearPedidoController() {
+    }
+    
     public CrearPedidoController(CrearPedidoView vista, Placa modeloPlaca) {
     this.vista = vista;
     this.modeloPlaca = modeloPlaca;
 }
 
+    public void mostrar()
+    {
+        vista.setVisible(true);
+    }
+    public void ocultar()
+    {
+        vista.setVisible(false);
+    }
+    
     public void guardar() {
         try{
             Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodic", "root", "");

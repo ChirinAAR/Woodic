@@ -17,7 +17,9 @@ import javax.swing.JTextField;
 public class CrearPedidoView extends javax.swing.JDialog {
 
     Placa plac = new Placa();
-    private CrearPedidoController controlador;
+    CrearPedidoController controlador = new CrearPedidoController();
+    MenuPrincipalController princ = new MenuPrincipalController();
+    DisenarModuloController diseno = new DisenarModuloController();
     
     public CrearPedidoView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -223,8 +225,10 @@ public class CrearPedidoView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
         controlador.guardar();
+        princ.ocultar();
+        diseno.mostrar();
+        controlador.ocultar();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
