@@ -169,7 +169,7 @@ public class CrearPedidoView extends javax.swing.JDialog {
                         .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                         .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(217, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,10 +225,10 @@ public class CrearPedidoView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        controlador.guardar();
+        controlador.guardar(plac);
         princ.ocultar();
         diseno.mostrar();
-        controlador.ocultar();
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -260,6 +260,7 @@ public class CrearPedidoView extends javax.swing.JDialog {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         controlador.cargarColor();
+        
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
@@ -347,7 +348,7 @@ public class CrearPedidoView extends javax.swing.JDialog {
     private void cargarColoresInicial(String lineaSeleccionada) {
     jComboBox2.removeAllItems();
     try {
-        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodic", "root", "");
+        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicdb", "root", "");
         PreparedStatement ps = c.prepareStatement("SELECT color FROM Placa WHERE linea = ?");
         ps.setString(1, lineaSeleccionada);
         ResultSet rs = ps.executeQuery();
@@ -366,8 +367,8 @@ public class CrearPedidoView extends javax.swing.JDialog {
     
     private void cargarLineasInicial() {
         try {
-            Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodic", "root", "");
-            String sql = "SELECT DISTINCT linea FROM Placa";
+            Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicdb", "root", "");
+            String sql = "SELECT linea FROM Placa";
             PreparedStatement ps = c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
