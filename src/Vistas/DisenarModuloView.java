@@ -7,6 +7,7 @@ import Controlador.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 /**
  *
@@ -18,63 +19,94 @@ public class DisenarModuloView extends javax.swing.JFrame {
     private FinalViewController lista;
     private CrearPedidoController pedilo;
     private MenuPrincipalController menu; 
-    private java.util.List<Rectangle> divisoresH = new ArrayList<>();
-    private java.util.List<Rectangle> divisoresV = new ArrayList<>();
-    private java.util.List<Rectangle> puertas = new ArrayList<>();
-    private java.util.List<Rectangle> cajones = new ArrayList<>();
     private int alturaModulo = 1;
     private int anchoModulo = 1;
     private int profundidadModulo;
     private float escalaX = 1;
     private float escalaY = 1;
+    private int moduloX;
+    private int moduloY;
+    private boolean dibujarDivisorio = false;
+    private boolean esDivisorioHorizontal = false;
+    private Point puntoInicioDivisorio = null;
+    private List<Point> divisoriosHorizontales = new ArrayList<>();
+    private List<Point> divisoriosVerticales = new ArrayList<>();
+    private List<Integer> posicionesDivisoriosHorizontales = new ArrayList<>(); // Declaración aquí
+    private List<Integer> posicionesDivisoriosVerticales = new ArrayList<>(); 
 
     
     public DisenarModuloView() {
     initComponents();
 
-    jButton1.addActionListener(e -> {
-        try {
-            actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
-            divisoresH.add(new Rectangle(0, alturaModulo / 2 - 5, anchoModulo, 10));
-            dibujarModulo(alturaModulo,anchoModulo,profundidadModulo);
-        } catch (NumberFormatException ex) {
-            mostrarErrorMedidas();
-        }
-    });
-
-    jButton2.addActionListener(e -> {
-        try {
-            actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
-            divisoresV.add(new Rectangle(anchoModulo / 2 - 5, 0, 10, alturaModulo));
-            dibujarModulo(alturaModulo,anchoModulo,profundidadModulo);
-        } catch (NumberFormatException ex) {
-            mostrarErrorMedidas();
-        }
-    });
-
-    jButton5.addActionListener(e -> {
-        try {
-            actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
-            puertas.add(new Rectangle(0, 0, anchoModulo / 2, alturaModulo));
-            dibujarModulo(alturaModulo,anchoModulo,profundidadModulo);
-        } catch (NumberFormatException ex) {
-            mostrarErrorMedidas();
-        }
-    });
-
-    jButton6.addActionListener(e -> {
-        try {
-            actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
-            int cantidad = Integer.parseInt(jTextField4.getText());
-            int altoCajon = alturaModulo / cantidad;
-            for (int i = 0; i < cantidad; i++) {
-                cajones.add(new Rectangle(anchoModulo / 2, i * altoCajon, anchoModulo / 2, altoCajon));
+    jButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jCheckBox1.isSelected()) {
+                    dibujarDivisorio = true;
+                    esDivisorioHorizontal = true;
+                    puntoInicioDivisorio = null;
+                    jPanel2.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+                } else {
+                    JOptionPane.showMessageDialog(DisenarModuloView.this, "Debe seleccionar la opción 'Divisorios'.");
+                }
             }
-            dibujarModulo(alturaModulo,anchoModulo,profundidadModulo);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Ingrese un número válido de cajones.", "Error", JOptionPane.ERROR_MESSAGE);
+        });
+
+    jButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jCheckBox1.isSelected()) {
+                    dibujarDivisorio = true;
+                    esDivisorioHorizontal = false;
+                    puntoInicioDivisorio = null;
+                    jPanel2.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+                } else {
+                    JOptionPane.showMessageDialog(DisenarModuloView.this, "Debe seleccionar la opción 'Divisorios'.");
+                }
+            }
+        });
+
+jPanel2.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (dibujarDivisorio && puntoInicioDivisorio == null) {
+            // Primer clic: marca el inicio del divisorio temporal
+            puntoInicioDivisorio = e.getPoint();
+            dibujarModuloConDivisorio(alturaModulo, anchoModulo, profundidadModulo);
+            jPanel2.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR)); // Mantener el cursor de dibujo
+        } else if (dibujarDivisorio && puntoInicioDivisorio != null) {
+            // Segundo clic: fija la posición del divisorio
+            jPanel2.setCursor(Cursor.getDefaultCursor());
+            dibujarDivisorio = false;
+
+            if (esDivisorioHorizontal) {
+                int yFinal = puntoInicioDivisorio.y - moduloY;
+                divisoriosHorizontales.add(new Point(0, yFinal));
+                System.out.println("Divisorio Horizontal fijo en Y = " + yFinal + " píxeles relativos.");
+            } else {
+                int xFinal = puntoInicioDivisorio.x - moduloX;
+                int yFinal = puntoInicioDivisorio.y - moduloY; // Guardar la coordenada Y también
+                divisoriosVerticales.add(new Point(xFinal, yFinal));
+                System.out.println("Divisorio Vertical fijo en X = " + xFinal + ", Y = " + yFinal + " píxeles relativos.");
+            }
+
+            esDivisorioHorizontal = false;
+            puntoInicioDivisorio = null;
+            dibujarModuloConDivisorio(alturaModulo, anchoModulo, profundidadModulo); // Redibujar con el divisorio fijo
         }
-    });
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        if (dibujarDivisorio && puntoInicioDivisorio != null) {
+            // Mientras se mueve el mouse, actualiza la posición del divisorio temporal
+            puntoInicioDivisorio = e.getPoint();
+            dibujarModuloConDivisorio(alturaModulo, anchoModulo, profundidadModulo);
+        }
+    }
+});
+    
+ 
 }
     
 
@@ -156,8 +188,18 @@ public class DisenarModuloView extends javax.swing.JFrame {
         jCheckBox1.setText("Divisorios");
 
         jButton1.setText("Añadir Divisorio Horizontal");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Añadir Divisorio Vertical");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jCheckBox2.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox2.setText("Banquinas");
@@ -407,8 +449,86 @@ private void dibujarModulo(int alto, int ancho, int profundidad) {
     int y = (jPanel2.getHeight() - altoDibujado) / 2;
 
     g2d.setColor(Color.BLACK);
-    g2d.setStroke(new BasicStroke(3)); // Establecer el grosor de la línea a 3 (puedes ajustar este valor)
+    g2d.setStroke(new BasicStroke(5)); // Establecer el grosor de la línea a 3 (puedes ajustar este valor)
     g2d.drawRect(x, y, anchoDibujado, altoDibujado);
+
+    g2d.dispose();
+}
+
+ private void dibujarModuloConDivisorio(int alto, int ancho, int profundidad) {
+    Graphics2D g2d = (Graphics2D) jPanel2.getGraphics();
+    if (g2d == null) {
+        return;
+    }
+    g2d.clearRect(0, 0, jPanel2.getWidth(), jPanel2.getHeight());
+    g2d.setColor(Color.BLACK);
+    g2d.setStroke(new BasicStroke(5));
+
+    escalaX = (float) jPanel2.getWidth() / 1830;
+    escalaY = (float) jPanel2.getHeight() / 2600;
+
+    int anchoDibujado = Math.round(ancho * escalaX);
+    int altoDibujado = Math.round(alto * escalaY);
+
+    moduloX = (jPanel2.getWidth() - anchoDibujado) / 2;
+    moduloY = (jPanel2.getHeight() - altoDibujado) / 2;
+
+    g2d.drawRect(moduloX, moduloY, anchoDibujado, altoDibujado);
+
+    g2d.setColor(Color.BLACK);
+    g2d.setStroke(new BasicStroke(3));
+
+    for (Point ph : divisoriosHorizontales) {
+        int yDivisorio = moduloY + ph.y;
+        g2d.drawLine(moduloX, yDivisorio, moduloX + anchoDibujado, yDivisorio);
+    }
+
+    for (Point pv : divisoriosVerticales) {
+        int xDivisorio = moduloX + pv.x;
+        int yInicio = moduloY + pv.y; // Usar la coordenada Y guardada como punto de inicio
+        int yFin = moduloY + altoDibujado;
+
+        // Ajustar el fin de la línea vertical según los divisores horizontales que estén POR DEBAJO del inicio
+        for (Point ph : divisoriosHorizontales) {
+            int yDiv = moduloY + ph.y;
+            if (yDiv > yInicio && yDiv < yFin) {
+                yFin = Math.min(yFin, yDiv);
+            }
+        }
+        // Ajustar el inicio de la línea vertical según los divisores horizontales que estén POR ENCIMA del inicio
+        int moduloSuperior = moduloY;
+        for (Point ph : divisoriosHorizontales) {
+            int yDiv = moduloY + ph.y;
+            if (yDiv < yInicio && yDiv > moduloSuperior) {
+                moduloSuperior = Math.max(moduloSuperior, yDiv);
+                yInicio = moduloSuperior;
+            }
+        }
+        g2d.drawLine(xDivisorio, yInicio, xDivisorio, yFin);
+    }
+
+    if (dibujarDivisorio && puntoInicioDivisorio != null) {
+        g2d.setColor(Color.RED);
+        g2d.setStroke(new BasicStroke(2));
+        if (esDivisorioHorizontal) {
+            g2d.drawLine(moduloX, puntoInicioDivisorio.y, moduloX + anchoDibujado, puntoInicioDivisorio.y);
+        } else {
+            int xTemp = puntoInicioDivisorio.x;
+            int yTemp = puntoInicioDivisorio.y;
+            int yInicioTemp = moduloY;
+            int yFinTemp = moduloY + altoDibujado;
+            for (Point ph : divisoriosHorizontales) {
+                int yDiv = moduloY + ph.y;
+                if (yDiv > yTemp && yDiv < yFinTemp) {
+                    yFinTemp = Math.min(yFinTemp, yDiv);
+                }
+                if (yDiv < yTemp && yDiv > yInicioTemp) {
+                    yInicioTemp = Math.max(yInicioTemp, yDiv);
+                }
+            }
+            g2d.drawLine(xTemp, yInicioTemp, xTemp, yFinTemp);
+        }
+    }
 
     g2d.dispose();
 }
@@ -429,6 +549,14 @@ private void dibujarModulo(int alto, int ancho, int profundidad) {
         actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
         dibujarModulo(alturaModulo,anchoModulo,profundidadModulo);
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dibujarModuloConDivisorio(alturaModulo,anchoModulo,profundidadModulo);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        dibujarModuloConDivisorio(alturaModulo,anchoModulo,profundidadModulo);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
