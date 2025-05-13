@@ -4,10 +4,10 @@
  */
 package Vistas;
 import Controlador.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 /**
  *
@@ -18,7 +18,7 @@ public class DisenarModuloView extends javax.swing.JFrame {
     private DisenarModuloController diseno;
     private FinalViewController lista;
     private CrearPedidoController pedilo;
-    private MenuPrincipalController menu; 
+    private MenuPrincipalController menu;
     private int alturaModulo = 1;
     private int anchoModulo = 1;
     private int profundidadModulo;
@@ -32,13 +32,16 @@ public class DisenarModuloView extends javax.swing.JFrame {
     private List<Point> divisoriosHorizontales = new ArrayList<>();
     private List<Point> divisoriosVerticales = new ArrayList<>();
     private List<Integer> posicionesDivisoriosHorizontales = new ArrayList<>(); // Declaración aquí
-    private List<Integer> posicionesDivisoriosVerticales = new ArrayList<>(); 
+    private List<Integer> posicionesDivisoriosVerticales = new ArrayList<>();
+    private boolean dibujarPuerta = false;
+    private List<Rectangle> puertas = new ArrayList<>();
+    private Point puntoInicioPuerta = null;
 
     
     public DisenarModuloView() {
     initComponents();
 
-    jButton1.addActionListener(new ActionListener() {
+   jButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (jCheckBox1.isSelected()) {
@@ -52,7 +55,7 @@ public class DisenarModuloView extends javax.swing.JFrame {
             }
         });
 
-    jButton2.addActionListener(new ActionListener() {
+        jButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (jCheckBox1.isSelected()) {
@@ -66,45 +69,88 @@ public class DisenarModuloView extends javax.swing.JFrame {
             }
         });
 
-jPanel2.addMouseListener(new MouseAdapter() {
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (dibujarDivisorio && puntoInicioDivisorio == null) {
-            // Primer clic: marca el inicio del divisorio temporal
-            puntoInicioDivisorio = e.getPoint();
-            dibujarModuloConDivisorio(alturaModulo, anchoModulo, profundidadModulo);
-            jPanel2.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR)); // Mantener el cursor de dibujo
-        } else if (dibujarDivisorio && puntoInicioDivisorio != null) {
-            // Segundo clic: fija la posición del divisorio
-            jPanel2.setCursor(Cursor.getDefaultCursor());
-            dibujarDivisorio = false;
+        jButton5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jCheckBox3.isSelected()) {
+                    dibujarPuerta = true;
+                    puntoInicioPuerta = null;
+                    jPanel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                } else {
+                    JOptionPane.showMessageDialog(DisenarModuloView.this, "Debe seleccionar la opción 'Puertas'.");
+                    dibujarPuerta = false;
+                    jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                }
+            }
+        });
 
-            if (esDivisorioHorizontal) {
-                int yFinal = puntoInicioDivisorio.y - moduloY;
-                divisoriosHorizontales.add(new Point(0, yFinal));
-                System.out.println("Divisorio Horizontal fijo en Y = " + yFinal + " píxeles relativos.");
-            } else {
-                int xFinal = puntoInicioDivisorio.x - moduloX;
-                int yFinal = puntoInicioDivisorio.y - moduloY; // Guardar la coordenada Y también
-                divisoriosVerticales.add(new Point(xFinal, yFinal));
-                System.out.println("Divisorio Vertical fijo en X = " + xFinal + ", Y = " + yFinal + " píxeles relativos.");
+        jPanel2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (dibujarDivisorio && puntoInicioDivisorio == null) {
+                    // Primer clic: marca el inicio del divisorio temporal
+                    puntoInicioDivisorio = e.getPoint();
+                    dibujarModuloConDivisorio(alturaModulo, anchoModulo, profundidadModulo);
+                    jPanel2.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR)); // Mantener el cursor de dibujo
+                } else if (dibujarDivisorio && puntoInicioDivisorio != null) {
+                    // Segundo clic: fija la posición del divisorio
+                    jPanel2.setCursor(Cursor.getDefaultCursor());
+                    dibujarDivisorio = false;
+
+                    if (esDivisorioHorizontal) {
+                        int yFinal = puntoInicioDivisorio.y - moduloY;
+                        divisoriosHorizontales.add(new Point(0, yFinal));
+                        System.out.println("Divisorio Horizontal fijo en Y = " + yFinal + " píxeles relativos.");
+                    } else {
+                        int xFinal = puntoInicioDivisorio.x - moduloX;
+                        int yFinal = puntoInicioDivisorio.y - moduloY; // Guardar la coordenada Y también
+                        divisoriosVerticales.add(new Point(xFinal, yFinal));
+                        System.out.println("Divisorio Vertical fijo en X = " + xFinal + ", Y = " + yFinal + " píxeles relativos.");
+                    }
+
+                    esDivisorioHorizontal = false;
+                    puntoInicioDivisorio = null;
+                    dibujarModuloConElementos(alturaModulo, anchoModulo, profundidadModulo); // Redibujar con el divisorio fijo
+                } else if (dibujarPuerta) {
+                    int clickX = e.getX();
+                    int clickY = e.getY();
+                    
+                    int anchoDibujado = Math.round(anchoModulo * escalaX);
+                    int altoDibujado = Math.round(alturaModulo * escalaY);
+                    // Convertir coordenadas del panel a coordenadas relativas al módulo
+                    int moduloClickX = clickX - moduloX;
+                    int moduloClickY = clickY - moduloY;
+
+                    if (moduloClickX >= 0 && moduloClickX <= anchoDibujado && moduloClickY >= 0 && moduloClickY <= altoDibujado) {
+                        Rectangle espacioLibre = encontrarEspacioLibre(moduloClickX, moduloClickY);
+                        if (espacioLibre != null && !hayPuertaEnEspacio(espacioLibre)) {
+                            int numPuertas = (e.getButton() == MouseEvent.BUTTON1) ? 1 : (e.getButton() == MouseEvent.BUTTON3) ? 2 : 0;
+                            if (numPuertas > 0) {
+                                colocarPuertas(espacioLibre, numPuertas);
+                                dibujarModuloConElementos(alturaModulo, anchoModulo, profundidadModulo); // Redibujar con las puertas
+                            }
+                        } else if (espacioLibre == null) {
+                            JOptionPane.showMessageDialog(DisenarModuloView.this, "No se puede colocar la puerta fuera del módulo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(DisenarModuloView.this, "Ya hay una puerta en este espacio.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(DisenarModuloView.this, "Debe hacer clic dentro del módulo para colocar la puerta.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    }
+                    dibujarPuerta = false;
+                    jPanel2.setCursor(new Cursor (Cursor.DEFAULT_CURSOR));
+                }
             }
 
-            esDivisorioHorizontal = false;
-            puntoInicioDivisorio = null;
-            dibujarModuloConDivisorio(alturaModulo, anchoModulo, profundidadModulo); // Redibujar con el divisorio fijo
-        }
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        if (dibujarDivisorio && puntoInicioDivisorio != null) {
-            // Mientras se mueve el mouse, actualiza la posición del divisorio temporal
-            puntoInicioDivisorio = e.getPoint();
-            dibujarModuloConDivisorio(alturaModulo, anchoModulo, profundidadModulo);
-        }
-    }
-});
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                if (dibujarDivisorio && puntoInicioDivisorio != null) {
+                    // Mientras se mueve el mouse, actualiza la posición del divisorio temporal
+                    puntoInicioDivisorio = e.getPoint();
+                    dibujarModuloConDivisorio(alturaModulo, anchoModulo, profundidadModulo);
+                }
+            }
+        });
     
  
 }
@@ -413,6 +459,207 @@ jPanel2.addMouseListener(new MouseAdapter() {
     profundidadModulo = Integer.parseInt(jTextField3.getText());
 }
     
+    private boolean hayPuertaEnEspacio(Rectangle espacio) {
+        Rectangle espacioPanel = new Rectangle(moduloX + espacio.x, moduloY + espacio.y, espacio.width, espacio.height);
+        for (Rectangle puerta : puertas) {
+            Rectangle puertaPanel = new Rectangle(moduloX + puerta.x, moduloY + puerta.y, puerta.width, puerta.height);
+            if (espacioPanel.intersects(puertaPanel)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Rectangle encontrarEspacioLibre(int x, int y) {
+        int inicioX = 0;
+        int inicioY = 0;
+        int finX = anchoModulo;
+        int finY = alturaModulo;
+
+        // Considerar los divisores verticales para delimitar el ancho
+        int divisorIzquierdo = 0;
+        for (Point pv : divisoriosVerticales) {
+            int xDiv = pv.x;
+            if (x >= xDiv && xDiv >= inicioX) {
+                divisorIzquierdo = Math.max(divisorIzquierdo, xDiv);
+            }
+        }
+        inicioX = divisorIzquierdo;
+
+        int divisorDerecho = anchoModulo;
+        for (Point pv : divisoriosVerticales) {
+            int xDiv = pv.x;
+            if (x <= xDiv && xDiv <= finX) {
+                divisorDerecho = Math.min(divisorDerecho, xDiv);
+            }
+        }
+        finX = divisorDerecho;
+
+        // Considerar los divisores horizontales para delimitar la altura
+        int divisorSuperior = 0;
+        for (Point ph : divisoriosHorizontales) {
+            int yDiv = ph.y;
+            if (y >= yDiv && yDiv >= inicioY) {
+                divisorSuperior = Math.max(divisorSuperior, yDiv);
+            }
+        }
+        inicioY = divisorSuperior;
+
+        int divisorInferior = alturaModulo;
+        for (Point ph : divisoriosHorizontales) {
+            int yDiv = ph.y;
+            if (y <= yDiv && yDiv <= finY) {
+                divisorInferior = Math.min(divisorInferior, yDiv);
+            }
+        }
+        finY = divisorInferior;
+
+        if (x >= inicioX && x <= finX && y >= inicioY && y <= finY) {
+            return new Rectangle(inicioX, inicioY, finX - inicioX, finY - inicioY);
+        }
+
+        return null;
+    }
+
+    private void colocarPuertas(Rectangle espacio, int cantidad) {
+        if (cantidad == 1) {
+            // Colocar una puerta centrada en el espacio
+            int puertaAncho, puertaAlto;
+            boolean aperturaHorizontal = espacio.height > espacio.width;
+
+            if (aperturaHorizontal) {
+                puertaAlto = espacio.height;
+                puertaAncho = Math.min(espacio.width / 2, 50); // Ancho razonable
+            } else {
+                puertaAncho = espacio.width;
+                puertaAlto = Math.min(espacio.height / 2, 50); // Alto razonable
+            }
+
+            int puertaX = espacio.x;
+            int puertaY = espacio.y;
+
+            if (aperturaHorizontal) {
+                // Puerta a la izquierda, abriendo a la derecha
+                puertas.add(new Rectangle(puertaX, puertaY, puertaAncho, puertaAlto));
+            } else {
+                // Puerta arriba, abriendo hacia abajo
+                puertas.add(new Rectangle(puertaX, puertaY, puertaAncho, puertaAlto));
+            }
+        } else if (cantidad == 2) {
+            // Colocar dos puertas centradas en el espacio
+            int puertaAncho, puertaAlto;
+            boolean aperturaHorizontal = espacio.height > espacio.width;
+
+            if (aperturaHorizontal) {
+                puertaAlto = espacio.height / 2;
+                puertaAncho = Math.min(espacio.width / 2, 50);
+                puertas.add(new Rectangle(espacio.x, espacio.y, puertaAncho, puertaAlto)); // Puerta superior
+                puertas.add(new Rectangle(espacio.x, espacio.y + puertaAlto, puertaAncho, espacio.height - puertaAlto)); // Puerta inferior
+            } else {
+                puertaAncho = espacio.width / 2;
+                puertaAlto = Math.min(espacio.height / 2, 50);
+                puertas.add(new Rectangle(espacio.x, espacio.y, puertaAncho, puertaAlto)); // Puerta izquierda
+                puertas.add(new Rectangle(espacio.x + puertaAncho, espacio.y, espacio.width - puertaAncho, puertaAlto)); // Puerta derecha
+            }
+        }
+    }
+
+    private void dibujarModuloConElementos(int alto, int ancho, int profundidad) {
+        Graphics2D g2d = (Graphics2D) jPanel2.getGraphics();
+        if (g2d == null) {
+            return;
+        }
+        g2d.clearRect(0, 0, jPanel2.getWidth(), jPanel2.getHeight());
+        g2d.setColor(Color.BLACK);
+        g2d.setStroke(new BasicStroke(5));
+
+        escalaX = (float) jPanel2.getWidth() / 2600;
+        escalaY = (float) jPanel2.getHeight() / 2600;
+
+        int anchoDibujado = Math.round(ancho * escalaX);
+        int altoDibujado = Math.round(alto * escalaY);
+
+        moduloX = (jPanel2.getWidth() - anchoDibujado) / 2;
+        moduloY = (jPanel2.getHeight() - altoDibujado) / 2;
+
+        g2d.drawRect(moduloX, moduloY, anchoDibujado, altoDibujado);
+
+        g2d.setColor(Color.BLACK);
+        g2d.setStroke(new BasicStroke(3));
+
+        for (Point ph : divisoriosHorizontales) {
+            int yDivisorio = moduloY + ph.y;
+            g2d.drawLine(moduloX, yDivisorio, moduloX + anchoDibujado, yDivisorio);
+        }
+
+        for (Point pv : divisoriosVerticales) {
+            int xDivisorio = moduloX + pv.x;
+            int yInicio = moduloY + pv.y;
+            int yFin = moduloY + altoDibujado;
+            for (Point ph : divisoriosHorizontales) {
+                int yDiv = moduloY + ph.y;
+                if (yDiv > yInicio && yDiv < yFin) {
+                    yFin = Math.min(yFin, yDiv);
+                }
+                if (yDiv < yInicio && yDiv > moduloY) {
+                    yInicio = Math.max(yInicio, yDiv);
+                }
+            }
+            g2d.drawLine(xDivisorio, yInicio, xDivisorio, yFin);
+        }
+
+        // Dibujar las puertas
+        g2d.setColor(new Color(100, 100, 100)); // Color gris para las puertas
+        g2d.setStroke(new BasicStroke(2));
+        for (Rectangle puerta : puertas) {
+            int puertaXPanel = moduloX + puerta.x;
+            int puertaYPanel = moduloY + puerta.y;
+            int puertaAnchoPanel = Math.round(puerta.width * escalaX);
+            int puertaAltoPanel = Math.round(puerta.height * escalaY);
+            g2d.drawRect(puertaXPanel, puertaYPanel, puertaAnchoPanel, puertaAltoPanel);
+
+            // Dibujar el sentido de apertura (un arco simple)
+            g2d.setColor(Color.BLACK);
+            if (puerta.height * escalaY > puerta.width * escalaX) { // Apertura horizontal
+                if (puerta.x == 0) { // Puerta izquierda, abre derecha
+                    g2d.drawArc(puertaXPanel, puertaYPanel, puertaAnchoPanel * 2, puertaAltoPanel, 90, 90);
+                } else { // Puerta derecha, abre izquierda (asumiendo una sola puerta por hueco horizontal)
+                    g2d.drawArc(puertaXPanel - puertaAnchoPanel, puertaYPanel, puertaAnchoPanel * 2, puertaAltoPanel, 180, 90);
+                }
+            } else { // Apertura vertical
+                if (puerta.y == 0) { // Puerta superior, abre abajo
+                    g2d.drawArc(puertaXPanel, puertaYPanel, puertaAnchoPanel, puertaAltoPanel * 2, 0, 90);
+                } else { // Puerta inferior, abre arriba (asumiendo una sola puerta por hueco vertical)
+                    g2d.drawArc(puertaXPanel, puertaYPanel - puertaAltoPanel, puertaAnchoPanel, puertaAltoPanel * 2, 270, 90);
+                }
+            }
+        }
+
+        if (dibujarDivisorio && puntoInicioDivisorio != null) {
+            g2d.setColor(Color.RED);
+            g2d.setStroke(new BasicStroke(2));
+            if (esDivisorioHorizontal) {
+                g2d.drawLine(moduloX, puntoInicioDivisorio.y, moduloX + anchoDibujado, puntoInicioDivisorio.y);
+            } else {
+                int xTemp = puntoInicioDivisorio.x;
+                int yTemp = puntoInicioDivisorio.y;
+                int yInicioTemp = moduloY;
+                int yFinTemp = moduloY + altoDibujado;
+                for (Point ph : divisoriosHorizontales) {
+                    int yDiv = moduloY + ph.y;
+                    if (yDiv > yTemp && yDiv < yFinTemp) {
+                        yFinTemp = Math.min(yFinTemp, yDiv);
+                    }
+                    if (yDiv < yTemp && yDiv > yInicioTemp) {
+                        yInicioTemp = Math.max(yInicioTemp, yDiv);
+                    }
+                }
+                g2d.drawLine(xTemp, yInicioTemp, xTemp, yFinTemp);
+            }
+        }
+        g2d.dispose();
+    }
+    
 
     private void mostrarErrorMedidas() {
     JOptionPane.showMessageDialog(this, "Ingrese medidas válidas para el módulo (Altura, Ancho, Profundidad).", "Error", JOptionPane.ERROR_MESSAGE);
@@ -426,8 +673,8 @@ private void dibujarModulo(int alto, int ancho, int profundidad) {
         return;
     }
 
-    if (alto <= 0 || alto > 2600 || ancho <= 0 || ancho > 1830) {
-        JOptionPane.showMessageDialog(this, "Las dimensiones superan los límites permitidos.\nAltura máxima: 2600 mm\nAncho máximo: 1830 mm");
+    if (alto <= 0 || alto > 2600 || ancho <= 0 || ancho > 2600 || profundidad <= 0 || profundidad > 1830) {
+        JOptionPane.showMessageDialog(this, "Las dimensiones superan los límites permitidos.\nAltura máxima: 2600 mm\nAncho máximo: 2600 mm");
         return;
     }
 

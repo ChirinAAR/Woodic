@@ -225,7 +225,7 @@ public class CrearPedidoView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        controlador.guardar(plac);
+        //controlador.guardar(plac);
         princ.ocultar();
         diseno.mostrar();
         this.dispose();
@@ -348,13 +348,13 @@ public class CrearPedidoView extends javax.swing.JDialog {
     private void cargarColoresInicial(String lineaSeleccionada) {
     jComboBox2.removeAllItems();
     try {
-        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicdb", "root", "");
-        PreparedStatement ps = c.prepareStatement("SELECT color FROM Placa WHERE linea = ?");
+        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
+        PreparedStatement ps = c.prepareStatement("SELECT COLOR FROM PLACA WHERE LINEA = ?");
         ps.setString(1, lineaSeleccionada);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            jComboBox2.addItem(rs.getString("color"));
+            jComboBox2.addItem(rs.getString("COLOR"));
         }
 
         rs.close();
@@ -367,14 +367,14 @@ public class CrearPedidoView extends javax.swing.JDialog {
     
     private void cargarLineasInicial() {
         try {
-            Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicdb", "root", "");
-            String sql = "SELECT linea FROM Placa";
+            Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
+            String sql = "SELECT LINEA FROM PLACA";
             PreparedStatement ps = c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             jComboBox1.removeAllItems(); // Limpiar items previos
             while (rs.next()) {
-                jComboBox1.addItem(rs.getString("linea"));
+                jComboBox1.addItem(rs.getString("LINEA"));
             }
 
             rs.close();

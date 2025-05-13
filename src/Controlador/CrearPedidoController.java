@@ -48,9 +48,9 @@ public class CrearPedidoController {
     }
 
     // Intentar guardar en la base de datos
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/woodicdb", "root", "");
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
          PreparedStatement ps = conn.prepareStatement(
-             "INSERT INTO pedido (contacto, nombre, direccion) VALUES (?, ?, ?)")) {
+             "INSERT INTO CLIENTE (CONTACTO, NOMBRE, DIRECCION) VALUES (?, ?, ?)")) {
 
         ps.setInt(1, contacto);
         ps.setString(2, nombre);
@@ -59,7 +59,7 @@ public class CrearPedidoController {
 
     } catch (SQLException e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al cargar datos:\n" + e.getMessage());
+        JOptionPane.showMessageDialog(null, "Error al guardar datos del cliente:\n" + e.getMessage());
     }
 
 }
@@ -68,14 +68,14 @@ public class CrearPedidoController {
     String compuesto = modeloPlaca.getCompuesto();
     vista.getjComboBox1().removeAllItems();
 
-    try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicdb", "root", "");
-         PreparedStatement ps = c.prepareStatement("SELECT linea FROM placa WHERE compuesto = ?")) {
+    try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
+         PreparedStatement ps = c.prepareStatement("SELECT LINEA FROM PLACA WHERE COMPUESTO = ?")) {
         
         ps.setString(1, compuesto);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            vista.getjComboBox1().addItem(rs.getString("linea"));
+            vista.getjComboBox1().addItem(rs.getString("LINEA"));
         }
 
     } catch (Exception e) {
@@ -89,14 +89,14 @@ public class CrearPedidoController {
     String lineaSeleccionada = (String) vista.getjComboBox1().getSelectedItem();
     vista.getjComboBox2().removeAllItems();
 
-    try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicdb", "root", "");
-         PreparedStatement ps = c.prepareStatement("SELECT color FROM placa WHERE linea = ?")) {
+    try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
+         PreparedStatement ps = c.prepareStatement("SELECT COLOR FROM PLACA WHERE LINEA = ?")) {
 
         ps.setString(1, lineaSeleccionada);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            vista.getjComboBox2().addItem(rs.getString("color"));
+            vista.getjComboBox2().addItem(rs.getString("COLOR"));
         }
 
     } catch (Exception e) {
