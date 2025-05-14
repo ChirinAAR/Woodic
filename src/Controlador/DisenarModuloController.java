@@ -15,4 +15,6 @@ public class DisenarModuloController {
     {
         vista.setVisible(false);
     }
+    
+
 }
