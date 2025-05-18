@@ -33,7 +33,8 @@ public class DisenarModuloView extends javax.swing.JFrame {
     private int moduloX;
     private int moduloY;
     private float escalaX = 1;
-    private float escalaY = 1;private List<Point> divisoriosHorizontales = new ArrayList<>();
+    private float escalaY = 1;
+    private List<Point> divisoriosHorizontales = new ArrayList<>();
     private List<Point> divisoriosVerticales = new ArrayList<>();
 
     private boolean dibujarPuerta = false;
@@ -49,32 +50,34 @@ public class DisenarModuloView extends javax.swing.JFrame {
     
     public DisenarModuloView() {
     initComponents();
+    diseno = new DisenarModuloController(this); // Inicializa el controlador y le pasa la vista
 
-   // ActionListener para el botón Aceptar (dibujar módulo base)
+        // ActionListener para el botón Aceptar (dibujar módulo base)
         jButton9.addActionListener(e -> {
             try {
                 alturaModulo = Integer.parseInt(jTextField1.getText());
                 anchoModulo = Integer.parseInt(jTextField2.getText());
                 profundidadModulo = Integer.parseInt(jTextField3.getText());
-                if (alturaModulo <= 0 || alturaModulo > MAX_ALTO || anchoModulo <= 0 || anchoModulo > MAX_ALTO || profundidadModulo <= 0 || profundidadModulo > MAX_PROFUNDIDAD) {
+                if (alturaModulo <= 0 || alturaModulo > MAX_ALTO || anchoModulo <= 0 || anchoModulo > MAX_ANCHO || profundidadModulo <= 0 || profundidadModulo > MAX_PROFUNDIDAD) {
                     JOptionPane.showMessageDialog(this, "Las dimensiones superan los límites permitidos.");
                     return;
                 }
-                dibujarModuloConElementos();
+                diseno.actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
+                diseno.dibujarModuloConElementos();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Ingrese valores numéricos válidos.");
             }
         });
 
         jButton1.addActionListener(e -> {
-            agregarDivisorio(true); // Llama al método agregarDivisorio
-            dibujarModuloConElementos(); // Redibuja el módulo con el divisorio
+            diseno.agregarDivisorio(true); // Llama al método agregarDivisorio en el controlador
+            diseno.dibujarModuloConElementos(); // Redibuja el módulo con el divisorio
         });
 
         // Modificado para dibujar automáticamente el divisorio
         jButton2.addActionListener(e -> {
-            agregarDivisorio(false); // Llama al método agregarDivisorio
-            dibujarModuloConElementos(); // Redibuja el módulo con el divisorio
+            diseno.agregarDivisorio(false); // Llama al método agregarDivisorio en el controlador
+            diseno.dibujarModuloConElementos(); // Redibuja el módulo con el divisorio
         });
 
         jButton5.addActionListener(e -> {
@@ -117,11 +120,11 @@ public class DisenarModuloView extends javax.swing.JFrame {
                 int moduloRelY = clickY - moduloY;
 
                 if (dibujarPuerta) {
-                    Rectangle espacio = encontrarSubespacio(moduloRelX, moduloRelY);
-                    if (espacio != null && !hayElementoEnEspacio(espacio, puertas)) {
+                    Rectangle espacio = diseno.encontrarSubespacio(moduloRelX, moduloRelY); // Usa el método del controlador
+                    if (espacio != null && !diseno.hayElementoEnEspacio(espacio, puertas)) { // Usa el método del controlador
                         int numPuertas = (e.getButton() == MouseEvent.BUTTON1) ? 1 : (e.getButton() == MouseEvent.BUTTON3) ? 2 : 0;
-                        colocarPuertas(espacio, numPuertas);
-                        dibujarModuloConElementos();
+                        diseno.colocarPuertas(espacio, numPuertas);  // Usa el método del controlador
+                        diseno.dibujarModuloConElementos(); // Usa el método del controlador
                         jLabel11.setText("Total: " + puertas.size());
                     } else if (espacio == null) {
                         JOptionPane.showMessageDialog(DisenarModuloView.this, "Debe hacer clic dentro de un subespacio para colocar la puerta.");
@@ -131,10 +134,10 @@ public class DisenarModuloView extends javax.swing.JFrame {
                     dibujarPuerta = false;
                     jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 } else if (dibujarCajon) {
-                    Rectangle espacio = encontrarSubespacio(moduloRelX, moduloRelY);
-                    if (espacio != null && !hayElementoEnEspacio(espacio, cajones)) {
-                        colocarCajones(espacio, cantidadCajones);
-                        dibujarModuloConElementos();
+                    Rectangle espacio = diseno.encontrarSubespacio(moduloRelX, moduloRelY);  // Usa el método del controlador
+                    if (espacio != null && !diseno.hayElementoEnEspacio(espacio, cajones)) { // Usa el método del controlador
+                        diseno.colocarCajones(espacio, cantidadCajones); // Usa el método del controlador
+                        diseno.dibujarModuloConElementos();  // Usa el método del controlador
                         jLabel10.setText("Total: " + cajones.size());
                     } else if (espacio == null) {
                         JOptionPane.showMessageDialog(DisenarModuloView.this, "Debe hacer clic dentro de un subespacio para colocar los cajones.");
@@ -146,7 +149,7 @@ public class DisenarModuloView extends javax.swing.JFrame {
                     jTextField4.setText("");
                     jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
-            }  
+            }
         });
 }
     
@@ -454,279 +457,7 @@ public class DisenarModuloView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private boolean hayElementoEnEspacio(Rectangle espacio, List<Rectangle> elementos) {
-        for (Rectangle elemento : elementos) {
-            if (espacio.intersects(elemento)) return true;
-        }
-        return false;
-    }
 
-    private Rectangle encontrarSubespacio(int x, int y) {
-        int inicioX = 0;
-        int inicioY = 0;
-        int finX = anchoModulo;
-        int finY = alturaModulo;
-
-        // Encuentra los límites verticales
-        int izquierda = 0;
-        for (Point pv : divisoriosVerticales) {
-            if (x >= pv.x && pv.x >= izquierda) {
-                izquierda = pv.x;
-            }
-        }
-        int derecha = anchoModulo;
-        for (Point pv : divisoriosVerticales) {
-            if (x <= pv.x && pv.x <= derecha) {
-                derecha = pv.x;
-            }
-        }
-
-        // Encuentra los límites horizontales
-        int arriba = 0;
-        for (Point ph : divisoriosHorizontales) {
-            if (y >= ph.y && ph.y >= arriba) {
-                arriba = ph.y;
-            }
-        }
-        int abajo = alturaModulo;
-        for (Point ph : divisoriosHorizontales) {
-            if (y <= ph.y && ph.y <= abajo) {
-                abajo = ph.y;
-            }
-        }
-
-        // Verifica si el punto está dentro de los límites definidos por los divisores
-        if (x >= izquierda && x <= derecha && y >= arriba && y <= abajo) {
-            return new Rectangle(izquierda, arriba, derecha - izquierda, abajo - arriba);
-        }
-        return null; // Retorna null si no se encuentra un subespacio
-    }
-
-    
-
-    private void colocarPuertas(Rectangle espacio, int cantidad) {
-         if (cantidad == 1) {
-            puertas.add(new Rectangle(espacio.x, espacio.y, espacio.width, espacio.height));
-        } else if (cantidad == 2) {
-            if (espacio.width > espacio.height) {
-                int anchoPuerta = espacio.width / 2;
-                puertas.add(new Rectangle(espacio.x, espacio.y, anchoPuerta, espacio.height));
-                puertas.add(new Rectangle(espacio.x + anchoPuerta, espacio.y, anchoPuerta, espacio.height));
-            } else {
-                int altoPuerta = espacio.height / 2;
-                puertas.add(new Rectangle(espacio.x, espacio.y, espacio.width, altoPuerta));
-                puertas.add(new Rectangle(espacio.x, espacio.y + altoPuerta, espacio.width, altoPuerta));
-            }
-        }
-    }
-
-    private void colocarCajones(Rectangle espacio, int cantidad) {
-        int altoCajon = espacio.height / cantidad;
-        for (int i = 0; i < cantidad; i++) {
-            cajones.add(new Rectangle(espacio.x, espacio.y + i * altoCajon, espacio.width, altoCajon));
-        }
-    }
-
-    private void agregarDivisorio(boolean horizontal) {
-        try {
-            String input = JOptionPane.showInputDialog(this, "Ingrese la posición del divisorio:");
-            if (input != null) { // Para evitar NullPointerException si el usuario cancela.
-                int posicion = Integer.parseInt(input);
-                if (horizontal) {
-                    if (posicion > 0 && posicion < alturaModulo) {
-                         divisoriosHorizontales.add(new Point(0, posicion));
-                    } else {
-                        JOptionPane.showMessageDialog(this, "La posición del divisorio horizontal debe estar entre 0 y " + alturaModulo + ".");
-                    }
-                } else {
-                    if (posicion > 0 && posicion < anchoModulo) {
-                         divisoriosVerticales.add(new Point(posicion, 0));
-                    } else {
-                        JOptionPane.showMessageDialog(this, "La posición del divisorio vertical debe estar entre 0 y " + anchoModulo + ".");
-                    }
-                }
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un número válido para la posición del divisorio.");
-        }
-    }
-    private void dibujarModuloConElementos() {
-    Graphics2D g2d = (Graphics2D) jPanel2.getGraphics();
-        if (g2d == null) {
-            return;
-        }
-        g2d.clearRect(0, 0, jPanel2.getWidth(), jPanel2.getHeight()); // Limpiar el jPanel2 antes de dibujar
-
-    // Calcular escala
-    escalaX = (float) jPanel2.getWidth() / 2600;
-        escalaY = (float) jPanel2.getHeight() / 2600;
-
-        int anchoDibujado = Math.round(anchoModulo * escalaX);
-        int altoDibujado = Math.round(alturaModulo * escalaY);
-
-        moduloX = (jPanel2.getWidth() - anchoDibujado) / 2;
-        moduloY = (jPanel2.getHeight() - altoDibujado) / 2;
-
-        g2d.setColor(Color.BLACK);
-        g2d.setStroke(new BasicStroke(5));
-        g2d.drawRect(moduloX, moduloY, anchoDibujado, altoDibujado);
-
-    // Dibujar divisorios horizontales
-    g2d.setColor(Color.BLACK);
-    for (Point p : divisoriosHorizontales) {
-        g2d.drawLine(moduloX, moduloY + (int) (p.y * escalaY), moduloX + (int) (anchoModulo * escalaX), moduloY + (int) (p.y * escalaY));
-    }
-
-    // Dibujar divisorios verticales
-    for (Point p : divisoriosVerticales) {
-        g2d.drawLine(moduloX + (int) (p.x * escalaX), moduloY, moduloX + (int) (p.x * escalaX), moduloY + (int) (alturaModulo * escalaY));
-    }
-
-    g2d.setColor(new Color(100, 100, 100));
-        g2d.setStroke(new BasicStroke(2));
-        for (Rectangle puerta : puertas) {
-            int px = moduloX + Math.round(puerta.x * escalaX);
-            int py = moduloY + Math.round(puerta.y * escalaY);
-            int pw = Math.round(puerta.width * escalaX);
-            int ph = Math.round(puerta.height * escalaY);
-            g2d.drawRect(px, py, pw, ph);
-             g2d.drawLine(px, py, px + pw, py + ph);
-        }
-
-        // Dibujar cajones
-        g2d.setColor(new Color(150, 150, 200));
-        g2d.setStroke(new BasicStroke(1));
-        for (Rectangle cajon : cajones) {
-            int cx = moduloX + Math.round(cajon.x * escalaX);
-            int cy = moduloY + Math.round(cajon.y * escalaY);
-            int cw = Math.round(cajon.width * escalaX);
-            int ch = Math.round(cajon.height * escalaY);
-            g2d.drawRect(cx, cy, cw, ch);
-        }
-
-        g2d.dispose();
-}
-
-    public List<String> calcularMedidas() {
-        List<String> medidas = new ArrayList<>();
-
-        // Módulo base
-        medidas.add("Cabezal = (" + anchoModulo + ", " + profundidadModulo + ")");
-        medidas.add("Lateral = (" + (alturaModulo - 36) + ", " + profundidadModulo + ")");
-        medidas.add("Lateral = (" + (alturaModulo - 36) + ", " + profundidadModulo + ")");
-
-        // Divisorios horizontales
-        for (Point ph : divisoriosHorizontales) {
-             Rectangle subespacio = encontrarSubespacio(anchoModulo / 2, ph.y);
-             if (subespacio != null)
-             {
-                 medidas.add("Divisorio Horizontal = (" + (subespacio.width - 36) + ", " + profundidadModulo + ")");
-             }
-             else
-             {
-                  medidas.add("Divisorio Horizontal = (" + (anchoModulo - 36) + ", " + profundidadModulo + ")");
-             }
-        }
-
-        // Divisorios verticales
-        for (Point pv : divisoriosVerticales) {
-             Rectangle subespacio = encontrarSubespacio(pv.x, alturaModulo/2);
-             if(subespacio != null){
-                 medidas.add("Divisorio Vertical = (" + (subespacio.height - 36) + ", " + profundidadModulo + ")");
-             }
-             else{
-                 medidas.add("Divisorio Vertical = (" + (alturaModulo - 36) + ", " + profundidadModulo + ")");
-             }
-        }
-
-        // Puertas
-        for (Rectangle puerta : puertas) {
-             Rectangle subespacioContenedor = encontrarSubespacio(puerta.x + puerta.width / 2, puerta.y + puerta.height / 2);
-             if (subespacioContenedor != null)
-             {
-                  medidas.add("Puerta = (" + (subespacioContenedor.width - 6) + ", " + (subespacioContenedor.height - 6) + ")");
-             }
-             else{
-                  medidas.add("Puerta = (" + (anchoModulo - 6) + ", " + (alturaModulo - 6) + ")");
-             }
-
-        }
-
-        // Cajones
-        for (Rectangle cajon : cajones) {
-            Rectangle subespacioContenedor = encontrarSubespacio(cajon.x + cajon.width / 2, cajon.y + cajon.height / 2);
-            int cantidadCajonesEnSubespacio = contarCajonesEnSubespacio(subespacioContenedor);
-             if (subespacioContenedor != null)
-             {
-                  medidas.add("Cajon Base = (" + (subespacioContenedor.width - 62) + ", " + (profundidadModulo - 40) + ")");
-                  medidas.add("Cajon Frente = (" + (subespacioContenedor.width - 62) + ", " + ((subespacioContenedor.height / cantidadCajonesEnSubespacio) - 30) + ")");
-                  medidas.add("Cajon Lateral = (" + ((subespacioContenedor.width - 62) - 36) + ", " + ((subespacioContenedor.height / cantidadCajonesEnSubespacio) - 30) + ")");
-                  medidas.add("Cajon Tapa = (" + (subespacioContenedor.width - (subespacioContenedor.height/ cantidadCajonesEnSubespacio) - 5) + ")");
-             }
-             else{
-                  medidas.add("Cajon Base = (" + (anchoModulo - 62) + ", " + (profundidadModulo - 40) + ")");
-                  medidas.add("Cajon Frente = (" + (anchoModulo - 62) + ", " + ((alturaModulo / cantidadCajonesEnSubespacio) - 30) + ")");
-                  medidas.add("Cajon Lateral = (" + ((anchoModulo - 62) - 36) + ", " + ((alturaModulo / cantidadCajonesEnSubespacio) - 30) + ")");
-                  medidas.add("Cajon Tapa = (" + (anchoModulo - (alturaModulo / cantidadCajonesEnSubespacio) - 5) + ")");
-             }
-        }
-        return medidas;
-    }
-
-    private int contarCajonesEnSubespacio(Rectangle subespacio) {
-        int count = 0;
-        for (Rectangle cajon : cajones) {
-            if (subespacio.intersects(cajon)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    private void mostrarErrorMedidas() {
-        JOptionPane.showMessageDialog(this, "Ingrese medidas válidas para el módulo (Altura, Ancho, Profundidad).", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-     private void actualizarDimensiones(int altura, int ancho, int profundidad) throws NumberFormatException {
-        alturaModulo = Integer.parseInt(jTextField1.getText());
-        anchoModulo = Integer.parseInt(jTextField2.getText());
-        profundidadModulo = Integer.parseInt(jTextField3.getText());
-    }
-
-    private void dibujarModulo(int alto, int ancho, int profundidad) {
-        try {
-            actualizarDimensiones(alto,ancho,profundidad);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor ingrese valores numéricos válidos.");
-            return;
-        }
-
-        if (alto <= 0 || alto > MAX_ALTO || ancho <= 0 || ancho > MAX_ALTO || profundidad <= 0 || profundidad > MAX_PROFUNDIDAD) {
-            JOptionPane.showMessageDialog(this, "Las dimensiones superan los límites permitidos.\nAltura máxima: MAX_ALTO mm\nAncho máximo: MAX_ALTO mm");
-            return;
-        }
-
-        Graphics2D g2d = (Graphics2D) jPanel2.getGraphics();
-        if (g2d == null) {
-            return;
-        }
-        g2d.clearRect(0, 0, jPanel2.getWidth(), jPanel2.getHeight());
-
-        escalaX = (float) jPanel2.getWidth() / 2600;
-        escalaY = (float) jPanel2.getHeight() / 2600;
-
-        int anchoDibujado = Math.round(ancho * escalaX);
-        int altoDibujado = Math.round(alto * escalaY);
-
-        moduloX = (jPanel2.getWidth() - anchoDibujado) / 2;
-        moduloY = (jPanel2.getHeight() - altoDibujado) / 2;
-
-        g2d.setColor(Color.BLACK);
-        g2d.setStroke(new BasicStroke(5));
-        g2d.drawRect(moduloX, moduloY, anchoDibujado, altoDibujado);
-
-        g2d.dispose();
-    }
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButton7ActionPerformed
@@ -737,8 +468,8 @@ public class DisenarModuloView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
-        dibujarModulo(alturaModulo,anchoModulo,profundidadModulo);
+       diseno.actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
+       diseno.dibujarModulo(alturaModulo,anchoModulo,profundidadModulo);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -845,6 +576,10 @@ public class DisenarModuloView extends javax.swing.JFrame {
 
     public void setjTextField3(JTextField jTextField3) {
         this.jTextField3 = jTextField3;
+    }
+
+    public JPanel getjPanel2() {
+        return jPanel2;
     }
 
 }

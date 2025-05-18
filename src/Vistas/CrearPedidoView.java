@@ -19,10 +19,11 @@ public class CrearPedidoView extends javax.swing.JDialog {
     Placa plac = new Placa();
     CrearPedidoController controlador = new CrearPedidoController();
     MenuPrincipalController princ = new MenuPrincipalController();
-    DisenarModuloController diseno = new DisenarModuloController();
+    DisenarModuloController diseno;
     
     public CrearPedidoView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        this.diseno = new DisenarModuloController();
         initComponents();
         controlador = new CrearPedidoController(this, plac);
         cargarLineasInicial();
