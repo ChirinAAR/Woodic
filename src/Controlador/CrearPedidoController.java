@@ -3,106 +3,92 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Controlador;
-import Vistas.*;
+
 import Modelo.*;
+import Vistas.CrearPedidoView;
 import java.sql.*;
-import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
-
 public class CrearPedidoController {
-    private CrearPedidoView vista;
-    private Placa modeloPlaca;
 
-    public CrearPedidoController() {
-    }
-    
-    public CrearPedidoController(CrearPedidoView vista, Placa modeloPlaca) {
-    this.vista = vista;
-    this.modeloPlaca = modeloPlaca;
-}
+    private final CrearPedidoView vista;
 
-    public void mostrar()
-    {
-        vista.setVisible(true);
-    }
-    public void ocultar()
-    {
-        vista.setVisible(false);
-    }
-    
-    public void guardar(Placa placa) {
-    String nombre = vista.getjTextField1().getText();
-    int contacto = Integer.parseInt(vista.getjTextField2().getText());
-    String direccion = vista.getjTextField3().getText();
-    String compuesto = placa.getCompuesto();  // ya se setea al seleccionar checkbox
-    String linea = (String) vista.getjComboBox1().getSelectedItem();
-    String color = (String) vista.getjComboBox2().getSelectedItem();
-    int cantidad = Integer.parseInt(vista.getjTextField4().getText());
-
-    try {
-        cantidad = Integer.parseInt(vista.getjTextField4().getText());
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Cantidad inválida. Debe ser un número.");
-        return;
+    public CrearPedidoController(CrearPedidoView vista) {
+        this.vista = vista;
     }
 
-    // Intentar guardar en la base de datos
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
-         PreparedStatement ps = conn.prepareStatement(
-             "INSERT INTO CLIENTE (CONTACTO, NOMBRE, DIRECCION) VALUES (?, ?, ?)")) {
+    /**
+     * Guarda el pedido y el cliente en la base de datos.
+     *
+     * @param pedido El pedido a guardar.
+     * @return El id generado para el pedido, o -1 si hubo error.
+     */
+    public int guardar(Pedido pedido) {
+        int idPedido = -1;
+        Cliente cliente = pedido.getCliente();
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "")) {
+            // Guardar cliente (si no existe)
+            String sqlCliente = "INSERT IGNORE INTO Cliente (NOMBRE, DIRECCION, CONTACTO) VALUES (?, ?, ?)";
+            try (PreparedStatement psCliente = conn.prepareStatement(sqlCliente)) {
+                psCliente.setString(1, cliente.getNombre());
+                psCliente.setString(2, cliente.getDireccion());
+                psCliente.setInt(3, cliente.getContacto());
+                psCliente.executeUpdate();
+            }
 
-        ps.setInt(1, contacto);
-        ps.setString(2, nombre);
-        ps.setString(3, direccion);
-
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al guardar datos del cliente:\n" + e.getMessage());
+            // Guardar pedido
+            String sqlPedido = "INSERT INTO Pedido (CANTIDADMODULOS, PRECIO, CLIENTE_CONTACTO) VALUES (?, ?, ?)";
+            try (PreparedStatement psPedido = conn.prepareStatement(sqlPedido, Statement.RETURN_GENERATED_KEYS)) {
+                psPedido.setInt(1, pedido.getCantidadModulos());
+                psPedido.setInt(2, pedido.getPrecio());
+                psPedido.setInt(3, cliente.getContacto());
+                psPedido.executeUpdate();
+                ResultSet rs = psPedido.getGeneratedKeys();
+                if (rs.next()) {
+                    idPedido = rs.getInt(1);
+                }
+                rs.close();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(vista, "Error al guardar pedido o cliente: " + e.getMessage());
+        }
+        return idPedido;
     }
 
-}
-
+    /**
+     * Carga las líneas disponibles según el compuesto seleccionado en la vista.
+     */
     public void cargarLinea() {
-    String compuesto = modeloPlaca.getCompuesto();
-    vista.getjComboBox1().removeAllItems();
-
-    try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
-         PreparedStatement ps = c.prepareStatement("SELECT LINEA FROM PLACA WHERE COMPUESTO = ?")) {
-        
-        ps.setString(1, compuesto);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            vista.getjComboBox1().addItem(rs.getString("LINEA"));
+        String compuesto = vista.jCheckBox1.isSelected() ? "Aglomerado" : "MDF";
+        vista.getjComboBox1().removeAllItems();
+        try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
+             PreparedStatement ps = c.prepareStatement("SELECT DISTINCT LINEA FROM PLACA WHERE COMPUESTO = ?")) {
+            ps.setString(1, compuesto);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                vista.getjComboBox1().addItem(rs.getString("LINEA"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(vista, "Error al cargar líneas: " + e.getMessage());
         }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al cargar linea: " + e.getMessage());
     }
-}
 
-    
+    /**
+     * Carga los colores disponibles según la línea seleccionada en la vista.
+     */
     public void cargarColor() {
-    String lineaSeleccionada = (String) vista.getjComboBox1().getSelectedItem();
-    vista.getjComboBox2().removeAllItems();
-
-    try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
-         PreparedStatement ps = c.prepareStatement("SELECT COLOR FROM PLACA WHERE LINEA = ?")) {
-
-        ps.setString(1, lineaSeleccionada);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            vista.getjComboBox2().addItem(rs.getString("COLOR"));
+        String lineaSeleccionada = (String) vista.getjComboBox1().getSelectedItem();
+        vista.getjComboBox2().removeAllItems();
+        if (lineaSeleccionada == null) return;
+        try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
+             PreparedStatement ps = c.prepareStatement("SELECT COLOR FROM PLACA WHERE LINEA = ?")) {
+            ps.setString(1, lineaSeleccionada);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                vista.getjComboBox2().addItem(rs.getString("COLOR"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(vista, "Error al cargar colores: " + e.getMessage());
         }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al cargar colores: " + e.getMessage());
     }
-}
-    
 }

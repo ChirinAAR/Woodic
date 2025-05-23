@@ -3,19 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vistas;
-import Controlador.FinalViewController;
-import Controlador.MenuPrincipalController;
-/**
- *
- * @author Alumno
- */
+import javax.swing.*;
+import java.util.*;
+import Controlador.*;
+
 public class FinalView extends javax.swing.JFrame {
 
-    FinalViewController controlador = new FinalViewController();
-    MenuPrincipalController menuprincipal = new MenuPrincipalController();
-    
-    public FinalView() {
+    private int idPedido;
+    private int cantidadModulos;
+
+    public FinalView(int idPedido, int cantidadModulos) {
+        this.idPedido = idPedido;
+        this.cantidadModulos = cantidadModulos;
         initComponents();
+        FinalViewController controlador = new FinalViewController();
+        List<Map<String, List<double[]>>> listaDespiece = controlador.obtenerListaDespiece(idPedido);
+        mostrarDespieceEnTabla(cantidadModulos, listaDespiece);
+    }
+
+    // Constructor vacío solo para pruebas o para el ma
+
+    public FinalView() {
+        //TODO Auto-generated constructor stub
     }
 
     /**
@@ -47,6 +56,7 @@ public class FinalView extends javax.swing.JFrame {
         jLabel1.setText("Resultados Despiece");
 
         jTable1.setBackground(new java.awt.Color(204, 204, 204));
+        jTable1.setForeground(new java.awt.Color(0, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Zocalo", null, null, null, null, null},
@@ -146,9 +156,62 @@ public class FinalView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        controlador.ocultar();
-        menuprincipal.mostrar();
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * Llena el jTable1 con los resultados del despiece de cada módulo.
+     * @param cantidadModulos cantidad de módulos diseñados
+     * @param listaDespiece lista de mapas, uno por módulo, con clave el nombre del componente y valor una lista de arreglos [ancho, largo, cantidad]
+     */
+    public void mostrarDespieceEnTabla(int cantidadModulos, List<Map<String, List<double[]>>> listaDespiece) {
+        if (listaDespiece == null || listaDespiece.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No hay datos de despiece para mostrar.");
+        return;
+        } 
+        String[] nombresComponentes = {
+            "Zocalo", "Cabezal", "Laterales", "Div Horizontal", "Div Vertical",
+            "Banq Horizontal", "Banq Vertical", "Base Cajon", "Frente Cajon",
+            "Lateral Cajon", "Tapa Cajon", "Puertas"
+        };
+
+        // Construir columnas dinámicamente
+        String[] columnas = new String[cantidadModulos + 1];
+        columnas[0] = "Cortes";
+        for (int i = 1; i <= cantidadModulos; i++) {
+            columnas[i] = "Modulo " + i;
+        }
+
+        Object[][] datos = new Object[nombresComponentes.length][cantidadModulos + 1];
+        for (int i = 0; i < nombresComponentes.length; i++) {
+            datos[i][0] = nombresComponentes[i];
+            for (int j = 0; j < cantidadModulos; j++) {
+                Map<String, List<double[]>> despieceModulo = listaDespiece.get(j);
+                List<double[]> lista = despieceModulo.getOrDefault(nombresComponentes[i], new ArrayList<>());
+                if (lista.isEmpty()) {
+                    datos[i][j + 1] = "-";
+                } else {
+                    // Si hay varios componentes iguales, los listamos separados por coma
+                    StringBuilder sb = new StringBuilder();
+                    for (double[] pieza : lista) {
+                        int ancho = (int) Math.round(pieza[0]);
+                        int largo = (int) Math.round(pieza[1]);
+                        int cantidad = pieza.length > 2 ? (int) Math.round(pieza[2]) : 1;
+                        sb.append(ancho).append("x").append(largo).append(" (").append(cantidad).append("), ");
+                    }
+                    // Quitar la última coma y espacio
+                    if (sb.length() > 2) sb.setLength(sb.length() - 2);
+                    datos[i][j + 1] = sb.toString();
+                }
+            }
+        }
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            datos,
+            columnas
+        ));
+        jTable1.setRowHeight(30);
+    }
 
     /**
      * @param args the command line arguments

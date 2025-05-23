@@ -1,15 +1,23 @@
-
 package Controlador;
 import Vistas.DisenarModuloView;
 import javax.swing.*;
+
+import Modelo.Modulo;
+import Modelo.Pedido;
+
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DisenarModuloController {
-    DisenarModuloView vista;
+    private DisenarModuloView vista;
+    private Modulo mod;
+    private Pedido ped = new Pedido();
+    int idPed = ped.getId_pedido();
     private int alturaModulo = 1;
     private int anchoModulo = 1;
     private int profundidadModulo;
@@ -24,121 +32,137 @@ public class DisenarModuloController {
     private List<Point> divisoriosHorizontales = new ArrayList<>();
     private List<Point> divisoriosVerticales = new ArrayList<>();
 
-    private boolean dibujarPuerta = false;
     private List<Rectangle> puertas = new ArrayList<>();
-
-    private boolean dibujarCajon = false;
-    private int cantidadCajones = 0;
     private List<Rectangle> cajones = new ArrayList<>();
+    private Map<String, List<double[]>> medidasElementos = new HashMap<>();
+    private JPanel panelDibujo;
 
-    private Map<String, List<double[]>> medidasElementos = new HashMap<>(); // Para guardar las medidas
-    private JPanel panelDibujo; // Referencia al JPanel de la vista
+    private int cantidadModulos = 1;
+    private int moduloActual = 1;
+    private int idPedido = -1;
 
-    public DisenarModuloController() {
+    public DisenarModuloController(DisenarModuloView vista, int idPedido, int cantidadModulos) {
+        this.vista = vista;
+        this.idPedido = idPedido;
+        this.cantidadModulos = cantidadModulos;
+        this.mod = new Modulo();
+        this.panelDibujo = vista.getjPanel2();
     }
 
-    
+    public void actualizarDimensiones(int altura, int ancho, int profundidad) {
+        if (mod == null) {
+            mod = new Modulo();
+        }
+        this.alturaModulo = altura;
+        this.anchoModulo = ancho;
+        this.profundidadModulo = profundidad;
+        mod.setAlto(altura);
+        mod.setAncho(ancho);
+        mod.setProfundo(profundidad);
+        divisoriosHorizontales.clear();
+        divisoriosVerticales.clear();
+        puertas.clear();
+        cajones.clear();
+        calcularMedidas();
+    }
 
-    public DisenarModuloController(DisenarModuloView view) { // Constructor que recibe la vista
-        this.vista = view;
-        this.panelDibujo = vista.getjPanel2(); // Obtiene la referencia al JPanel
+    public int getModuloActual() {
+    return moduloActual;
+}
+public int getCantidadModulos() {
+    return cantidadModulos;
+}
+
+    public void agregarDivisorio(boolean horizontal, int posicion) {
+        if (horizontal) {
+            if (posicion > 0 && posicion < alturaModulo) {
+                // Evitar duplicados
+                for (Point p : divisoriosHorizontales) {
+                    if (p.y == posicion) return;
+                }
+                divisoriosHorizontales.add(new Point(0, posicion));
+            }
+        } else {
+            if (posicion > 0 && posicion < anchoModulo) {
+                for (Point p : divisoriosVerticales) {
+                    if (p.x == posicion) return;
+                }
+                divisoriosVerticales.add(new Point(posicion, 0));
+            }
+        }
+        calcularMedidas();
     }
-    public void mostrar()
-    {
-        vista.setVisible(true);
+
+    // Encuentra el subespacio donde se hizo click
+    public Rectangle encontrarSubespacio(int mouseX, int mouseY) {
+        int x = (int) ((mouseX - moduloX) / escalaX);
+        int y = (int) ((mouseY - moduloY) / escalaY);
+
+        List<Integer> puntosX = new ArrayList<>();
+        puntosX.add(0);
+        for (Point p : divisoriosVerticales) puntosX.add(p.x);
+        puntosX.add(anchoModulo);
+
+        List<Integer> puntosY = new ArrayList<>();
+        puntosY.add(0);
+        for (Point p : divisoriosHorizontales) puntosY.add(p.y);
+        puntosY.add(alturaModulo);
+
+        int x1 = 0, y1 = 0, x2 = anchoModulo, y2 = alturaModulo;
+        for (int i = 0; i < puntosX.size() - 1; i++) {
+            if (x >= puntosX.get(i) && x < puntosX.get(i + 1)) {
+                x1 = puntosX.get(i);
+                x2 = puntosX.get(i + 1);
+                break;
+            }
+        }
+        for (int i = 0; i < puntosY.size() - 1; i++) {
+            if (y >= puntosY.get(i) && y < puntosY.get(i + 1)) {
+                y1 = puntosY.get(i);
+                y2 = puntosY.get(i + 1);
+                break;
+            }
+        }
+        return new Rectangle(x1, y1, x2 - x1, y2 - y1);
     }
-    public void ocultar()
-    {
-        vista.setVisible(false);
-    }
-    
+
     public boolean hayElementoEnEspacio(Rectangle espacio, List<Rectangle> elementos) {
         for (Rectangle elemento : elementos) {
-            if (espacio.intersects(elemento)) {
-                return true;
-            }
+            if (espacio.equals(elemento)) return true;
         }
         return false;
     }
 
-    public void colocarPuertas(Rectangle espacio, int numPuertas) {
-        if (numPuertas == 1) {
-            puertas.add(espacio);
-        } else if (numPuertas == 2) {
-            // Dividir el espacio en dos y colocar dos puertas
-            int anchoMitad = espacio.width / 2;
-            puertas.add(new Rectangle(espacio.x, espacio.y, anchoMitad, espacio.height));
-            puertas.add(new Rectangle(espacio.x + anchoMitad, espacio.y, anchoMitad, espacio.height));
+    public void manejarClickPuerta(int mouseX, int mouseY, int boton) {
+        Rectangle subespacio = encontrarSubespacio(mouseX, mouseY);
+        if (subespacio == null || hayElementoEnEspacio(subespacio, puertas)) return;
+
+        if (boton == MouseEvent.BUTTON1) {
+            puertas.add(subespacio);
+        } else if (boton == MouseEvent.BUTTON3) {
+            // Dos puertas: dividir el subespacio en dos verticalmente
+            int mitad = subespacio.width / 2;
+            puertas.add(new Rectangle(subespacio.x, subespacio.y, mitad, subespacio.height));
+            puertas.add(new Rectangle(subespacio.x + mitad, subespacio.y, subespacio.width - mitad, subespacio.height));
         }
+        calcularMedidas();
+        vista.actualizarLabelPuertas(puertas.size());
+        dibujarModuloConElementos();
     }
 
-    public void colocarCajones(Rectangle espacio, int cantidad) {
-        if (cantidad > 0) {
-            int espacioCajon = espacio.height / cantidad;
-            for (int i = 0; i < cantidad; i++) {
-                cajones.add(new Rectangle(espacio.x, espacio.y + i * espacioCajon, espacio.width, espacioCajon));
-            }
-        }
+    public void manejarClickCajon(int mouseX, int mouseY, int cantidad) {
+    Rectangle subespacio = encontrarSubespacio(mouseX, mouseY);
+    if (subespacio == null || hayElementoEnEspacio(subespacio, cajones)) return;
+
+    int altoCajon = subespacio.height / cantidad;
+    for (int i = 0; i < cantidad; i++) {
+        Rectangle cajon = new Rectangle(subespacio.x, subespacio.y + i * altoCajon, subespacio.width, altoCajon);
+        cajones.add(cajon);
     }
-
-    public Rectangle encontrarSubespacio(int x, int y) {
-        if (divisoriosHorizontales.isEmpty() && divisoriosVerticales.isEmpty()) {
-            return new Rectangle(0, 0, anchoModulo, alturaModulo);
-        }
-
-        List<Integer> puntosX = new ArrayList<>();
-        puntosX.add(0);
-        for (Point p : divisoriosVerticales) {
-            puntosX.add(p.x);
-        }
-        puntosX.add(anchoModulo);
-        puntosX.sort(Integer::compareTo);
-
-        List<Integer> puntosY = new ArrayList<>();
-        puntosY.add(0);
-        for (Point p : divisoriosHorizontales) {
-            puntosY.add(p.y);
-        }
-        puntosY.add(alturaModulo);
-        puntosY.sort(Integer::compareTo);
-
-        for (int i = 0; i < puntosX.size() - 1; i++) {
-            for (int j = 0; j < puntosY.size() - 1; j++) {
-                int x1 = puntosX.get(i);
-                int y1 = puntosY.get(j);
-                int ancho = puntosX.get(i + 1) - x1;
-                int alto = puntosY.get(j + 1) - y1;
-                if (x >= x1 && x < x1 + ancho && y >= y1 && y < y1 + alto) {
-                    return new Rectangle(x1, y1, ancho, alto);
-                }
-            }
-        }
-        return null;
-    }
-
-    public void agregarDivisorio(boolean horizontal) {
-        try {
-            String input = JOptionPane.showInputDialog(vista, "Ingrese la posición del divisorio:");
-            if (input != null) { // Para evitar NullPointerException si el usuario cancela.
-                int posicion = Integer.parseInt(input);
-                if (horizontal) {
-                    if (posicion > 0 && posicion < alturaModulo) {
-                        divisoriosHorizontales.add(new Point(0, posicion));
-                    } else {
-                        JOptionPane.showMessageDialog(vista, "La posición del divisorio horizontal debe estar entre 0 y " + alturaModulo + ".");
-                    }
-                } else {
-                    if (posicion > 0 && posicion < anchoModulo) {
-                        divisoriosVerticales.add(new Point(posicion, 0));
-                    } else {
-                        JOptionPane.showMessageDialog(vista, "La posición del divisorio vertical debe estar entre 0 y " + anchoModulo + ".");
-                    }
-                }
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(vista, "Ingrese un número válido para la posición del divisorio.");
-        }
-    }
+    calcularMedidas();
+    vista.actualizarLabelCajones(cajones.size());
+    dibujarModuloConElementos();
+}
 
     public void dibujarModuloConElementos() {
         Graphics2D g2d = (Graphics2D) panelDibujo.getGraphics();
@@ -232,55 +256,128 @@ public class DisenarModuloController {
         g2d.dispose();
     }
 
-    public void actualizarDimensiones(int altura, int ancho, int profundidad) {
-        alturaModulo = altura;
-        anchoModulo = ancho;
-        profundidadModulo = profundidad;
-    }
-
-    private int contarCajonesEnSubespacio(Rectangle espacio) {
-        int count = 0;
-        for (Rectangle cajon : cajones) {
-            if (espacio.intersects(cajon)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     private void calcularMedidas() {
         medidasElementos.clear();
-
-        // Medidas del módulo base
+        // Módulo base
         List<double[]> moduloMedidas = new ArrayList<>();
-        moduloMedidas.add(new double[]{0, 0, anchoModulo, alturaModulo, profundidadModulo}); // x, y, ancho, alto, profundidad
+        moduloMedidas.add(new double[]{0, 0, anchoModulo, alturaModulo, profundidadModulo});
         medidasElementos.put("modulo", moduloMedidas);
 
-        // Medidas de los divisorios
-        List<double[]> divisoriosHMedidas = new ArrayList<>();
+        // Divisorios horizontales
+        List<double[]> divH = new ArrayList<>();
         for (Point p : divisoriosHorizontales) {
-            divisoriosHMedidas.add(new double[]{0, p.y, anchoModulo, 0, profundidadModulo}); // x, y, ancho, alto, profundidad
+            divH.add(new double[]{0, p.y, anchoModulo - 36, profundidadModulo});
         }
-        medidasElementos.put("divisoriosHorizontales", divisoriosHMedidas);
+        medidasElementos.put("divisoriosHorizontales", divH);
 
-        List<double[]> divisoriosVMedidas = new ArrayList<>();
+        // Divisorios verticales
+        List<double[]> divV = new ArrayList<>();
         for (Point p : divisoriosVerticales) {
-            divisoriosVMedidas.add(new double[]{p.x, 0, 0, alturaModulo, profundidadModulo}); // x, y, ancho, alto, profundidad
+            divV.add(new double[]{p.x, 0, alturaModulo - 36, profundidadModulo});
         }
-        medidasElementos.put("divisoriosVerticales", divisoriosVMedidas);
+        medidasElementos.put("divisoriosVerticales", divV);
 
-        // Medidas de las puertas
+        // Puertas
         List<double[]> puertasMedidas = new ArrayList<>();
         for (Rectangle puerta : puertas) {
-            puertasMedidas.add(new double[]{puerta.x, puerta.y, puerta.width, puerta.height, profundidadModulo}); // x, y, ancho, alto, profundidad
+            double anchoP = puerta.width - 6;
+            double altoP = puerta.height - 6;
+            puertasMedidas.add(new double[]{puerta.x, puerta.y, anchoP, altoP});
         }
         medidasElementos.put("puertas", puertasMedidas);
 
-        // Medidas de los cajones
+        // Cajones
         List<double[]> cajonesMedidas = new ArrayList<>();
         for (Rectangle cajon : cajones) {
-            cajonesMedidas.add(new double[]{cajon.x, cajon.y, cajon.width, cajon.height, profundidadModulo}); // x, y, ancho, alto, profundidad
+            double baseAncho = cajon.width - 62;
+            double baseProf = profundidadModulo - 40;
+            double frenteAlto = (cajon.height) - 30;
+            double lateralLargo = baseAncho - 36;
+            double tapaAncho = cajon.width - (cajon.height) - 5;
+            cajonesMedidas.add(new double[]{cajon.x, cajon.y, baseAncho, baseProf, frenteAlto, lateralLargo, tapaAncho});
         }
         medidasElementos.put("cajones", cajonesMedidas);
     }
+
+    public Map<String, List<double[]>> getMedidasElementos() {
+        return medidasElementos;
+    }
+
+public void iniciarCicloDiseno() {
+        moduloActual = 1;
+        vista.mostrarMensajeModuloActual(moduloActual, cantidadModulos);
+    }
+
+public void terminarModuloYContinuar() {
+    // Guardar módulo y componentes en la BD
+    int idModulo = guardarModuloEnBD();
+    if (idModulo != -1) {
+        guardarComponentesEnBD(idModulo);
+    }
+
+    if (moduloActual < cantidadModulos) {
+        moduloActual++;
+        vista.mostrarMensajeModuloActual(moduloActual, cantidadModulos);
+        limpiarVistaParaNuevoModulo();
+    } else {
+        vista.finalizarCicloDiseno();
+    }
+}
+
+private int guardarModuloEnBD() {
+    int idModulo = -1;
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "")) {
+        String sql = "INSERT INTO Modulo (ANCHO, ALTO, PROFUNDO, PEDIDO_idPEDIDO) VALUES (?, ?, ?, ?)";
+        PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, mod.getAncho());
+        ps.setInt(2, mod.getAlto());
+        ps.setInt(3, mod.getProfundo());
+        ps.setInt(4, idPedido);
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        if (rs.next()) {
+            idModulo = rs.getInt(1);
+        }
+        rs.close();
+        ps.close();
+    } catch (SQLException e) {
+        vista.mostrarError("Error al guardar módulo: " + e.getMessage());
+    }
+    return idModulo;
+}
+
+private void guardarComponentesEnBD(int idModulo) {
+    Map<String, List<double[]>> medidas = getMedidasElementos();
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "")) {
+        String sql = "INSERT INTO Componente (NOMBRECOMPONENTE, ANCHOCOMP, LARGOCOMP, CANTIDADCOMP, MODULO_idMODULO) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        for (Map.Entry<String, List<double[]>> entry : medidas.entrySet()) {
+            String nombre = entry.getKey();
+            List<double[]> lista = entry.getValue();
+            for (double[] datos : lista) {
+                int ancho = (int) Math.round(datos.length > 2 ? datos[2] : 0);
+                int largo = (int) Math.round(datos.length > 3 ? datos[3] : 0);
+                int cantidad = 1; // Ajusta según lógica de tu app
+                ps.setString(1, nombre);
+                ps.setInt(2, ancho);
+                ps.setInt(3, largo);
+                ps.setInt(4, cantidad);
+                ps.setInt(5, idModulo);
+                ps.addBatch();
+            }
+        }
+        ps.executeBatch();
+        ps.close();
+    } catch (SQLException e) {
+        vista.mostrarError("Error al guardar componentes: " + e.getMessage());
+    }
+}
+
+private void limpiarVistaParaNuevoModulo() {
+    actualizarDimensiones(1, 1, 1);
+    dibujarModuloConElementos();
+    vista.limpiarCamposModulo();
+    vista.actualizarLabelPuertas(0);
+    vista.actualizarLabelCajones(0);
+}
 }

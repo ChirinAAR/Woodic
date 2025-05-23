@@ -6,7 +6,6 @@ package Vistas;
 import java.sql.*;
 import Controlador.*;
 import Modelo.*;
-import java.time.LocalDateTime;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -16,16 +15,14 @@ import javax.swing.JTextField;
  */
 public class CrearPedidoView extends javax.swing.JDialog {
 
-    Placa plac = new Placa();
-    CrearPedidoController controlador = new CrearPedidoController();
-    MenuPrincipalController princ = new MenuPrincipalController();
-    DisenarModuloController diseno;
-    
+    private Placa placa = new Placa();
+    private Pedido pedido = new Pedido();
+    private CrearPedidoController controlador;
+
     public CrearPedidoView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.diseno = new DisenarModuloController();
         initComponents();
-        controlador = new CrearPedidoController(this, plac);
+        controlador = new CrearPedidoController(this);
         cargarLineasInicial();
     }
 
@@ -56,6 +53,7 @@ public class CrearPedidoView extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -138,6 +136,15 @@ public class CrearPedidoView extends javax.swing.JDialog {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(102, 0, 0));
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Salir");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -165,7 +172,10 @@ public class CrearPedidoView extends javax.swing.JDialog {
                             .addComponent(jLabel7)))
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(jButton1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                         .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,7 +217,9 @@ public class CrearPedidoView extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -225,17 +237,50 @@ public class CrearPedidoView extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //controlador.guardar(plac);
-        princ.ocultar();
-        diseno.mostrar();
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        int cantidadModulos;
+        try {
+            cantidadModulos = Integer.parseInt(jTextField4.getText());
+            if (cantidadModulos <= 0) {
+                JOptionPane.showMessageDialog(this, "Ingrese una cantidad de módulos mayor a cero.");
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido para la cantidad de módulos.");
+            return;
+        }
+
+        // Poblar modelo Cliente y Pedido
+        Cliente cliente = new Cliente();
+        cliente.setNombre(jTextField1.getText());
+        try {
+            cliente.setContacto(Integer.parseInt(jTextField2.getText()));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido para el contacto.");
+            return;
+        }
+        cliente.setDireccion(jTextField3.getText());
+
+        pedido.setCliente(cliente);
+        pedido.setCantidadModulos(cantidadModulos);
+        pedido.setPrecio(0); // O el valor calculado
+
+        int idPedido = controlador.guardar(pedido);
+        if (idPedido == -1) {
+            JOptionPane.showMessageDialog(this, "No se pudo guardar el pedido. Intente nuevamente.");
+            return;
+        }
+
+        // Pasar datos a la siguiente vista
+        DisenarModuloView diseno = new DisenarModuloView(idPedido, cantidadModulos);
+        diseno.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
 
         if (jCheckBox1.isSelected()) { // Verifica si el checkbox está seleccionado
-            plac.setCompuesto("Aglomerado");
+            placa.setCompuesto("Aglomerado");
             controlador.cargarLinea(); // Llama a cargarLinea después de setear el compuesto
             if (jCheckBox2.isSelected()) {
                 jCheckBox2.setSelected(false); // Deselecciona el otro checkbox si está seleccionado
@@ -248,7 +293,7 @@ public class CrearPedidoView extends javax.swing.JDialog {
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
     if (jCheckBox2.isSelected()) { // Verifica si el checkbox está seleccionado
-            plac.setCompuesto("MDF");
+            placa.setCompuesto("MDF");
             controlador.cargarLinea(); // Llama a cargarLinea después de setear el compuesto
             if (jCheckBox1.isSelected()) {
                 jCheckBox1.setSelected(false); // Deselecciona el otro checkbox si está seleccionado
@@ -270,7 +315,7 @@ public class CrearPedidoView extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         jCheckBox2.setSelected(true);
-        plac.setCompuesto("MDF"); // Establecer un compuesto inicial
+        placa.setCompuesto("MDF"); // Establecer un compuesto inicial
         controlador.cargarLinea(); // Cargar líneas iniciales basadas en el compuesto por defecto
         if (jComboBox1.getItemCount() > 0) {
         String opcion = jComboBox1.getSelectedItem().toString();
@@ -279,9 +324,12 @@ public class CrearPedidoView extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowOpened
 
     private void jComboBox2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox2MouseClicked
-        //CrearPedidoController controlador = new CrearPedidoController(this);
-        //controlador.cargarColor();
+        controlador.cargarColor();
     }//GEN-LAST:event_jComboBox2MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -327,7 +375,8 @@ public class CrearPedidoView extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton jButton2;
+    public javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -348,68 +397,36 @@ public class CrearPedidoView extends javax.swing.JDialog {
 
     private void cargarColoresInicial(String lineaSeleccionada) {
     jComboBox2.removeAllItems();
-    try {
-        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
-        PreparedStatement ps = c.prepareStatement("SELECT COLOR FROM PLACA WHERE LINEA = ?");
-        ps.setString(1, lineaSeleccionada);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            jComboBox2.addItem(rs.getString("COLOR"));
+    try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
+             PreparedStatement ps = c.prepareStatement("SELECT COLOR FROM PLACA WHERE LINEA = ?")) {
+            ps.setString(1, lineaSeleccionada);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                jComboBox2.addItem(rs.getString("COLOR"));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar colores: " + e.getMessage());
         }
-
-        rs.close();
-        ps.close();
-        c.close();
-    } catch (Exception e) {
-        System.out.println("Error al cargar colores inicialmente: " + e.getMessage());
     }
-}
     
     private void cargarLineasInicial() {
-        try {
-            Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
-            String sql = "SELECT LINEA FROM PLACA";
-            PreparedStatement ps = c.prepareStatement(sql);
+        try (Connection c = DriverManager.getConnection("jdbc:mysql://localhost/woodicbase", "root", "");
+             PreparedStatement ps = c.prepareStatement("SELECT LINEA FROM PLACA")) {
             ResultSet rs = ps.executeQuery();
-
-            jComboBox1.removeAllItems(); // Limpiar items previos
+            jComboBox1.removeAllItems();
             while (rs.next()) {
                 jComboBox1.addItem(rs.getString("LINEA"));
             }
-
-            rs.close();
-            ps.close();
-            c.close();
         } catch (Exception e) {
-            System.out.println(e);
+            JOptionPane.showMessageDialog(this, "Error al cargar líneas: " + e.getMessage());
         }
     }
-    
-    public JTextField getjTextField1() {
-        return jTextField1;
-    }
 
-    public JTextField getjTextField2() {
-        return jTextField2;
-    }
-
-    public JTextField getjTextField3() {
-        return jTextField3;
-    }
-
-    public JTextField getjTextField4() {
-        return jTextField4;
-    }
-
-    public JComboBox<String> getjComboBox1() {
-        return jComboBox1;
-    }
-
-    public JComboBox<String> getjComboBox2() {
-        return jComboBox2;
-    }
-
-    
-    
+    // Getters para los campos de la vista
+    public JTextField getjTextField1() { return jTextField1; }
+    public JTextField getjTextField2() { return jTextField2; }
+    public JTextField getjTextField3() { return jTextField3; }
+    public JTextField getjTextField4() { return jTextField4; }
+    public JComboBox<String> getjComboBox1() { return jComboBox1; }
+    public JComboBox<String> getjComboBox2() { return jComboBox2; }
 }

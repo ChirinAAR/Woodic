@@ -4,14 +4,11 @@
  */
 package Vistas;
 import Controlador.*;
+import Modelo.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 /**
  *
  * @author Alumno
@@ -22,6 +19,9 @@ public class DisenarModuloView extends javax.swing.JFrame {
     private FinalViewController lista;
     private CrearPedidoController pedilo;
     private MenuPrincipalController menu;
+    private Pedido pedido;
+    private int idPedido;
+    private int cantidadModulos;
 
     private int alturaModulo = 1;
     private int anchoModulo = 1;
@@ -32,27 +32,29 @@ public class DisenarModuloView extends javax.swing.JFrame {
 
     private int moduloX;
     private int moduloY;
-    private float escalaX = 1;
-    private float escalaY = 1;
-    private List<Point> divisoriosHorizontales = new ArrayList<>();
-    private List<Point> divisoriosVerticales = new ArrayList<>();
+    // Removed unused fields: escalaX, escalaY, divisoriosHorizontales, divisoriosVerticales
 
     private boolean dibujarPuerta = false;
-    private List<Rectangle> puertas = new ArrayList<>();
 
     private boolean dibujarCajon = false;
     private int cantidadCajones = 0;
-    private List<Rectangle> cajones = new ArrayList<>();
 
-    private Map<String, List<double[]>> medidasElementos = new HashMap<>(); // Para guardar las medidas
+    // private Map<String, List<double[]>> medidasElementos = new HashMap<>(); // Para guardar las medidas
 
-
-    
     public DisenarModuloView() {
-    initComponents();
-    diseno = new DisenarModuloController(this); // Inicializa el controlador y le pasa la vista
+        initComponents();
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setTitle("Diseñar Módulo");
+    }
+    
+    public DisenarModuloView(int idPedido, int cantidadModulos) {
+        this.idPedido = idPedido;
+        this.cantidadModulos = cantidadModulos;
+        initComponents();
+        diseno = new DisenarModuloController(this, idPedido, cantidadModulos);
+        diseno.iniciarCicloDiseno();
 
-        // ActionListener para el botón Aceptar (dibujar módulo base)
         jButton9.addActionListener(e -> {
             try {
                 alturaModulo = Integer.parseInt(jTextField1.getText());
@@ -69,90 +71,91 @@ public class DisenarModuloView extends javax.swing.JFrame {
             }
         });
 
-        jButton1.addActionListener(e -> {
-            diseno.agregarDivisorio(true); // Llama al método agregarDivisorio en el controlador
-            diseno.dibujarModuloConElementos(); // Redibuja el módulo con el divisorio
-        });
-
-        // Modificado para dibujar automáticamente el divisorio
-        jButton2.addActionListener(e -> {
-            diseno.agregarDivisorio(false); // Llama al método agregarDivisorio en el controlador
-            diseno.dibujarModuloConElementos(); // Redibuja el módulo con el divisorio
-        });
-
-        jButton5.addActionListener(e -> {
-            if (jCheckBox3.isSelected()) {
-                dibujarPuerta = true;
-                jPanel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            } else {
-                JOptionPane.showMessageDialog(this, "Debe seleccionar la opción 'Puertas'.");
-                dibujarPuerta = false;
-                jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        jButton1.addActionListener(evt -> {
+            if (!jCheckBox1.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar la opción 'Divisorios'.");
+                return;
+            }
+            String input = JOptionPane.showInputDialog(this, "Ingrese la posición del divisorio horizontal (mm):");
+            try {
+                int pos = Integer.parseInt(input);
+                diseno.agregarDivisorio(true, pos);
+                diseno.dibujarModuloConElementos();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Ingrese un número válido.");
             }
         });
 
-        jButton6.addActionListener(e -> {
-            if (jCheckBox4.isSelected()) {
-                try {
-                    cantidadCajones = Integer.parseInt(jTextField4.getText());
-                    if (cantidadCajones > 0) {
-                        dibujarCajon = true;
-                        jPanel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Ingrese una cantidad válida de cajones.");
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Ingrese un número entero para la cantidad de cajones.");
-                }
-            } else {
+        jButton2.addActionListener(evt -> {
+            if (!jCheckBox1.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar la opción 'Divisorios'.");
+                return;
+            }
+            String input = JOptionPane.showInputDialog(this, "Ingrese la posición del divisorio vertical (mm):");
+            try {
+                int pos = Integer.parseInt(input);
+                diseno.agregarDivisorio(false, pos);
+                diseno.dibujarModuloConElementos();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Ingrese un número válido.");
+            }
+        });
+
+        jButton5.addActionListener(evt -> {
+            if (!jCheckBox3.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar la opción 'Puertas'.");
+                return;
+            }
+            jPanel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        });
+
+        jButton6.addActionListener(evt -> {
+            if (!jCheckBox4.isSelected()) {
                 JOptionPane.showMessageDialog(this, "Debe seleccionar la opción 'Cajones'.");
-                dibujarCajon = false;
-                jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                return;
+            }
+            try {
+                int cantidad = Integer.parseInt(jTextField4.getText());
+                if (cantidad <= 0) {
+                    JOptionPane.showMessageDialog(this, "Ingrese una cantidad válida de cajones.");
+                    return;
+                }
+                jPanel2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Ingrese un número entero para la cantidad de cajones.");
             }
         });
 
         jPanel2.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int clickX = e.getX();
-                int clickY = e.getY();
-                int moduloRelX = clickX - moduloX;
-                int moduloRelY = clickY - moduloY;
-
-                if (dibujarPuerta) {
-                    Rectangle espacio = diseno.encontrarSubespacio(moduloRelX, moduloRelY); // Usa el método del controlador
-                    if (espacio != null && !diseno.hayElementoEnEspacio(espacio, puertas)) { // Usa el método del controlador
-                        int numPuertas = (e.getButton() == MouseEvent.BUTTON1) ? 1 : (e.getButton() == MouseEvent.BUTTON3) ? 2 : 0;
-                        diseno.colocarPuertas(espacio, numPuertas);  // Usa el método del controlador
-                        diseno.dibujarModuloConElementos(); // Usa el método del controlador
-                        jLabel11.setText("Total: " + puertas.size());
-                    } else if (espacio == null) {
-                        JOptionPane.showMessageDialog(DisenarModuloView.this, "Debe hacer clic dentro de un subespacio para colocar la puerta.");
-                    } else {
-                        JOptionPane.showMessageDialog(DisenarModuloView.this, "Ya hay una puerta en este subespacio.");
-                    }
-                    dibujarPuerta = false;
-                    jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                } else if (dibujarCajon) {
-                    Rectangle espacio = diseno.encontrarSubespacio(moduloRelX, moduloRelY);  // Usa el método del controlador
-                    if (espacio != null && !diseno.hayElementoEnEspacio(espacio, cajones)) { // Usa el método del controlador
-                        diseno.colocarCajones(espacio, cantidadCajones); // Usa el método del controlador
-                        diseno.dibujarModuloConElementos();  // Usa el método del controlador
-                        jLabel10.setText("Total: " + cajones.size());
-                    } else if (espacio == null) {
-                        JOptionPane.showMessageDialog(DisenarModuloView.this, "Debe hacer clic dentro de un subespacio para colocar los cajones.");
-                    } else {
-                        JOptionPane.showMessageDialog(DisenarModuloView.this, "Ya hay cajones en este subespacio.");
-                    }
-                    dibujarCajon = false;
-                    cantidadCajones = 0;
-                    jTextField4.setText("");
-                    jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (jCheckBox3.isSelected()) {
+            diseno.manejarClickPuerta(e.getX(), e.getY(), e.getButton());
+            jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        } else if (jCheckBox4.isSelected()) {
+            try {
+                int cantidad = Integer.parseInt(jTextField4.getText());
+                diseno.manejarClickCajon(e.getX(), e.getY(), cantidad);
+                jPanel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida de cajones.");
             }
-        });
+        }
+    }
+});
+
 }
-    
+
+public DisenarModuloController getControlador() {
+    return diseno;
+}
+
+public void actualizarLabelPuertas(int cantidad) {
+    jLabel11.setText("Total: " + cantidad);
+}
+    public void actualizarLabelCajones(int cantidad) {
+        jLabel10.setText("Total: " + cantidad);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -347,26 +350,25 @@ public class DisenarModuloView extends javax.swing.JFrame {
                         .addComponent(jCheckBox2)
                         .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                         .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton7)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(jButton9)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel9)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(41, 41, 41)))
+                        .addComponent(jButton9))
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jCheckBox4)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel10))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jCheckBox3)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel11)))
+                        .addComponent(jLabel11))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
@@ -401,7 +403,7 @@ public class DisenarModuloView extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel8)
@@ -411,35 +413,35 @@ public class DisenarModuloView extends javax.swing.JFrame {
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
-                        .addGap(32, 32, 32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4)
-                        .addGap(36, 36, 36)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox3)
-                            .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCheckBox4)
                             .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
+                            .addComponent(jLabel9)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6))
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBox3)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)
+                        .addGap(33, 33, 33)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton7)
+                            .addComponent(jButton8)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton7)
-                    .addComponent(jButton8))
                 .addContainerGap())
         );
 
@@ -451,7 +453,7 @@ public class DisenarModuloView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -463,13 +465,18 @@ public class DisenarModuloView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        this.dispose();
-        lista.mostrar();
+        // Llama al controlador para guardar el módulo actual y avanzar
+    diseno.terminarModuloYContinuar();
+
+    // Si ya se llegó al máximo de módulos, abrir la ventana de lista de cortes
+    if (diseno.getModuloActual() > diseno.getCantidadModulos()) {
+        finalizarCicloDiseno();
+    }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
        diseno.actualizarDimensiones(alturaModulo, anchoModulo, profundidadModulo);
-       diseno.dibujarModulo(alturaModulo,anchoModulo,profundidadModulo);
+       diseno.dibujarModuloConElementos();
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -582,4 +589,37 @@ public class DisenarModuloView extends javax.swing.JFrame {
         return jPanel2;
     }
 
+    public int getAltoModulo() {
+        return Integer.parseInt(jTextField1.getText());
+    }
+
+    public int getAnchoModulo() {
+        return Integer.parseInt(jTextField2.getText());
+    }
+
+    public int getProfundidadModulo() {
+        return Integer.parseInt(jTextField3.getText());
+    }
+
+    public void limpiarCamposModulo() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+    }
+
+    public void mostrarMensajeModuloActual(int actual, int total) {
+        JOptionPane.showMessageDialog(this, "Diseñando módulo " + actual + " de " + total);
+    }
+
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    public void finalizarCicloDiseno() {
+        JOptionPane.showMessageDialog(this, "Todos los módulos han sido diseñados y guardados.");
+        this.setVisible(false);
+        FinalView lista = new FinalView(idPedido, cantidadModulos);
+        lista.setVisible(true);
+    }
 }
