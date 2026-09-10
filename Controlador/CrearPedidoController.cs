@@ -1,167 +1,148 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using MySql.Data.MySqlClient; // Requiere instalar el paquete NuGet MySql.Data
-using Woodic.Modelo; // Asegúrate de tener tu namespace de Modelos
+using Microsoft.Data.SqlClient;
+using Woodic.Modelo;
 using Woodic.Vistas;
 
 namespace Woodic.Controlador
 {
     public class CrearPedidoController
     {
-        private readonly CrearPedidoView vista;
+        private readonly MainWindow _mainWindow;
 
-        // Cadena de conexión para MySQL en C#
-        private readonly string connectionString = "Server=localhost;Database=woodicbase;Uid=root;Pwd=;";
-
-        public CrearPedidoController(CrearPedidoView vista)
+        public CrearPedidoController(MainWindow mainWindow)
         {
-            this.vista = vista;
+            _mainWindow = mainWindow;
         }
 
-        /// <summary>
-        /// Guarda el pedido y el cliente en la base de datos.
-        /// </summary>
-        public int Guardar(Pedido pedido)
+        public List<string> CargarLineas(string compuesto)
         {
-            int idPedido = -1;
-            Cliente cliente = pedido.Cliente();
+            var lineas = new List<string>();
+            try
+            {
+                using var conn = DatabaseHelper.CreateConnection();
+                conn.Open();
+                string sql = "SELECT DISTINCT LINEA FROM placa WHERE COMPUESTO = @compuesto ORDER BY LINEA";
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@compuesto", compuesto);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    lineas.Add(reader.GetString(0));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar líneas: {ex.Message}", "Error de Base de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return lineas;
+        }
+
+        public List<string> CargarColores(string compuesto, string linea)
+        {
+            var colores = new List<string>();
+            if (string.IsNullOrEmpty(linea)) return colores;
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using var conn = DatabaseHelper.CreateConnection();
+                conn.Open();
+                string sql = "SELECT DISTINCT COLOR FROM placa WHERE COMPUESTO = @compuesto AND LINEA = @linea ORDER BY COLOR";
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@compuesto", compuesto);
+                cmd.Parameters.AddWithValue("@linea", linea);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    conn.Open();
-
-                    // Guardar cliente (si no existe)
-                    string sqlCliente = "INSERT IGNORE INTO Cliente (NOMBRE, DIRECCION, CONTACTO) VALUES (@nombre, @direccion, @contacto)";
-                    using (MySqlCommand cmdCliente = new MySqlCommand(sqlCliente, conn))
-                    {
-                        cmdCliente.Parameters.AddWithValue("@nombre", cliente.getNombre());
-                        cmdCliente.Parameters.AddWithValue("@direccion", cliente.getDireccion());
-                        cmdCliente.Parameters.AddWithValue("@contacto", cliente.getContacto());
-                        cmdCliente.ExecuteNonQuery();
-                    }
-
-                    // Guardar pedido
-                    string sqlPedido = "INSERT INTO Pedido (CANTIDADMODULOS, PRECIO, cliente_CONTACTO, placa_idPLACA) VALUES (@cantidad, @precio, @contacto, @idPlaca)";
-                    using (MySqlCommand cmdPedido = new MySqlCommand(sqlPedido, conn))
-                    {
-                        cmdPedido.Parameters.AddWithValue("@cantidad", pedido.getCantidadModulos());
-                        cmdPedido.Parameters.AddWithValue("@precio", pedido.getPrecio());
-                        cmdPedido.Parameters.AddWithValue("@contacto", cliente.getContacto());
-                        cmdPedido.Parameters.AddWithValue("@idPlaca", pedido.getPlacaId());
-
-                        cmdPedido.ExecuteNonQuery();
-
-                        // Obtener el ID generado
-                        idPedido = Convert.ToInt32(cmdPedido.LastInsertedId);
-                    }
+                    colores.Add(reader.GetString(0));
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar pedido o cliente: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error al cargar colores: {ex.Message}", "Error de Base de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            return idPedido;
+            return colores;
         }
 
-        public void CargarLinea()
-        {
-            string compuesto = vista.chkAglomerado.IsChecked == true ? "Aglomerado" : "MDF";
-            vista.cmbLinea.Items.Clear();
-
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string query = "SELECT DISTINCT LINEA FROM PLACA WHERE COMPUESTO = @compuesto";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@compuesto", compuesto);
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                vista.cmbLinea.Items.Add(reader.GetString("LINEA"));
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al cargar líneas: " + e.Message);
-            }
-        }
-
-        /// <summary>
-        /// Carga los colores disponibles según la línea seleccionada en la vista.
-        /// </summary>
-        public void CargarColor()
-        {
-            if (vista.cmbLinea.SelectedItem == null) return;
-            string lineaSeleccionada = vista.cmbLinea.SelectedItem.ToString();
-            vista.cmbColor.Items.Clear();
-
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string query = "SELECT DISTINCT COLOR FROM PLACA WHERE LINEA = @linea";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@linea", lineaSeleccionada);
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                vista.cmbColor.Items.Add(reader.GetString("COLOR"));
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al cargar colores: " + e.Message);
-            }
-        }
-
-        public int ObtenerIdPlacaSeleccionada(string linea, string color)
+        public int ObtenerIdPlaca(string compuesto, string linea, string color)
         {
             int idPlaca = -1;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using var conn = DatabaseHelper.CreateConnection();
+                conn.Open();
+                string sql = "SELECT TOP 1 idPLACA FROM placa WHERE COMPUESTO = @compuesto AND LINEA = @linea AND COLOR = @color";
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@compuesto", compuesto);
+                cmd.Parameters.AddWithValue("@linea", linea);
+                cmd.Parameters.AddWithValue("@color", color);
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
                 {
-                    conn.Open();
-                    string query = "SELECT idPLACA FROM placa WHERE LINEA = @linea AND COLOR = @color";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@linea", linea);
-                        cmd.Parameters.AddWithValue("@color", color);
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                idPlaca = reader.GetInt32("idPLACA");
-                            }
-                        }
-                    }
+                    idPlaca = Convert.ToInt32(result);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Manejo de error
+                MessageBox.Show($"Error al buscar placa: {ex.Message}");
             }
             return idPlaca;
         }
+
+        public int GuardarPedido(Cliente cliente, int idPlaca, int cantidadModulos)
+        {
+            int idPedido = -1;
+            try
+            {
+                using var conn = DatabaseHelper.CreateConnection();
+                conn.Open();
+
+                // 1. Guardar cliente (si no existe)
+                string sqlCliente = @"
+                    IF NOT EXISTS (SELECT 1 FROM cliente WHERE CONTACTO = @contacto)
+                    BEGIN
+                        INSERT INTO cliente (CONTACTO, NOMBRE, DIRECCION) VALUES (@contacto, @nombre, @direccion);
+                    END
+                    ELSE
+                    BEGIN
+                        UPDATE cliente SET NOMBRE = @nombre, DIRECCION = @direccion WHERE CONTACTO = @contacto;
+                    END";
+
+                using (var cmdCliente = new SqlCommand(sqlCliente, conn))
+                {
+                    cmdCliente.Parameters.AddWithValue("@contacto", cliente.Contacto);
+                    cmdCliente.Parameters.AddWithValue("@nombre", cliente.Nombre ?? "");
+                    cmdCliente.Parameters.AddWithValue("@direccion", cliente.Direccion ?? "");
+                    cmdCliente.ExecuteNonQuery();
+                }
+
+                // 2. Guardar pedido
+                string sqlPedido = @"
+                    INSERT INTO pedido (CANTIDADMODULOS, PRECIO, cliente_CONTACTO, placa_idPLACA)
+                    OUTPUT INSERTED.idPEDIDO
+                    VALUES (@cantidad, 0, @contacto, @idPlaca);";
+
+                using (var cmdPedido = new SqlCommand(sqlPedido, conn))
+                {
+                    cmdPedido.Parameters.AddWithValue("@cantidad", cantidadModulos);
+                    cmdPedido.Parameters.AddWithValue("@contacto", cliente.Contacto);
+                    cmdPedido.Parameters.AddWithValue("@idPlaca", idPlaca);
+                    idPedido = Convert.ToInt32(cmdPedido.ExecuteScalar());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar pedido: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return idPedido;
+        }
+
+        public void IniciarDisenoModulos(int idPedido, int cantidadModulos, List<string>? descripciones = null)
+        {
+            var disenoView = new DisenarModuloView(_mainWindow, idPedido, cantidadModulos, descripciones, esPresupuestoRapido: false);
+            _mainWindow.NavegarA(disenoView);
+        }
     }
 }
-

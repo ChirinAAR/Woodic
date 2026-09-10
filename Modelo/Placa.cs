@@ -1,72 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
 
 namespace Woodic.Modelo
 {
     public class Placa
     {
-        private int id_placa;
-        private string linea;
-        private string color;
-        private string compuesto;
-        private int precio;
-        private bool beta;
-        private int ancho;
-        private int largo;
-        public Placa() {
-        }
-        public int getLargo() {
-            return largo;
-        }
-        public void setLargo(int largo) {
-            this.largo = largo;
-        }
-        public int getId_placa(){
-            return id_placa;
-        }
-        public void setId_placa(int id_placa){
-            this.id_placa = id_placa;
-        }
+        public int IdPlaca { get; set; }
+        public string Linea { get; set; } = string.Empty;
+        public string Compuesto { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
+        public double Precio { get; set; }
+        public bool Beta { get; set; }
+        public string Proveedor { get; set; } = string.Empty;
+        public int Ancho { get; set; } = 1830;
+        public int Largo { get; set; } = 2400;
 
-        public string getLinea(){
-            return linea;
-        }
-        public void setLinea(string linea){
-            this.linea = linea;
-        }
-        public string getColor(){
-            return color;
-        }
-        public void setColor(string color){
-            this.color = color;
-        }
-        public string getCompuesto(){
-            return compuesto;
-        }
-        public void setCompuesto(string compuesto){
-            this.compuesto = compuesto;
-        }
-        public int getPrecio(){
-            return precio;
-        }
-        public void setPrecio(int precio){
-            this.precio = precio;
-        }
-        public bool isBeta(){
-            return beta;
-        }
-        public void setBeta(bool beta){
-            this.beta = beta;
-        }
-        public int getAncho(){
-            return ancho;
-        }
-        public void setAncho(int ancho){
-            this.ancho = ancho;
-        }
+        public string BetaTexto => Beta ? "Con Veta" : "Sin Veta";
+        public string DimensionesTexto => $"{Ancho} x {Largo}";
+        public string PrecioFormateado => $"${Precio:N2}";
+
+        public Placa() { }
+
+        // Compatibilidad con código original
+        public int getId_placa() => IdPlaca;
+        public void setId_placa(int id) => IdPlaca = id;
+
+        public string getLinea() => Linea;
+        public void setLinea(string l) => Linea = l;
+
+        public string getColor() => Color;
+        public void setColor(string c) => Color = c;
+
+        public string getCompuesto() => Compuesto;
+        public void setCompuesto(string c) => Compuesto = c;
+
+        public int getPrecio() => (int)Precio;
+        public void setPrecio(int p) => Precio = p;
+
+        public bool isBeta() => Beta;
+        public void setBeta(bool b) => Beta = b;
+
+        public int getAncho() => Ancho;
+        public void setAncho(int a) => Ancho = a;
+
+        public int getLargo() => Largo;
+        public void setLargo(int l) => Largo = l;
     }
 }

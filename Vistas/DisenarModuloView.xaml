@@ -1,12 +1,310 @@
-﻿<Window x:Class="Woodic.Vistas.DisenarModuloView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Woodic.Vistas"
-        mc:Ignorable="d"
-        Title="DisenarModuloView" Height="450" Width="800">
-    <Grid>
-        
+<UserControl x:Class="Woodic.Vistas.DisenarModuloView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <!-- Panel de Controles de Diseño -->
+            <ColumnDefinition Width="380" />
+            <!-- Separador -->
+            <ColumnDefinition Width="15" />
+            <!-- Visor 3D y Vista Previa -->
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- PANEL IZQUIERDO: PARÁMETROS Y ELEMENTOS -->
+        <Border Grid.Column="0"
+                Background="{DynamicResource CardBackgroundBrush}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="18">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- Título -->
+                    <TextBlock Text="Diseño Modulos"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               Margin="0,0,0,16" />
+
+                    <!-- Medidas Principales -->
+                    <!-- Altura -->
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="35" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="- Altura" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <TextBox x:Name="txtAltura" Grid.Column="1" Text="1800" Height="32" ToolTip="Altura en mm (máx 2600)" />
+                        <TextBlock Grid.Column="2" Text="mm" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </Grid>
+
+                    <!-- Ancho -->
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="35" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="- Ancho" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <TextBox x:Name="txtAncho" Grid.Column="1" Text="900" Height="32" ToolTip="Ancho en mm (máx 2600)" />
+                        <TextBlock Grid.Column="2" Text="mm" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </Grid>
+
+                    <!-- Profundidad -->
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="35" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="- Profundidad" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <TextBox x:Name="txtProfundidad" Grid.Column="1" Text="500" Height="32" ToolTip="Profundidad en mm (máx 1830)" />
+                        <TextBlock Grid.Column="2" Text="mm" VerticalAlignment="Center" Margin="6,0,0,0" Foreground="{DynamicResource TextSecondaryBrush}" />
+                    </Grid>
+
+                    <!-- Formato -->
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="- Formato" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                        <ComboBox x:Name="cmbFormato" Grid.Column="1" Height="32" SelectionChanged="cmbFormato_SelectionChanged">
+                            <ComboBoxItem Content="Completo" IsSelected="True" />
+                            <ComboBoxItem Content="Escritorio (Sin zócalo inf.)" />
+                            <ComboBoxItem Content="Bajomesada (Sin cabezal sup.)" />
+                        </ComboBox>
+                    </Grid>
+
+                    <!-- Botón Aplicar Medidas -->
+                    <Button x:Name="btnAplicarMedidas"
+                            Content="Aplicar Medidas"
+                            Style="{DynamicResource ActionButtonStyle}"
+                            Height="32"
+                            Margin="0,0,0,16"
+                            Click="btnAplicarMedidas_Click" />
+
+                    <!-- SECCIÓN ELEMENTOS -->
+                    <TextBlock Text="Elementos"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               Margin="0,0,0,10" />
+
+                    <!-- 1. Divisorios -->
+                    <Border BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,1,0,0" Padding="0,8">
+                        <StackPanel>
+                            <DockPanel LastChildFill="False" Margin="0,0,0,8">
+                                <CheckBox x:Name="chkDivisorios" Content="Divisorios" IsChecked="True" VerticalAlignment="Center" />
+                                <Button x:Name="btnDeshacerDivisorios"
+                                        Content="Deshacer"
+                                        DockPanel.Dock="Right"
+                                        Style="{DynamicResource NavButtonStyle}"
+                                        Padding="8,3"
+                                        FontSize="12"
+                                        Click="btnDeshacerDivisorios_Click" />
+                            </DockPanel>
+                            <Button x:Name="btnDivisorioHorizontal"
+                                    Content="Añadir Divisorio Horizontal"
+                                    Style="{DynamicResource ActionButtonStyle}"
+                                    Margin="0,0,0,6"
+                                    Click="btnDivisorioHorizontal_Click" />
+                            <Button x:Name="btnDivisorioVertical"
+                                    Content="Añadir Divisorio Vertical"
+                                    Style="{DynamicResource ActionButtonStyle}"
+                                    Click="btnDivisorioVertical_Click" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 2. Banquinas -->
+                    <Border BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,1,0,0" Padding="0,8">
+                        <StackPanel>
+                            <DockPanel LastChildFill="False" Margin="0,0,0,8">
+                                <CheckBox x:Name="chkBanquinas" Content="Banquinas" VerticalAlignment="Center" />
+                                <Button x:Name="btnDeshacerBanquinas"
+                                        Content="Deshacer"
+                                        DockPanel.Dock="Right"
+                                        Style="{DynamicResource NavButtonStyle}"
+                                        Padding="8,3"
+                                        FontSize="12"
+                                        Click="btnDeshacerBanquinas_Click" />
+                            </DockPanel>
+                            <Button x:Name="btnBanquinaHorizontal"
+                                    Content="Añadir Banquina Horizontal"
+                                    Style="{DynamicResource ActionButtonStyle}"
+                                    Margin="0,0,0,6"
+                                    Click="btnBanquinaHorizontal_Click" />
+                            <Button x:Name="btnBanquinaVertical"
+                                    Content="Añadir Banquina Vertical"
+                                    Style="{DynamicResource ActionButtonStyle}"
+                                    Click="btnBanquinaVertical_Click" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 3. Cajones -->
+                    <Border BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,1,0,0" Padding="0,8">
+                        <StackPanel>
+                            <DockPanel LastChildFill="False" Margin="0,0,0,8">
+                                <CheckBox x:Name="chkCajones" Content="Cajones" VerticalAlignment="Center" />
+                                <Button x:Name="btnDeshacerCajones"
+                                        Content="Deshacer"
+                                        DockPanel.Dock="Right"
+                                        Style="{DynamicResource NavButtonStyle}"
+                                        Padding="8,3"
+                                        FontSize="12"
+                                        Click="btnDeshacerCajones_Click" />
+                            </DockPanel>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="85" />
+                                    <ColumnDefinition Width="65" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="- Cantidad" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                <TextBox x:Name="txtCantidadCajones" Grid.Column="1" Text="2" Height="28" />
+                            </Grid>
+                            <Button x:Name="btnSeleccionarCajones"
+                                    Content="Seleccionar Ubicacion"
+                                    Style="{DynamicResource ActionButtonStyle}"
+                                    Click="btnSeleccionarCajones_Click" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 4. Puertas -->
+                    <Border BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,1,0,0" Padding="0,8">
+                        <StackPanel>
+                            <DockPanel LastChildFill="False" Margin="0,0,0,8">
+                                <CheckBox x:Name="chkPuertas" Content="Puertas" VerticalAlignment="Center" />
+                                <Button x:Name="btnDeshacerPuertas"
+                                        Content="Deshacer"
+                                        DockPanel.Dock="Right"
+                                        Style="{DynamicResource NavButtonStyle}"
+                                        Padding="8,3"
+                                        FontSize="12"
+                                        Click="btnDeshacerPuertas_Click" />
+                            </DockPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                <RadioButton x:Name="rbPuertaSimple" Content="1 Puerta" IsChecked="True" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,15,0" />
+                                <RadioButton x:Name="rbPuertaDoble" Content="2 Puertas (Doble)" Foreground="{DynamicResource TextPrimaryBrush}" />
+                            </StackPanel>
+                            <Button x:Name="btnSeleccionarPuertas"
+                                    Content="Seleccionar Ubicacion"
+                                    Style="{DynamicResource ActionButtonStyle}"
+                                    Click="btnSeleccionarPuertas_Click" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Mensaje de Instrucción -->
+                    <TextBlock x:Name="lblInstruccion"
+                               Text=""
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextAccentBrush}"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,12" />
+
+                    <!-- Botón Terminar -->
+                    <Button x:Name="btnTerminar"
+                            Content="Terminar"
+                            Style="{DynamicResource ActionButtonStyle}"
+                            Height="44"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Background="#1E3A8A"
+                            Click="btnTerminar_Click" />
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- PANEL DERECHO: VISOR 3D DEL MÓDULO -->
+        <Border Grid.Column="2"
+                Background="{DynamicResource CardBackgroundBrush}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="14">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Encabezado del Visor 3D -->
+                <DockPanel Grid.Row="0" Margin="0,0,0,10">
+                    <TextBlock x:Name="lblTituloVistaPrevia"
+                               Text="Vista Previa Modulo 1"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               VerticalAlignment="Center" />
+
+                    <!-- Controles de Cámara 3D -->
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <Button x:Name="btnCamIsometrica" Content="3D Isométrica" Style="{DynamicResource NavButtonStyle}" Padding="8,4" FontSize="12" Margin="0,0,5,0" Click="btnCamIsometrica_Click" />
+                        <Button x:Name="btnCamFrente" Content="Frente" Style="{DynamicResource NavButtonStyle}" Padding="8,4" FontSize="12" Margin="0,0,5,0" Click="btnCamFrente_Click" />
+                        <Button x:Name="btnCamPlanta" Content="Planta" Style="{DynamicResource NavButtonStyle}" Padding="8,4" FontSize="12" Margin="0,0,5,0" Click="btnCamPlanta_Click" />
+                        <Button x:Name="btnCamLateral" Content="Lateral" Style="{DynamicResource NavButtonStyle}" Padding="8,4" FontSize="12" Click="btnCamLateral_Click" />
+                    </StackPanel>
+                </DockPanel>
+
+                <!-- Área 3D Interactiva -->
+                <Border Grid.Row="1"
+                        Background="#1E2028"
+                        BorderBrush="{DynamicResource CardBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        ClipToBounds="True">
+                    <Grid>
+                        <!-- Viewport3D Nativo WPF -->
+                        <Viewport3D x:Name="viewport3D"
+                                    MouseDown="viewport3D_MouseDown"
+                                    MouseMove="viewport3D_MouseMove"
+                                    MouseUp="viewport3D_MouseUp"
+                                    MouseWheel="viewport3D_MouseWheel"
+                                    Cursor="Hand">
+
+                            <!-- Cámara de Perspectiva -->
+                            <Viewport3D.Camera>
+                                <PerspectiveCamera x:Name="mainCamera"
+                                                   Position="1500,1200,2800"
+                                                   LookDirection="-1500,-1200,-2800"
+                                                   UpDirection="0,1,0"
+                                                   FieldOfView="50" />
+                            </Viewport3D.Camera>
+
+                            <!-- Luces -->
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <Model3DGroup>
+                                        <AmbientLight Color="#707070" />
+                                        <DirectionalLight Color="#FFFFFF" Direction="-1,-1.5,-2" />
+                                        <DirectionalLight Color="#606060" Direction="1,1,1" />
+                                    </Model3DGroup>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+
+                            <!-- Mueble 3D -->
+                            <ModelVisual3D x:Name="furnitureVisual" />
+
+                        </Viewport3D>
+
+                        <!-- Indicador flotante de ayuda de controles 3D -->
+                        <Border Background="#90000000"
+                                CornerRadius="6"
+                                Padding="8,4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                Margin="12">
+                            <TextBlock Text="Arrastrar: Girar 3D | Rueda: Zoom | Clic en frontal para ubicar puertas/cajones"
+                                       FontSize="11"
+                                       Foreground="#D1D5DB" />
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
     </Grid>
-</Window>
+</UserControl>

@@ -13,11 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="9.7.0" />
+    <Resource Include="Vistas\logo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Vistas\logo.png" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+    <PackageReference Include="PDFsharp-WPF" Version="6.1.1" />
   </ItemGroup>
 
 </Project>

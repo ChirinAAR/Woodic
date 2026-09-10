@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="Woodic.Vistas.CortesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="1100"
+             Loaded="UserControl_Loaded">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock x:Name="lblTitulo"
+                           Text="Listado de Cortes"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource TextAccentBrush}" />
+                <TextBlock x:Name="lblSubtitulo"
+                           Text="Despiece detallado por módulo para producción y corte"
+                           FontSize="14"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           Margin="0,4,0,0" />
+            </StackPanel>
+
+            <Button x:Name="btnVolver"
+                    Grid.Column="1"
+                    Content="⬅ Volver a Pedidos"
+                    Style="{StaticResource NavButtonStyle}"
+                    VerticalAlignment="Center"
+                    Click="btnVolver_Click" />
+        </Grid>
+
+        <!-- Cuts Table Card -->
+        <Border Grid.Row="1"
+                Background="{DynamicResource CardBackgroundBrush}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="16"
+                Margin="0,0,0,16">
+            <DataGrid x:Name="dgCortes"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="All"
+                      CanUserReorderColumns="False"
+                      CanUserResizeRows="False"
+                      SelectionMode="Single"
+                      AutoGenerateColumns="False" />
+        </Border>
+
+        <!-- Action Bar -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="lblEstadoExportacion"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       FontSize="13"
+                       Foreground="#34D399" />
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button x:Name="btnExportarPdf"
+                        Content="📄 Exportar a PDF"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Margin="0,0,10,0"
+                        Click="btnExportarPdf_Click" />
+
+                <Button x:Name="btnImprimir"
+                        Content="🖨️ Imprimir Presupuesto y Cortes"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Background="{DynamicResource ButtonSuccessBackgroundBrush}"
+                        BorderBrush="{DynamicResource ButtonSuccessHoverBrush}"
+                        Click="btnImprimir_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

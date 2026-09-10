@@ -1,12 +1,90 @@
-﻿<Window x:Class="Woodic.Vistas.ListaPedidosView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Woodic.Vistas"
-        mc:Ignorable="d"
-        Title="ListaPedidosView" Height="450" Width="800">
-    <Grid>
-        
+﻿<UserControl x:Class="Woodic.Vistas.ListaPedidosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="1000"
+             Loaded="UserControl_Loaded">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Listado de Pedidos"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextAccentBrush}" />
+            <TextBlock Text="Consulte, imprima o elimine pedidos guardados en el sistema"
+                       FontSize="14"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       Margin="0,4,0,0" />
+        </StackPanel>
+
+        <!-- Orders Table Card -->
+        <Border Grid.Row="1"
+                Background="{DynamicResource CardBackgroundBrush}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="16"
+                Margin="0,0,0,16">
+            <DataGrid x:Name="dgPedidos"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="All"
+                      CanUserReorderColumns="False"
+                      CanUserResizeRows="False"
+                      SelectionMode="Single"
+                      AutoGenerateColumns="False"
+                      MouseDoubleClick="dgPedidos_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID Pedido" Binding="{Binding IdPedido}" Width="90" FontWeight="Bold" />
+                    <DataGridTextColumn Header="Cliente" Binding="{Binding Nombre}" Width="1.5*" />
+                    <DataGridTextColumn Header="Contacto" Binding="{Binding Contacto}" Width="120" />
+                    <DataGridTextColumn Header="Dirección" Binding="{Binding Direccion}" Width="2*" />
+                    <DataGridTextColumn Header="Módulos" Binding="{Binding CantidadModulos}" Width="80" />
+                    <DataGridTextColumn Header="Precio Total" Binding="{Binding PrecioFormateado}" Width="120" FontWeight="SemiBold" Foreground="#34D399" />
+                    <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha, StringFormat=\{0:dd/MM/yyyy\}}" Width="100" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Action Bar -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Actions -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button x:Name="btnEliminarPedido"
+                        Content="🗑️ Borrar Pedido"
+                        Style="{StaticResource DangerButtonStyle}"
+                        Click="btnEliminarPedido_Click" />
+            </StackPanel>
+
+            <!-- Right Actions -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button x:Name="btnVerCortes"
+                        Content="📄 Ver Listado de Cortes"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Margin="0,0,10,0"
+                        Click="btnVerCortes_Click" />
+
+                <Button x:Name="btnImprimirPresupuesto"
+                        Content="🖨️ Imprimir Presupuesto"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Background="{DynamicResource ButtonSuccessBackgroundBrush}"
+                        BorderBrush="{DynamicResource ButtonSuccessHoverBrush}"
+                        Click="btnImprimirPresupuesto_Click" />
+            </StackPanel>
+        </Grid>
     </Grid>
-</Window>
+</UserControl>

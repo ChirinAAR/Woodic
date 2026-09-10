@@ -1,65 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace Woodic.Modelo
 {
     public class Pedido
     {
-        int id_pedido;
-        int placaId;
-        int cantidadModulos;
-        int precio;
-        public Pedido() {
-        }
-        public int getId_pedido()
-        {
-            return id_pedido;
-        }
-        public void setId_pedido(int id_pedido)
-        {
-            this.id_pedido = id_pedido;
-        }
-        public void setPlacaId(int placaId)
-        {
-            this.placaId = placaId;
-        }
-        public int getPlacaId()
-        {
-            return placaId;
-        }
-        public int getCantidadModulos()
-        {
-            return cantidadModulos;
-        }
-        public void setCantidadModulos(int cantidadModulos)
-        {
-            this.cantidadModulos = cantidadModulos;
-        }
-        public int getPrecio()
-        {
-            return precio;
-        }
-        public void setPrecio(int precio)
-        {
-            this.precio = precio;
-        }
-        private Cliente cliente;
-        public void setCliente(Cliente cliente)
-        {
-            this.cliente = cliente;
-        }
+        public int IdPedido { get; set; }
+        public int PlacaId { get; set; }
+        public int CantidadModulos { get; set; } = 1;
+        public decimal Precio { get; set; }
+        public Cliente? Cliente { get; set; }
+        public DateTime Fecha { get; set; } = DateTime.Now;
 
-        public Cliente getCliente()
-        {
-            return cliente;
-        }
+        public Pedido() { }
 
-        internal Cliente Cliente()
-        {
-            throw new NotImplementedException();
-        }
+        // Compatibilidad con código original
+        public int getId_pedido() => IdPedido;
+        public void setId_pedido(int id) => IdPedido = id;
+
+        public int getPlacaId() => PlacaId;
+        public void setPlacaId(int id) => PlacaId = id;
+
+        public int getCantidadModulos() => CantidadModulos;
+        public void setCantidadModulos(int cant) => CantidadModulos = cant;
+
+        public int getPrecio() => (int)Precio;
+        public void setPrecio(int p) => Precio = p;
+        public void setPrecio(decimal p) => Precio = p;
+        public void setPrecio(double p) => Precio = Convert.ToDecimal(p);
+
+        public Cliente? getCliente() => Cliente;
+        public void setCliente(Cliente? c) => Cliente = c;
+        public Cliente? GetCliente() => Cliente;
     }
 }

@@ -1,210 +1,124 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
 using Woodic.Controlador;
 using Woodic.Modelo;
 
 namespace Woodic.Vistas
 {
-    /// <summary>
-    /// Lógica de interacción para CrearPedidoView.xaml
-    /// </summary>
-    public partial class CrearPedidoView : Window
+    public partial class CrearPedidoView : UserControl
     {
-        private Placa placa = new Placa();
-        private Pedido pedido = new Pedido();
-        private CrearPedidoController controlador;
+        private readonly MainWindow _mainWindow;
+        private readonly CrearPedidoController _controller;
 
-        // Cadena de conexión para los métodos locales de inicialización
-        private readonly string connectionString = "Server=localhost;Database=woodicbase;Uid=root;Pwd=;";
-
-        public CrearPedidoView()
+        public CrearPedidoView(MainWindow mainWindow)
         {
             InitializeComponent();
-            controlador = new CrearPedidoController(this);
+            _mainWindow = mainWindow;
+            _controller = new CrearPedidoController(mainWindow);
+
+            CargarLineas();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void CargarLineas()
         {
-            CargarLineasInicial();
-            chkMDF.IsChecked = true; // Activa MDF por defecto
-            placa.setCompuesto("MDF");
-            controlador.CargarLinea();
+            string compuesto = chkAglomerado.IsChecked == true ? "Aglomerado" : "MDF";
+            var lineas = _controller.CargarLineas(compuesto);
+
+            cmbLinea.Items.Clear();
+            foreach (var l in lineas)
+            {
+                cmbLinea.Items.Add(l);
+            }
 
             if (cmbLinea.Items.Count > 0)
             {
                 cmbLinea.SelectedIndex = 0;
-                CargarColoresInicial(cmbLinea.SelectedItem.ToString());
             }
-        }
-
-        private void btnAceptar_Click(object sender, RoutedEventArgs e)
-        {
-            int cantidadModulos;
-            if (!int.TryParse(txtCantidadModulos.Text, out cantidadModulos) || cantidadModulos <= 0)
-            {
-                MessageBox.Show("Ingrese un número válido y mayor a cero para la cantidad de módulos.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (cmbLinea.SelectedItem == null || cmbColor.SelectedItem == null)
-            {
-                MessageBox.Show("Debe seleccionar una línea y un color.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            string linea = cmbLinea.SelectedItem.ToString();
-            string color = cmbColor.SelectedItem.ToString();
-            int idPlaca = controlador.ObtenerIdPlacaSeleccionada(linea, color);
-
-            if (idPlaca == -1)
-            {
-                MessageBox.Show("Debe seleccionar una placa válida.");
-                return;
-            }
-
-            // Poblar modelo Cliente
-            Cliente cliente = new Cliente();
-            cliente.setNombre(txtNombreCliente.Text);
-
-            if (!int.TryParse(txtContacto.Text, out int contacto))
-            {
-                MessageBox.Show("Ingrese un número válido para el contacto.");
-                return;
-            }
-            cliente.setContacto(contacto);
-            cliente.setDireccion(txtDireccion.Text);
-
-            // Poblar modelo Pedido
-            pedido.setCliente(cliente);
-            pedido.setCantidadModulos(cantidadModulos);
-            pedido.setPrecio(0); // O el valor calculado
-            pedido.setPlacaId(idPlaca);
-
-            int idPedido = controlador.Guardar(pedido);
-            if (idPedido == -1)
-            {
-                MessageBox.Show("No se pudo guardar el pedido. Intente nuevamente.");
-                return;
-            }
-
-            // Aquí instanciarías tu siguiente vista (Asegúrate de migrar DescripcionView también)
-            // DescripcionView dialog = new DescripcionView(cantidadModulos, idPedido);
-            // dialog.ShowDialog();
-
-            MessageBox.Show("Pedido guardado exitosamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-            this.Close();
-        }
-
-        private void btnCancelar_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
 
         private void chkAglomerado_Checked(object sender, RoutedEventArgs e)
         {
-            if (chkAglomerado.IsChecked == true)
-            {
-                placa.setCompuesto("Aglomerado");
-                controlador.CargarLinea();
-                chkMDF.IsChecked = false; // Desmarcar el otro
-            }
-            else if (chkMDF.IsChecked == false)
-            {
-                cmbLinea.Items.Clear();
-            }
+            if (chkMDF != null) chkMDF.IsChecked = false;
+            CargarLineas();
         }
 
         private void chkMDF_Checked(object sender, RoutedEventArgs e)
         {
-            if (chkMDF.IsChecked == true)
-            {
-                placa.setCompuesto("MDF");
-                controlador.CargarLinea();
-                chkAglomerado.IsChecked = false; // Desmarcar el otro
-            }
-            else if (chkAglomerado.IsChecked == false)
-            {
-                cmbLinea.Items.Clear();
-            }
+            if (chkAglomerado != null) chkAglomerado.IsChecked = false;
+            CargarLineas();
         }
 
         private void cmbLinea_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cmbLinea.SelectedItem != null)
+            if (cmbLinea.SelectedItem == null)
             {
-                controlador.CargarColor();
+                cmbColor.Items.Clear();
+                return;
+            }
+
+            string compuesto = chkAglomerado.IsChecked == true ? "Aglomerado" : "MDF";
+            string linea = cmbLinea.SelectedItem.ToString() ?? "";
+            var colores = _controller.CargarColores(compuesto, linea);
+
+            cmbColor.Items.Clear();
+            foreach (var c in colores)
+            {
+                cmbColor.Items.Add(c);
+            }
+
+            if (cmbColor.Items.Count > 0)
+            {
+                cmbColor.SelectedIndex = 0;
             }
         }
 
-        private void cmbColor_DropDownOpened(object sender, EventArgs e)
+        private void btnConfirmar_Click(object sender, RoutedEventArgs e)
         {
-            controlador.CargarColor();
-        }
+            string nombre = txtNombre.Text.Trim();
+            string contactoStr = txtContacto.Text.Trim();
+            string direccion = txtDireccion.Text.Trim();
 
-        private void CargarLineasInicial()
-        {
-            try
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(contactoStr) || string.IsNullOrWhiteSpace(direccion))
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string query = "SELECT DISTINCT LINEA FROM PLACA";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        cmbLinea.Items.Clear();
-                        while (reader.Read())
-                        {
-                            cmbLinea.Items.Add(reader.GetString("LINEA"));
-                        }
-                    }
-                }
+                MessageBox.Show("Por favor complete todos los datos del cliente.", "Campos incompletos", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar líneas: " + ex.Message);
-            }
-        }
 
-        private void CargarColoresInicial(string lineaSeleccionada)
-        {
-            try
+            if (!long.TryParse(contactoStr, out long contacto) || contacto <= 0)
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string query = "SELECT DISTINCT COLOR FROM PLACA WHERE LINEA = @linea";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@linea", lineaSeleccionada);
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            cmbColor.Items.Clear();
-                            while (reader.Read())
-                            {
-                                cmbColor.Items.Add(reader.GetString("COLOR"));
-                            }
-                        }
-                    }
-                }
+                MessageBox.Show("Por favor ingrese un número de contacto válido.", "Dato inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            catch (Exception ex)
+
+            if (!int.TryParse(txtCantidadModulos.Text.Trim(), out int cantidadModulos) || cantidadModulos <= 0)
             {
-                MessageBox.Show("Error al cargar colores: " + ex.Message);
+                MessageBox.Show("La cantidad de módulos debe ser un número entero mayor a 0.", "Dato inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
+
+            string compuesto = chkAglomerado.IsChecked == true ? "Aglomerado" : "MDF";
+            string linea = cmbLinea.SelectedItem?.ToString() ?? "";
+            string color = cmbColor.SelectedItem?.ToString() ?? "";
+
+            int idPlaca = _controller.ObtenerIdPlaca(compuesto, linea, color);
+            if (idPlaca <= 0)
+            {
+                MessageBox.Show("Debe seleccionar una línea y color de madera válidos.", "Material no seleccionado", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var cliente = new Cliente(contacto, nombre, direccion);
+            int idPedido = _controller.GuardarPedido(cliente, idPlaca, cantidadModulos);
+
+            if (idPedido <= 0)
+            {
+                MessageBox.Show("No se pudo registrar el pedido en la base de datos.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Iniciar diseño de módulos
+            _controller.IniciarDisenoModulos(idPedido, cantidadModulos);
         }
     }
 }

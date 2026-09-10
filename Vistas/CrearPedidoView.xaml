@@ -1,102 +1,144 @@
-﻿<Window x:Class="Woodic.Vistas.CrearPedidoView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Generar Pedido" Height="500" Width="400" 
-         WindowStartupLocation="CenterScreen"
-        Loaded="Window_Loaded"
-    FontFamily="Bahnschrift">
-    <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="FontFamily" Value="Bahnschrift"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" 
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="12" 
-                                SnapsToDevicePixels="True">
-                            <ContentPresenter x:Name="contentPresenter" 
-                                              Focusable="False" 
-                                              HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" 
-                                              Margin="{TemplateBinding Padding}" 
-                                              RecognizesAccessKey="True" 
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Border>
+<UserControl x:Class="Woodic.Vistas.CrearPedidoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Opacity" Value="0.85"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Opacity" Value="0.7"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
-    <Window.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <LinearGradientBrush.RelativeTransform>
-                <TransformGroup>
-                    <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                    <SkewTransform CenterX="0.5" CenterY="0.5"/>
-                    <RotateTransform Angle="65.225" CenterX="0.5" CenterY="0.5"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </LinearGradientBrush.RelativeTransform>
-            <GradientStop Color="Black" Offset="1"/>
-            <GradientStop Color="#FF191650" Offset="0.009"/>
-        </LinearGradientBrush>
-    </Window.Background>
-    <Grid Margin="20">
-        <StackPanel>
-            <TextBlock Text="Generar Pedido" FontSize="20" FontWeight="Bold" Foreground="#FF00C3C0" Margin="0,0,0,15"/>
+    <Border Background="{DynamicResource CardBackgroundBrush}"
+            BorderBrush="{DynamicResource CardBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="10"
+            Padding="28"
+            Margin="20"
+            MaxWidth="950"
+            HorizontalAlignment="Center">
 
-            <TextBlock Text="Nombre del Cliente" Foreground="White" FontWeight="Bold"/>
-            <TextBox x:Name="txtNombreCliente" Background="#FF4A4A4A" Foreground="White" Margin="0,0,0,10" ToolTip="Nombre y apellido del cliente" Padding="2" BorderBrush="Black"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-            <TextBlock Text="Contacto" Foreground="White" FontWeight="Bold"/>
-            <TextBox x:Name="txtContacto" Background="#FF4A4A4A" Foreground="White" Margin="0,0,0,10" ToolTip="Número de teléfono del cliente" Padding="2" BorderBrush="Black"/>
+            <!-- Título Principal -->
+            <TextBlock Text="Crear Pedido"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource TextPrimaryBrush}"
+                       Margin="0,0,0,24" />
 
-            <TextBlock Text="Dirección" Foreground="White" FontWeight="Bold"/>
-            <TextBox x:Name="txtDireccion" Background="#FF4A4A4A" Foreground="White" Margin="0,0,0,15" ToolTip="Dirección de la casa del cliente" Padding="2" BorderBrush="Black"/>
-
-            <Grid Margin="0,0,0,15">
+            <!-- Formulario a Dos Columnas -->
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                
+
+                <!-- Columna Izquierda: Datos del Cliente -->
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="Compuesto" Foreground="White" FontWeight="Bold"/>
-                    <CheckBox x:Name="chkAglomerado" Content="Aglomerado" Foreground="White" Checked="chkAglomerado_Checked"/>
-                    <CheckBox x:Name="chkMDF" Content="MDF" Foreground="White" Checked="chkMDF_Checked" Margin="0,5,0,0"/>
+                    <TextBlock Text="Datos del Cliente"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               Margin="0,0,0,16" />
+
+                    <!-- Nombre -->
+                    <TextBlock Text="- Nombre"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,6" />
+                    <TextBox x:Name="txtNombre"
+                             Height="36"
+                             Margin="0,0,0,18"
+                             ToolTip="Nombre y apellido del cliente" />
+
+                    <!-- Contacto -->
+                    <TextBlock Text="- Contacto"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,6" />
+                    <TextBox x:Name="txtContacto"
+                             Height="36"
+                             Margin="0,0,0,18"
+                             ToolTip="Teléfono del cliente (solo números)" />
+
+                    <!-- Dirección -->
+                    <TextBlock Text="- Direccion"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,6" />
+                    <TextBox x:Name="txtDireccion"
+                             Height="36"
+                             Margin="0,0,0,26"
+                             ToolTip="Dirección del domicilio de entrega" />
+
+                    <!-- Botón Confirmar -->
+                    <Button x:Name="btnConfirmar"
+                            Content="Confirmar"
+                            Style="{DynamicResource ActionButtonStyle}"
+                            HorizontalAlignment="Left"
+                            Width="140"
+                            Height="38"
+                            FontSize="15"
+                            Click="btnConfirmar_Click" />
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Margin="5,0">
-                    <TextBlock Text="Línea" Foreground="White" FontWeight="Bold"/>
-                    <ComboBox x:Name="cmbLinea" Background="#999999" Foreground="Black" SelectionChanged="cmbLinea_SelectionChanged"/>
-                </StackPanel>
-
+                <!-- Columna Derecha: Datos del Pedido -->
                 <StackPanel Grid.Column="2">
-                    <TextBlock Text="Color" Foreground="White" FontWeight="Bold"/>
-                    <ComboBox x:Name="cmbColor" Background="#999999" Foreground="Black" DropDownOpened="cmbColor_DropDownOpened"/>
+                    <TextBlock Text="Datos del Pedido"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               Margin="0,0,0,16" />
+
+                    <!-- Compuesto -->
+                    <TextBlock Text="- Compuesto"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,6" />
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <CheckBox x:Name="chkAglomerado"
+                                  Content="Aglomerado"
+                                  IsChecked="True"
+                                  Margin="0,0,25,0"
+                                  Checked="chkAglomerado_Checked" />
+                        <CheckBox x:Name="chkMDF"
+                                  Content="MDF"
+                                  Checked="chkMDF_Checked" />
+                    </StackPanel>
+
+                    <!-- Línea de colores -->
+                    <TextBlock Text="- Linea de colores"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,6" />
+                    <ComboBox x:Name="cmbLinea"
+                              Height="36"
+                              Margin="0,0,0,18"
+                              SelectionChanged="cmbLinea_SelectionChanged" />
+
+                    <!-- Color -->
+                    <TextBlock Text="- Color"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,6" />
+                    <ComboBox x:Name="cmbColor"
+                              Height="36"
+                              Margin="0,0,0,18" />
+
+                    <!-- Cantidad de Módulos -->
+                    <TextBlock Text="- Cantidad de Modulos"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,6" />
+                    <TextBox x:Name="txtCantidadModulos"
+                             Text="1"
+                             Height="36"
+                             Width="120"
+                             HorizontalAlignment="Left"
+                             Margin="0,0,0,18"
+                             ToolTip="Cantidad de muebles a diseñar" />
                 </StackPanel>
             </Grid>
-
-            <TextBlock Text="Cantidad de Módulos" Foreground="White" FontWeight="Bold"/>
-            <TextBox x:Name="txtCantidadModulos" Background="#FF4A4A4A" Foreground="White" Margin="0,0,0,20" Width="100" HorizontalAlignment="Left" ToolTip="Número de módulos (muebles) del pedido" Padding="2" BorderBrush="Black"/>
-
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="btnAceptar" Content="Aceptar" Background="#003399" Foreground="White" FontWeight="Bold" Width="100" Height="30" Margin="0,0,10,0" Click="btnAceptar_Click"/>
-                <Button x:Name="btnCancelar" Content="Cancelar" Background="#660000" Foreground="White" FontWeight="Bold" Width="100" Height="30" Click="btnCancelar_Click"/>
-            </StackPanel>
-        </StackPanel>
-    </Grid>
-</Window>
+        </Grid>
+    </Border>
+</UserControl>

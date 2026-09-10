@@ -1,0 +1,95 @@
+<Window x:Class="Woodic.Vistas.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Woodic - Wood Intelligent Cutter"
+        Height="740" Width="1180"
+        MinHeight="620" MinWidth="1020"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource AppBackgroundBrush}"
+        FontFamily="Segoe UI, Bahnschrift, Arial">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Barra Superior de Navegación -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource HeaderBackgroundBrush}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="16,12">
+            <DockPanel LastChildFill="False">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <!-- Botón Crear Pedido -->
+                    <Button x:Name="btnCrearPedido"
+                            Content="Crear Pedido"
+                            Style="{DynamicResource NavButtonStyle}"
+                            Margin="0,0,10,0"
+                            Click="btnCrearPedido_Click" />
+
+                    <!-- Botón Presupuesto Rápido -->
+                    <Button x:Name="btnPresupuestoRapido"
+                            Content="Presupuesto rápido"
+                            Style="{DynamicResource NavButtonStyle}"
+                            Margin="0,0,10,0"
+                            Click="btnPresupuestoRapido_Click" />
+
+                    <!-- Botón Lista de Pedidos -->
+                    <Button x:Name="btnListaPedidos"
+                            Content="Lista de Pedidos"
+                            Style="{DynamicResource NavButtonStyle}"
+                            Margin="0,0,10,0"
+                            Click="btnListaPedidos_Click" />
+
+                    <!-- Botón Configuración -->
+                    <Button x:Name="btnConfiguracion"
+                            Content="Configuracion"
+                            Style="{DynamicResource NavButtonStyle}"
+                            Margin="0,0,10,0"
+                            Click="btnConfiguracion_Click" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                    <!-- Botón Selector de Tema -->
+                    <Button x:Name="btnCambiarTema"
+                            Content="🌓 Tema"
+                            Style="{DynamicResource NavButtonStyle}"
+                            Margin="0,0,15,0"
+                            ToolTip="Alternar entre modo Claro y Oscuro"
+                            Click="btnCambiarTema_Click" />
+
+                    <!-- Botón Cerrar -->
+                    <Button x:Name="btnCerrar"
+                            Content="Cerrar"
+                            Style="{DynamicResource DangerButtonStyle}"
+                            Click="btnCerrar_Click" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Contenido Central Dinámico (Vista Única) -->
+        <Border Grid.Row="1"
+                Background="{DynamicResource AppBackgroundBrush}"
+                Padding="10">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <ContentControl x:Name="MainContent" />
+            </ScrollViewer>
+        </Border>
+
+        <!-- Pie de Página Institucional -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource HeaderBackgroundBrush}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="8">
+            <TextBlock Text="- 2026 - Chirin"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       FontSize="13" />
+        </Border>
+    </Grid>
+</Window>

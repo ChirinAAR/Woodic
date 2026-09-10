@@ -1,31 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
 
 namespace Woodic.Modelo
 {
     public class Componente
     {
-        int idComponente;
-        string nombreComponente;
-        int ancho;
-        int largo;
-        int cantidad;
-        internal class Pieza
+        public int IdComponente { get; set; }
+        public string NombreComponente { get; set; } = string.Empty;
+        public int Ancho { get; set; }
+        public int Largo { get; set; }
+        public int Cantidad { get; set; } = 1;
+        public int ModuloId { get; set; }
+
+        public Componente() { }
+
+        public Componente(string nombre, int ancho, int largo, int cantidad = 1, int moduloId = 0)
         {
-            public int ancho, alto;
-            public bool colocada = false;
+            NombreComponente = nombre;
+            Ancho = ancho;
+            Largo = largo;
+            Cantidad = cantidad;
+            ModuloId = moduloId;
+        }
+
+        public class Pieza
+        {
+            public int Ancho { get; set; }
+            public int Alto { get; set; }
+            public bool Colocada { get; set; } = false;
+
             public Pieza(int ancho, int alto)
             {
-                this.ancho = ancho;
-                this.alto = alto;
+                Ancho = ancho;
+                Alto = alto;
             }
-            public Pieza rotada()
+
+            public Pieza Rotada()
             {
-                return new Pieza(this.alto, this.ancho);
+                return new Pieza(Alto, Ancho);
             }
         }
     }

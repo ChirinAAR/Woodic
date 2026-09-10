@@ -1,50 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace Woodic.Modelo
 {
     public class Modulo
     {
-        int id_modulo;
-        int ancho;
-        int alto;
-        int profundo;
-        public Modulo(){
-        }
-        public int getId_modulo()
+        public int IdModulo { get; set; }
+        public int Ancho { get; set; } = 1;
+        public int Alto { get; set; } = 1;
+        public int Profundo { get; set; } = 1;
+        public int PedidoId { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
+
+        public Modulo() { }
+
+        public Modulo(int ancho, int alto, int profundo, int pedidoId = 0, string descripcion = "")
         {
-            return id_modulo;
+            Ancho = ancho;
+            Alto = alto;
+            Profundo = profundo;
+            PedidoId = pedidoId;
+            Descripcion = descripcion;
         }
-        public void setId_modulo(int id_modulo)
-        {
-            this.id_modulo = id_modulo;
-        }
-        public int getAncho()
-        {
-            return ancho;
-        }
-        public void setAncho(int ancho)
-        {
-            this.ancho = ancho;
-        }
-        public int getAlto()
-        {
-            return alto;
-        }
-        public void setAlto(int alto)
-        {
-            this.alto = alto;
-        }
-        public int getProfundo()
-        {
-            return profundo;
-        }
-        public void setProfundo(int profundo)
-        {
-            this.profundo = profundo;
-        }
+
+        // Métodos de compatibilidad
+        public int getId_modulo() => IdModulo;
+        public void setId_modulo(int id) => IdModulo = id;
+
+        public int getAncho() => Ancho;
+        public void setAncho(int a) => Ancho = a;
+
+        public int getAlto() => Alto;
+        public void setAlto(int a) => Alto = a;
+
+        public int getProfundo() => Profundo;
+        public void setProfundo(int p) => Profundo = p;
+
+        public string getDescripcion() => Descripcion;
+        public void setDescripcion(string d) => Descripcion = d;
     }
 }

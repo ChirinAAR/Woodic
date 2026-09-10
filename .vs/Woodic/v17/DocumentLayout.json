@@ -1,27 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\crearpedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\crearpedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\menuprincipal.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\menuprincipal.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\menuprincipal.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\menuprincipal.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Usuario\\AppData\\Local\\Temp\\.vsdbgsrc\\b49ace08f4cd26a4f275d628999a0f91ccb8a1892704530d9e6f5bd1284082f1\\ResourcePart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -29,73 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CrearPedidoView.xaml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CrearPedidoView.xaml",
-              "RelativeDocumentMoniker": "Vistas\\CrearPedidoView.xaml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CrearPedidoView.xaml",
-              "RelativeToolTip": "Vistas\\CrearPedidoView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-07-09T17:50:14.241Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MenuPrincipal.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\MenuPrincipal.xaml.cs",
-              "RelativeDocumentMoniker": "Vistas\\MenuPrincipal.xaml.cs",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\MenuPrincipal.xaml.cs",
-              "RelativeToolTip": "Vistas\\MenuPrincipal.xaml.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAuwDUAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-09T17:40:40.409Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ResourcePart.cs",
-              "DocumentMoniker": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\.vsdbgsrc\\b49ace08f4cd26a4f275d628999a0f91ccb8a1892704530d9e6f5bd1284082f1\\ResourcePart.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\b49ace08f4cd26a4f275d628999a0f91ccb8a1892704530d9e6f5bd1284082f1\\ResourcePart.cs",
-              "ToolTip": "C:\\Users\\Usuario\\AppData\\Local\\Temp\\.vsdbgsrc\\b49ace08f4cd26a4f275d628999a0f91ccb8a1892704530d9e6f5bd1284082f1\\ResourcePart.cs [Solo lectura]",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\b49ace08f4cd26a4f275d628999a0f91ccb8a1892704530d9e6f5bd1284082f1\\ResourcePart.cs [Solo lectura]",
-              "ViewState": "AgIAABUAAAAAAAAAAAAvwCcAAAAEAAAAAQAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-09T17:25:44.416Z",
-              "EditorCaption": " [Solo lectura]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MenuPrincipal.xaml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\MenuPrincipal.xaml",
-              "RelativeDocumentMoniker": "Vistas\\MenuPrincipal.xaml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\MenuPrincipal.xaml",
-              "RelativeToolTip": "Vistas\\MenuPrincipal.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-07-09T17:22:52.721Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\App.xaml",
-              "RelativeDocumentMoniker": "App.xaml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\App.xaml",
-              "RelativeToolTip": "App.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-07-09T17:16:36.743Z",
-              "EditorCaption": ""
             }
           ]
         }
