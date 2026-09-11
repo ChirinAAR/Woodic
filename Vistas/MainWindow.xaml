@@ -74,9 +74,9 @@
         <Border Grid.Row="1"
                 Background="{DynamicResource AppBackgroundBrush}"
                 Padding="10">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <ContentControl x:Name="MainContent" />
-            </ScrollViewer>
+            <ContentControl x:Name="MainContent"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch" />
         </Border>
 
         <!-- Pie de Página Institucional -->

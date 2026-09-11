@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using Woodic.Controlador;
@@ -106,8 +106,39 @@ namespace Woodic.Vistas
                 return;
             }
 
+            if (_controller == null) return;
+
+            int pedidosAsociados = _controller.ContarPedidosAsociados(placaSeleccionada.IdPlaca);
+
+            if (pedidosAsociados > 0)
+            {
+                var result = MessageBox.Show(
+                    $"La placa '{placaSeleccionada.Linea} {placaSeleccionada.Color}' no se puede eliminar directamente porque está en uso en {pedidosAsociados} pedido(s) registrado(s).\n\n" +
+                    "¿Desea eliminar la placa junto con todos los pedidos asociados (incluyendo sus módulos y piezas de corte)?\n\n" +
+                    "• Presione 'Sí' para eliminar la placa y sus {pedidosAsociados} pedido(s) vinculados.\n" +
+                    "• Presione 'No' para cancelar y conservar los datos.",
+                    "Placa en Uso por Pedidos",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+                );
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (_controller.BorrarPlacaYPedidos(placaSeleccionada.IdPlaca))
+                    {
+                        lblEstadoPlaca.Text = $"🗑️ Placa y {pedidosAsociados} pedido(s) asociados eliminados correctamente.";
+                        CargarPlacas();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo eliminar la placa y sus pedidos asociados.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                return;
+            }
+
             var confirm = MessageBox.Show(
-                $"¿Está seguro de eliminar la placa '{placaSeleccionada.Linea} {placaSeleccionada.Color}' (ID: {placaSeleccionada.IdPlaca})?",
+                $"¿Está seguro de eliminar la placa '{placaSeleccionada.Linea} {placaSeleccionada.Color}' (ID: {placaSeleccionada.IdPlaca}) del catálogo?",
                 "Confirmar Eliminación",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question
@@ -115,9 +146,9 @@ namespace Woodic.Vistas
 
             if (confirm == MessageBoxResult.Yes)
             {
-                if (_controller != null && _controller.BorrarPlaca(placaSeleccionada.IdPlaca))
+                if (_controller.BorrarPlaca(placaSeleccionada.IdPlaca))
                 {
-                    MessageBox.Show("Placa eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                    lblEstadoPlaca.Text = $"🗑️ Placa '{placaSeleccionada.Linea} {placaSeleccionada.Color}' eliminada.";
                     CargarPlacas();
                 }
                 else
@@ -166,7 +197,7 @@ namespace Woodic.Vistas
 
             if (_controller != null && _controller.AnadirPlaca(nuevaPlaca))
             {
-                MessageBox.Show("Placa agregada exitosamente al catálogo.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                lblEstadoPlaca.Text = $"✅ Placa '{nuevaPlaca.Linea} {nuevaPlaca.Color}' agregada exitosamente.";
 
                 txtLinea.Clear();
                 txtColor.Clear();

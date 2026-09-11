@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,7 +15,6 @@ namespace Woodic.Vistas
     {
         private readonly MainWindow? _mainWindow;
         private PresupuestoModel? _presupuesto;
-        private bool _promptShown = false;
 
         public FinalView()
         {
@@ -124,7 +123,8 @@ namespace Woodic.Vistas
                 Header = "Cortes",
                 Binding = new Binding("[Cortes]"),
                 FontWeight = FontWeights.SemiBold,
-                Width = new DataGridLength(140)
+                Width = new DataGridLength(160),
+                MinWidth = 140
             });
 
             for (int i = 1; i <= cantModulos; i++)
@@ -134,7 +134,8 @@ namespace Woodic.Vistas
                 {
                     Header = colName,
                     Binding = new Binding($"[{colName}]"),
-                    Width = new DataGridLength(1, DataGridLengthUnitType.Star)
+                    Width = cantModulos <= 4 ? new DataGridLength(1, DataGridLengthUnitType.Star) : new DataGridLength(180),
+                    MinWidth = 160
                 });
             }
 
@@ -143,21 +144,7 @@ namespace Woodic.Vistas
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!_promptShown && _presupuesto != null)
-            {
-                _promptShown = true;
-                var res = MessageBox.Show(
-                    "El presupuesto ha sido calculado con éxito.\n\n¿Desea imprimir el presupuesto ahora?",
-                    "Imprimir Presupuesto",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question
-                );
-
-                if (res == MessageBoxResult.Yes)
-                {
-                    btnImprimir_Click(this, new RoutedEventArgs());
-                }
-            }
+            // Carga directa sin pop-ups intrusivos
         }
 
         private void btnImprimir_Click(object sender, RoutedEventArgs e)

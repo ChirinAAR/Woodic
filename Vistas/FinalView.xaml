@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Woodic.Vistas.FinalView"
+<UserControl x:Class="Woodic.Vistas.FinalView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -61,7 +61,10 @@
                       CanUserReorderColumns="False"
                       CanUserResizeRows="False"
                       SelectionMode="Single"
-                      AutoGenerateColumns="False" />
+                      AutoGenerateColumns="False"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      MinHeight="180" />
         </Border>
 
         <!-- Financial Summary Card -->

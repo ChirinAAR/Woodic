@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using Woodic.Controlador;
@@ -10,18 +10,23 @@ namespace Woodic.Vistas
     {
         private readonly MainWindow _mainWindow;
         private readonly CrearPedidoController _controller;
+        private bool _isInitializing = true;
 
         public CrearPedidoView(MainWindow mainWindow)
         {
-            InitializeComponent();
             _mainWindow = mainWindow;
             _controller = new CrearPedidoController(mainWindow);
+
+            InitializeComponent();
+            _isInitializing = false;
 
             CargarLineas();
         }
 
         private void CargarLineas()
         {
+            if (_isInitializing || _controller == null || cmbLinea == null || chkAglomerado == null) return;
+
             string compuesto = chkAglomerado.IsChecked == true ? "Aglomerado" : "MDF";
             var lineas = _controller.CargarLineas(compuesto);
 
@@ -35,22 +40,54 @@ namespace Woodic.Vistas
             {
                 cmbLinea.SelectedIndex = 0;
             }
+            else if (cmbColor != null)
+            {
+                cmbColor.Items.Clear();
+            }
         }
 
         private void chkAglomerado_Checked(object sender, RoutedEventArgs e)
         {
-            if (chkMDF != null) chkMDF.IsChecked = false;
+            if (_isInitializing) return;
+            if (chkMDF != null && chkMDF.IsChecked == true)
+            {
+                chkMDF.IsChecked = false;
+            }
             CargarLineas();
+        }
+
+        private void chkAglomerado_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (_isInitializing) return;
+            if (chkMDF != null && chkMDF.IsChecked != true)
+            {
+                chkMDF.IsChecked = true;
+            }
         }
 
         private void chkMDF_Checked(object sender, RoutedEventArgs e)
         {
-            if (chkAglomerado != null) chkAglomerado.IsChecked = false;
+            if (_isInitializing) return;
+            if (chkAglomerado != null && chkAglomerado.IsChecked == true)
+            {
+                chkAglomerado.IsChecked = false;
+            }
             CargarLineas();
+        }
+
+        private void chkMDF_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (_isInitializing) return;
+            if (chkAglomerado != null && chkAglomerado.IsChecked != true)
+            {
+                chkAglomerado.IsChecked = true;
+            }
         }
 
         private void cmbLinea_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (_isInitializing || _controller == null || cmbLinea == null || cmbColor == null) return;
+
             if (cmbLinea.SelectedItem == null)
             {
                 cmbColor.Items.Clear();

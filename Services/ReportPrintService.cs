@@ -140,14 +140,16 @@ namespace Woodic.Services
                     string textoPiezas = "-";
                     if (m < despieceModulos.Count && despieceModulos[m].TryGetValue(nombre, out var lista) && lista.Count > 0)
                     {
-                        var parts = new List<string>();
+                        var agrupadas = new Dictionary<(int Ancho, int Largo), int>();
                         foreach (var item in lista)
                         {
                             int ancho = (int)Math.Round(item[0]);
                             int largo = (int)Math.Round(item[1]);
                             int cant = item.Length > 2 ? (int)Math.Round(item[2]) : 1;
-                            parts.Add($"{ancho}x{largo} ({cant})");
+                            var key = (ancho, largo);
+                            agrupadas[key] = agrupadas.GetValueOrDefault(key, 0) + cant;
                         }
+                        var parts = agrupadas.Select(kv => $"{kv.Key.Ancho}x{kv.Key.Largo} ({kv.Value})");
                         textoPiezas = string.Join(", ", parts);
                     }
                     row.Cells.Add(new TableCell(new Paragraph(new Run(textoPiezas))) { Padding = new Thickness(4) });
@@ -224,15 +226,23 @@ namespace Woodic.Services
                 {
                     if (entry.Value.Count == 0) continue;
 
+                    // Agrupar cortes del mismo tipo y misma medida sumando la cantidad total
+                    var agrupados = new Dictionary<(int Ancho, int Largo), int>();
                     foreach (var item in entry.Value)
                     {
                         int ancho = (int)Math.Round(item[0]);
                         int largo = (int)Math.Round(item[1]);
                         int cant = item.Length > 2 ? (int)Math.Round(item[2]) : 1;
 
+                        var key = (ancho, largo);
+                        agrupados[key] = agrupados.GetValueOrDefault(key, 0) + cant;
+                    }
+
+                    foreach (var kvp in agrupados)
+                    {
                         gfx.DrawString(entry.Key, fontRegular, XBrushes.Black, new XPoint(50, y + 12));
-                        gfx.DrawString($"{ancho} mm x {largo} mm", fontRegular, XBrushes.Black, new XPoint(220, y + 12));
-                        gfx.DrawString(cant.ToString(), fontRegular, XBrushes.Black, new XPoint(460, y + 12));
+                        gfx.DrawString($"{kvp.Key.Ancho} mm x {kvp.Key.Largo} mm", fontRegular, XBrushes.Black, new XPoint(220, y + 12));
+                        gfx.DrawString(kvp.Value.ToString(), fontRegular, XBrushes.Black, new XPoint(460, y + 12));
                         y += 16;
 
                         if (y > page.Height.Point - 60)

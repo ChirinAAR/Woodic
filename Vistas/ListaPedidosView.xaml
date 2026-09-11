@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Woodic.Vistas.ListaPedidosView"
+<UserControl x:Class="Woodic.Vistas.ListaPedidosView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -41,15 +41,17 @@
                       CanUserResizeRows="False"
                       SelectionMode="Single"
                       AutoGenerateColumns="False"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                       MouseDoubleClick="dgPedidos_MouseDoubleClick">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID Pedido" Binding="{Binding IdPedido}" Width="90" FontWeight="Bold" />
-                    <DataGridTextColumn Header="Cliente" Binding="{Binding Nombre}" Width="1.5*" />
-                    <DataGridTextColumn Header="Contacto" Binding="{Binding Contacto}" Width="120" />
-                    <DataGridTextColumn Header="Dirección" Binding="{Binding Direccion}" Width="2*" />
-                    <DataGridTextColumn Header="Módulos" Binding="{Binding CantidadModulos}" Width="80" />
-                    <DataGridTextColumn Header="Precio Total" Binding="{Binding PrecioFormateado}" Width="120" FontWeight="SemiBold" Foreground="#34D399" />
-                    <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha, StringFormat=\{0:dd/MM/yyyy\}}" Width="100" />
+                    <DataGridTextColumn Header="ID Pedido" Binding="{Binding IdPedido}" Width="90" MinWidth="80" FontWeight="Bold" />
+                    <DataGridTextColumn Header="Cliente" Binding="{Binding Nombre}" Width="1.5*" MinWidth="140" />
+                    <DataGridTextColumn Header="Contacto" Binding="{Binding Contacto}" Width="120" MinWidth="100" />
+                    <DataGridTextColumn Header="Dirección" Binding="{Binding Direccion}" Width="2*" MinWidth="160" />
+                    <DataGridTextColumn Header="Módulos" Binding="{Binding CantidadModulos}" Width="80" MinWidth="70" />
+                    <DataGridTextColumn Header="Precio Total" Binding="{Binding PrecioFormateado}" Width="120" MinWidth="110" FontWeight="SemiBold" Foreground="#34D399" />
+                    <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha, StringFormat=\{0:dd/MM/yyyy\}}" Width="100" MinWidth="90" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

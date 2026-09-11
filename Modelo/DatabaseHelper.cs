@@ -13,7 +13,31 @@ namespace Woodic.Modelo
         public static string GetDatabaseFilePath()
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            return Path.Combine(baseDir, "WoodicData.mdf");
+            string targetPath = Path.Combine(baseDir, "WoodicData.mdf");
+
+            if (!File.Exists(targetPath))
+            {
+                var currentDir = new DirectoryInfo(baseDir);
+                while (currentDir?.Parent != null)
+                {
+                    string candidate = Path.Combine(currentDir.FullName, "WoodicData.mdf");
+                    if (File.Exists(candidate) && !string.Equals(candidate, targetPath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        try
+                        {
+                            File.Copy(candidate, targetPath, true);
+                            string logCand = Path.ChangeExtension(candidate, "_log.ldf");
+                            string logTarget = Path.ChangeExtension(targetPath, "_log.ldf");
+                            if (File.Exists(logCand)) File.Copy(logCand, logTarget, true);
+                            break;
+                        }
+                        catch { }
+                    }
+                    currentDir = currentDir.Parent;
+                }
+            }
+
+            return targetPath;
         }
 
         public static string GetConnectionString()
@@ -312,16 +336,92 @@ namespace Woodic.Modelo
             return cmd.ExecuteNonQuery() > 0;
         }
 
+        public static int ContarPedidosConPlaca(int idPlaca)
+        {
+            try
+            {
+                using var conn = CreateConnection();
+                conn.Open();
+
+                string sql = "SELECT COUNT(*) FROM pedido WHERE placa_idPLACA = @id";
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@id", idPlaca);
+
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al contar pedidos de placa: {ex.Message}");
+                return 0;
+            }
+        }
+
         public static bool DeletePlaca(int idPlaca)
         {
-            using var conn = CreateConnection();
-            conn.Open();
+            try
+            {
+                using var conn = CreateConnection();
+                conn.Open();
 
-            string sql = "DELETE FROM placa WHERE idPLACA = @id";
-            using var cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@id", idPlaca);
+                string sql = "DELETE FROM placa WHERE idPLACA = @id";
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@id", idPlaca);
 
-            return cmd.ExecuteNonQuery() > 0;
+                return cmd.ExecuteNonQuery() > 0;
+            }
+            catch (SqlException ex) when (ex.Number == 547)
+            {
+                // Violación de clave foránea FK_pedido_placa (la placa está en uso por pedidos)
+                System.Diagnostics.Debug.WriteLine($"No se puede eliminar la placa {idPlaca} porque tiene pedidos asociados: {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al eliminar placa: {ex.Message}");
+                return false;
+            }
+        }
+
+        public static bool DeletePlacaYPedidos(int idPlaca)
+        {
+            try
+            {
+                using var conn = CreateConnection();
+                conn.Open();
+
+                using var tran = conn.BeginTransaction();
+                try
+                {
+                    // 1. Eliminar pedidos vinculados a esta placa (cascada automática a módulos y componentes)
+                    string sqlPedidos = "DELETE FROM pedido WHERE placa_idPLACA = @id";
+                    using (var cmdPedidos = new SqlCommand(sqlPedidos, conn, tran))
+                    {
+                        cmdPedidos.Parameters.AddWithValue("@id", idPlaca);
+                        cmdPedidos.ExecuteNonQuery();
+                    }
+
+                    // 2. Eliminar la placa del catálogo
+                    string sqlPlaca = "DELETE FROM placa WHERE idPLACA = @id";
+                    using (var cmdPlaca = new SqlCommand(sqlPlaca, conn, tran))
+                    {
+                        cmdPlaca.Parameters.AddWithValue("@id", idPlaca);
+                        cmdPlaca.ExecuteNonQuery();
+                    }
+
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al eliminar placa y pedidos asociados: {ex.Message}");
+                return false;
+            }
         }
     }
 }

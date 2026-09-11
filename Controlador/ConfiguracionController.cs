@@ -23,9 +23,19 @@ namespace Woodic.Controlador
             return DatabaseHelper.InsertPlaca(placa);
         }
 
+        public int ContarPedidosAsociados(int idPlaca)
+        {
+            return DatabaseHelper.ContarPedidosConPlaca(idPlaca);
+        }
+
         public bool BorrarPlaca(int idPlaca)
         {
             return DatabaseHelper.DeletePlaca(idPlaca);
+        }
+
+        public bool BorrarPlacaYPedidos(int idPlaca)
+        {
+            return DatabaseHelper.DeletePlacaYPedidos(idPlaca);
         }
 
         public void InicializarBaseDatos()

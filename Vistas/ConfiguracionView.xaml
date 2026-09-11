@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Woodic.Vistas.ConfiguracionView"
+<UserControl x:Class="Woodic.Vistas.ConfiguracionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -138,22 +138,25 @@
 
                     <DataGrid x:Name="dgPlacas"
                               Grid.Row="1"
+                              MinHeight="250"
                               IsReadOnly="True"
                               HeadersVisibility="Column"
                               GridLinesVisibility="All"
                               CanUserReorderColumns="False"
                               CanUserResizeRows="False"
                               SelectionMode="Single"
-                              AutoGenerateColumns="False">
+                              AutoGenerateColumns="False"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding IdPlaca}" Width="60" FontWeight="Bold" />
-                            <DataGridTextColumn Header="Línea" Binding="{Binding Linea}" Width="1.2*" />
-                            <DataGridTextColumn Header="Color" Binding="{Binding Color}" Width="1.2*" />
-                            <DataGridTextColumn Header="Compuesto" Binding="{Binding Compuesto}" Width="1.2*" />
-                            <DataGridTextColumn Header="Veta" Binding="{Binding BetaTexto}" Width="80" />
-                            <DataGridTextColumn Header="Dimensiones (mm)" Binding="{Binding DimensionesTexto}" Width="130" />
-                            <DataGridTextColumn Header="Precio Placa" Binding="{Binding PrecioFormateado}" Width="120" FontWeight="SemiBold" Foreground="#34D399" />
-                            <DataGridTextColumn Header="Proveedor" Binding="{Binding Proveedor}" Width="1.2*" />
+                            <DataGridTextColumn Header="ID" Binding="{Binding IdPlaca}" Width="60" MinWidth="50" FontWeight="Bold" />
+                            <DataGridTextColumn Header="Línea" Binding="{Binding Linea}" Width="140" MinWidth="110" />
+                            <DataGridTextColumn Header="Color" Binding="{Binding Color}" Width="130" MinWidth="100" />
+                            <DataGridTextColumn Header="Compuesto" Binding="{Binding Compuesto}" Width="120" MinWidth="100" />
+                            <DataGridTextColumn Header="Veta" Binding="{Binding BetaTexto}" Width="90" MinWidth="80" />
+                            <DataGridTextColumn Header="Dimensiones (mm)" Binding="{Binding DimensionesTexto}" Width="140" MinWidth="125" />
+                            <DataGridTextColumn Header="Precio Placa" Binding="{Binding PrecioFormateado}" Width="120" MinWidth="100" FontWeight="SemiBold" Foreground="#34D399" />
+                            <DataGridTextColumn Header="Proveedor" Binding="{Binding Proveedor}" Width="*" MinWidth="140" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -167,11 +170,19 @@
                     CornerRadius="10"
                     Padding="16">
                 <StackPanel>
-                    <TextBlock Text="➕ Añadir Nueva Placa de Madera"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Foreground="{DynamicResource TextPrimaryBrush}"
-                               Margin="0,0,0,12" />
+                    <DockPanel Margin="0,0,0,12" LastChildFill="False">
+                        <TextBlock Text="➕ Añadir Nueva Placa de Madera"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextPrimaryBrush}"
+                                   VerticalAlignment="Center" />
+                        <TextBlock x:Name="lblEstadoPlaca"
+                                   DockPanel.Dock="Right"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#34D399"
+                                   VerticalAlignment="Center" />
+                    </DockPanel>
 
                     <Grid>
                         <Grid.RowDefinitions>

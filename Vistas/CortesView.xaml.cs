@@ -135,7 +135,8 @@ namespace Woodic.Vistas
                     Header = "Módulo",
                     Binding = new Binding("[idModulo]"),
                     FontWeight = FontWeights.Bold,
-                    Width = new DataGridLength(100)
+                    Width = new DataGridLength(110),
+                    MinWidth = 90
                 });
 
                 for (int c = 1; c < columnas.Length; c++)
@@ -144,7 +145,8 @@ namespace Woodic.Vistas
                     {
                         Header = columnas[c],
                         Binding = new Binding($"[{columnas[c]}]"),
-                        Width = new DataGridLength(120)
+                        Width = new DataGridLength(140),
+                        MinWidth = 120
                     });
                 }
 
@@ -168,17 +170,11 @@ namespace Woodic.Vistas
 
                 lblEstadoExportacion.Text = $"✅ PDF generado con éxito: {Path.GetFileName(rutaPdf)}";
 
-                var res = MessageBox.Show(
-                    $"PDF generado correctamente en:\n{rutaPdf}\n\n¿Desea abrir el archivo ahora?",
-                    "PDF Exportado",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Information
-                );
-
-                if (res == MessageBoxResult.Yes)
+                try
                 {
                     Process.Start(new ProcessStartInfo(rutaPdf) { UseShellExecute = true });
                 }
+                catch { }
             }
             catch (Exception ex)
             {

@@ -3,20 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\disenarmoduloview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\disenarmoduloview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\dialogoentrada.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\dialogoentrada.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\cortesview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\cortesview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\themes\\darktheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:themes\\darktheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\crearpedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\crearpedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\inicioview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\inicioview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\disenarmoduloview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\disenarmoduloview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\disenarmoduloview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\disenarmoduloview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -35,49 +51,98 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "DisenarModuloView.xaml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\DisenarModuloView.xaml",
-              "RelativeDocumentMoniker": "Vistas\\DisenarModuloView.xaml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\DisenarModuloView.xaml",
-              "RelativeToolTip": "Vistas\\DisenarModuloView.xaml",
+              "Title": "DarkTheme.xaml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Themes\\DarkTheme.xaml",
+              "RelativeDocumentMoniker": "Themes\\DarkTheme.xaml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Themes\\DarkTheme.xaml",
+              "RelativeToolTip": "Themes\\DarkTheme.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-09-10T14:49:43.637Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DialogoEntrada.xaml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\DialogoEntrada.xaml",
-              "RelativeDocumentMoniker": "Vistas\\DialogoEntrada.xaml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\DialogoEntrada.xaml",
-              "RelativeToolTip": "Vistas\\DialogoEntrada.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-09-10T14:49:18.859Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CortesView.xaml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CortesView.xaml",
-              "RelativeDocumentMoniker": "Vistas\\CortesView.xaml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CortesView.xaml",
-              "RelativeToolTip": "Vistas\\CortesView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-09-10T14:49:09.308Z",
+              "WhenOpened": "2026-09-10T23:54:45.596Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "InicioView.xaml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\InicioView.xaml",
+              "RelativeDocumentMoniker": "Vistas\\InicioView.xaml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\InicioView.xaml",
+              "RelativeToolTip": "Vistas\\InicioView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-10T23:51:18.648Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "Vistas\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\MainWindow.xaml",
+              "RelativeToolTip": "Vistas\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-10T23:44:04.989Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T23:44:00.602Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "DisenarModuloView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\DisenarModuloView.xaml.cs",
+              "RelativeDocumentMoniker": "Vistas\\DisenarModuloView.xaml.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\DisenarModuloView.xaml.cs",
+              "RelativeToolTip": "Vistas\\DisenarModuloView.xaml.cs",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAYwJQAAABhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T23:13:27.816Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "CrearPedidoView.xaml",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CrearPedidoView.xaml",
               "RelativeDocumentMoniker": "Vistas\\CrearPedidoView.xaml",
               "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CrearPedidoView.xaml",
               "RelativeToolTip": "Vistas\\CrearPedidoView.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-07-09T17:50:14.241Z",
+              "WhenOpened": "2026-09-10T16:12:27.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DisenarModuloView.xaml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\DisenarModuloView.xaml",
+              "RelativeDocumentMoniker": "Vistas\\DisenarModuloView.xaml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\DisenarModuloView.xaml",
+              "RelativeToolTip": "Vistas\\DisenarModuloView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-10T16:12:10.323Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\App.xaml",
+              "RelativeDocumentMoniker": "App.xaml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\App.xaml",
+              "RelativeToolTip": "App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-10T16:09:27.893Z",
               "EditorCaption": ""
             }
           ]

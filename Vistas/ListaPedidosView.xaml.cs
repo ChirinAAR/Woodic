@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Woodic.Controlador;
@@ -88,7 +88,6 @@ namespace Woodic.Vistas
             {
                 if (_controller != null && _controller.EliminarPedido(ped.IdPedido, ped.Contacto))
                 {
-                    MessageBox.Show("Pedido eliminado con éxito.", "Operación Exitosa", MessageBoxButton.OK, MessageBoxImage.Information);
                     CargarLista();
                 }
             }

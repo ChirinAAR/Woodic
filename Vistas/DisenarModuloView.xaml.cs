@@ -43,6 +43,8 @@ namespace Woodic.Vistas
         private Point _lastMousePos;
         private bool _isOrbiting = false;
 
+        private bool _isInitializing = true;
+
         public DisenarModuloView(
             MainWindow mainWindow,
             int idPedido,
@@ -50,7 +52,7 @@ namespace Woodic.Vistas
             List<string>? descripcionesModulos = null,
             bool esPresupuestoRapido = false)
         {
-            InitializeComponent();
+            _isInitializing = true;
             _mainWindow = mainWindow;
             _idPedido = idPedido;
             _cantidadModulos = Math.Max(1, cantidadModulos);
@@ -58,6 +60,14 @@ namespace Woodic.Vistas
             _esPresupuestoRapido = esPresupuestoRapido;
 
             Controller = new DisenarModuloController();
+
+            InitializeComponent();
+            _isInitializing = false;
+
+            if (cmbFormato != null && cmbFormato.SelectedIndex < 0)
+            {
+                cmbFormato.SelectedIndex = 0;
+            }
 
             ActualizarTitulo();
             AplicarMedidasDesdeUI();
@@ -76,11 +86,16 @@ namespace Woodic.Vistas
                 desc = _esPresupuestoRapido ? "Presupuesto Rápido" : $"Módulo {_moduloActual}";
             }
 
-            lblTituloVistaPrevia.Text = $"Vista Previa: {desc} ({_moduloActual}/{_cantidadModulos})";
+            if (lblTituloVistaPrevia != null)
+            {
+                lblTituloVistaPrevia.Text = $"Vista Previa: {desc} ({_moduloActual}/{_cantidadModulos})";
+            }
         }
 
         private void AplicarMedidasDesdeUI()
         {
+            if (_isInitializing || Controller == null || txtAltura == null || txtAncho == null || txtProfundidad == null || cmbFormato == null) return;
+
             if (!int.TryParse(txtAltura.Text, out int alto) || alto <= 0) alto = 1800;
             if (!int.TryParse(txtAncho.Text, out int ancho) || ancho <= 0) ancho = 900;
             if (!int.TryParse(txtProfundidad.Text, out int prof) || prof <= 0) prof = 500;
@@ -93,6 +108,8 @@ namespace Woodic.Vistas
 
         private void ActualizarVisualizacion3D()
         {
+            if (_isInitializing || furnitureVisual == null || mainCamera == null || Controller == null) return;
+
             furnitureVisual.Content = Controller.GenerarModelo3D();
             ActualizarCamara();
         }
@@ -101,6 +118,8 @@ namespace Woodic.Vistas
 
         private void ActualizarCamara()
         {
+            if (_isInitializing || mainCamera == null || Controller == null) return;
+
             // Centro geométrico del mueble
             double cx = Controller.AnchoModulo / 2.0;
             double cy = Controller.AlturaModulo / 2.0;
@@ -128,8 +147,6 @@ namespace Woodic.Vistas
 
         private void btnCamIsometrica_Click(object sender, RoutedEventArgs e) => SetCameraView(30, 20);
         private void btnCamFrente_Click(object sender, RoutedEventArgs e) => SetCameraView(0, 0);
-        private void btnCamPlanta_Click(object sender, RoutedEventArgs e) => SetCameraView(0, 89);
-        private void btnCamLateral_Click(object sender, RoutedEventArgs e) => SetCameraView(90, 0);
 
         private void viewport3D_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -277,7 +294,9 @@ namespace Woodic.Vistas
 
         private void cmbFormato_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Controller != null && cmbFormato.SelectedIndex >= 0)
+            if (_isInitializing || Controller == null || cmbFormato == null) return;
+
+            if (cmbFormato.SelectedIndex >= 0)
             {
                 Controller.CambiarFormato(cmbFormato.SelectedIndex);
                 ActualizarVisualizacion3D();
@@ -286,12 +305,6 @@ namespace Woodic.Vistas
 
         private void btnDivisorioHorizontal_Click(object sender, RoutedEventArgs e)
         {
-            if (chkDivisorios.IsChecked != true)
-            {
-                MessageBox.Show("Debe tildar 'Divisorios' para agregar.", "Opción deshabilitada", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
             string? input = DialogoEntrada.Mostrar(
                 Window.GetWindow(this),
                 "Añadir Divisorio Horizontal",
@@ -318,12 +331,6 @@ namespace Woodic.Vistas
 
         private void btnDivisorioVertical_Click(object sender, RoutedEventArgs e)
         {
-            if (chkDivisorios.IsChecked != true)
-            {
-                MessageBox.Show("Debe tildar 'Divisorios' para agregar.", "Opción deshabilitada", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
             string? input = DialogoEntrada.Mostrar(
                 Window.GetWindow(this),
                 "Añadir Divisorio Vertical",
@@ -350,12 +357,6 @@ namespace Woodic.Vistas
 
         private void btnBanquinaHorizontal_Click(object sender, RoutedEventArgs e)
         {
-            if (chkBanquinas.IsChecked != true)
-            {
-                MessageBox.Show("Debe tildar 'Banquinas' para agregar.");
-                return;
-            }
-
             string? input = DialogoEntrada.Mostrar(Window.GetWindow(this), "Banquina Horizontal", "Posición de banquina horizontal (mm):", "100");
             if (int.TryParse(input, out int pos))
             {
@@ -366,12 +367,6 @@ namespace Woodic.Vistas
 
         private void btnBanquinaVertical_Click(object sender, RoutedEventArgs e)
         {
-            if (chkBanquinas.IsChecked != true)
-            {
-                MessageBox.Show("Debe tildar 'Banquinas' para agregar.");
-                return;
-            }
-
             string? input = DialogoEntrada.Mostrar(Window.GetWindow(this), "Banquina Vertical", "Posición de banquina vertical (mm):", "100");
             if (int.TryParse(input, out int pos))
             {
@@ -382,12 +377,6 @@ namespace Woodic.Vistas
 
         private void btnSeleccionarCajones_Click(object sender, RoutedEventArgs e)
         {
-            if (chkCajones.IsChecked != true)
-            {
-                MessageBox.Show("Debe tildar 'Cajones' para colocar cajones.");
-                return;
-            }
-
             if (!int.TryParse(txtCantidadCajones.Text, out int cant) || cant <= 0)
             {
                 MessageBox.Show("Ingrese una cantidad válida de cajones.");
@@ -402,12 +391,6 @@ namespace Woodic.Vistas
 
         private void btnSeleccionarPuertas_Click(object sender, RoutedEventArgs e)
         {
-            if (chkPuertas.IsChecked != true)
-            {
-                MessageBox.Show("Debe tildar 'Puertas' para colocar puertas.");
-                return;
-            }
-
             _modoSeleccion = ModoSeleccion.Puertas;
             _doblePuertaTemporal = rbPuertaDoble.IsChecked == true;
             lblInstruccion.Text = $"Haga clic en el compartimiento para colocar la(s) puerta(s) {(_doblePuertaTemporal ? "dobles" : "simple")}.";
@@ -463,11 +446,9 @@ namespace Woodic.Vistas
                     ActualizarTitulo();
                     // Limpiar y resetear para siguiente módulo
                     AplicarMedidasDesdeUI();
-                    MessageBox.Show($"Módulo guardado correctamente. Diseñe el módulo {_moduloActual} de {_cantidadModulos}.", "Siguiente Módulo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
-                    MessageBox.Show("Todos los módulos han sido diseñados y guardados.", "Diseño Finalizado", MessageBoxButton.OK, MessageBoxImage.Information);
                     var finalView = new FinalView(_mainWindow, _idPedido, _cantidadModulos);
                     _mainWindow.NavegarA(finalView);
                 }
