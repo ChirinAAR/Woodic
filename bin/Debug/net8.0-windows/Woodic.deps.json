@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "Woodic/1.0.0": {
+      "Woodic/0.1.0": {
         "dependencies": {
           "Microsoft.Data.SqlClient": "6.0.1",
           "PDFsharp-WPF": "6.1.1"
@@ -481,7 +481,7 @@
     }
   },
   "libraries": {
-    "Woodic/1.0.0": {
+    "Woodic/0.1.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

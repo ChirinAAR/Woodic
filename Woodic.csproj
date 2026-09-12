@@ -6,16 +6,30 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>img\app.ico</ApplicationIcon>
+    <Title>Woodic</Title>
+    <AssemblyTitle>Woodic</AssemblyTitle>
+    <Product>Woodic</Product>
+    <Company>Emiliano Abregu</Company>
+    <Authors>Emiliano Abregu</Authors>
+    <Copyright>Copyright 2026 Chirin</Copyright>
+    <Description>Sistema de diseño 3D, despiece y optimización de cortes de muebles.</Description>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <InformationalVersion>0.1</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Vistas\logo.png" />
     <None Remove="Vistas\logo2.png" />
+    <None Remove="img\icono.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Vistas\logo.png" />
     <Resource Include="Vistas\logo2.png" />
+    <Resource Include="img\icono.png" />
   </ItemGroup>
 
   <ItemGroup>

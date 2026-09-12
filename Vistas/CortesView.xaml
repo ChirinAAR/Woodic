@@ -25,12 +25,7 @@
                            Text="Listado de Cortes"
                            FontSize="24"
                            FontWeight="Bold"
-                           Foreground="{DynamicResource TextAccentBrush}" />
-                <TextBlock x:Name="lblSubtitulo"
-                           Text="Despiece detallado por módulo para producción y corte"
-                           FontSize="14"
-                           Foreground="{DynamicResource TextSecondaryBrush}"
-                           Margin="0,4,0,0" />
+                           Foreground="{DynamicResource TextPrimaryBrush}" />
             </StackPanel>
 
             <Button x:Name="btnVolver"

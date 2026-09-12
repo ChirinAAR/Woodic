@@ -91,7 +91,7 @@ namespace Woodic.Vistas {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Woodic;component/vistas/menuprincipal.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Woodic;V0.1.0.0;component/vistas/menuprincipal.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Vistas\MenuPrincipal.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

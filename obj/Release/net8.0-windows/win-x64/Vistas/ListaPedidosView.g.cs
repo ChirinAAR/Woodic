@@ -83,7 +83,7 @@ namespace Woodic.Vistas {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Woodic;component/vistas/listapedidosview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Woodic;V0.1.0.0;component/vistas/listapedidosview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Vistas\ListaPedidosView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

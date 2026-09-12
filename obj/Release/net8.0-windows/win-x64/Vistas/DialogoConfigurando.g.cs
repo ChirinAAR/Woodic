@@ -51,7 +51,7 @@ namespace Woodic.Vistas {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Woodic;component/vistas/dialogoconfigurando.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Woodic;V0.1.0.0;component/vistas/dialogoconfigurando.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Vistas\DialogoConfigurando.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

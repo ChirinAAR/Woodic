@@ -3,12 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\inicioview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\inicioview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\modelo\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:modelo\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\services\\reportprintservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:services\\reportprintservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\controlador\\configuracioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:controlador\\configuracioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\services\\settingsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:services\\settingsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\services\\localdbmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:services\\localdbmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\controlador\\maincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:controlador\\maincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\cortesview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\cortesview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\finalview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\finalview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|c:\\users\\usuario\\documents\\facultad\\seminario\\seminario c# (posible version final)\\programa\\woodic\\vistas\\crearpedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2C1AD401-FF2B-4929-ACD2-CBF56F97D9EE}|Woodic.csproj|solutionrelative:vistas\\crearpedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,35 +42,111 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DatabaseHelper.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Modelo\\DatabaseHelper.cs",
+              "RelativeDocumentMoniker": "Modelo\\DatabaseHelper.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Modelo\\DatabaseHelper.cs",
+              "RelativeToolTip": "Modelo\\DatabaseHelper.cs",
+              "ViewState": "AgIAAOsBAAAAAAAAAAAqwDkBAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-12T14:04:37.874Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SettingsService.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Services\\SettingsService.cs",
+              "RelativeDocumentMoniker": "Services\\SettingsService.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Services\\SettingsService.cs",
+              "RelativeToolTip": "Services\\SettingsService.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAcwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-12T14:04:20.91Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainController.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Controlador\\MainController.cs",
+              "RelativeDocumentMoniker": "Controlador\\MainController.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Controlador\\MainController.cs",
+              "RelativeToolTip": "Controlador\\MainController.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-12T14:04:07.628Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ConfiguracionController.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Controlador\\ConfiguracionController.cs",
+              "RelativeDocumentMoniker": "Controlador\\ConfiguracionController.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Controlador\\ConfiguracionController.cs",
+              "RelativeToolTip": "Controlador\\ConfiguracionController.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA1wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-12T14:03:37.256Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "InicioView.xaml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\InicioView.xaml",
-              "RelativeDocumentMoniker": "Vistas\\InicioView.xaml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\InicioView.xaml",
-              "RelativeToolTip": "Vistas\\InicioView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-09-12T04:37:14.839Z",
+              "DocumentIndex": 3,
+              "Title": "LocalDbManager.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Services\\LocalDbManager.cs",
+              "RelativeDocumentMoniker": "Services\\LocalDbManager.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Services\\LocalDbManager.cs",
+              "RelativeToolTip": "Services\\LocalDbManager.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-12T14:03:06.583Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ReportPrintService.cs",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Services\\ReportPrintService.cs",
-              "RelativeDocumentMoniker": "Services\\ReportPrintService.cs",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Services\\ReportPrintService.cs",
-              "RelativeToolTip": "Services\\ReportPrintService.cs",
-              "ViewState": "AgIAACsBAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-12T04:19:39.124Z",
+              "DocumentIndex": 5,
+              "Title": "CortesView.xaml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CortesView.xaml",
+              "RelativeDocumentMoniker": "Vistas\\CortesView.xaml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CortesView.xaml",
+              "RelativeToolTip": "Vistas\\CortesView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-12T14:01:39.925Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "FinalView.xaml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\FinalView.xaml",
+              "RelativeDocumentMoniker": "Vistas\\FinalView.xaml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\FinalView.xaml",
+              "RelativeToolTip": "Vistas\\FinalView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-12T14:01:31.324Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CrearPedidoView.xaml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CrearPedidoView.xaml",
+              "RelativeDocumentMoniker": "Vistas\\CrearPedidoView.xaml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\Facultad\\Seminario\\Seminario C# (posible version final)\\Programa\\Woodic\\Vistas\\CrearPedidoView.xaml",
+              "RelativeToolTip": "Vistas\\CrearPedidoView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-12T14:01:10.903Z",
               "EditorCaption": ""
             }
           ]

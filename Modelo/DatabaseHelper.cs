@@ -304,14 +304,14 @@ namespace Woodic.Modelo
         {
             string insertSql = @"
                 INSERT INTO placa (LINEA, COMPUESTO, COLOR, BETA, PRECIOPLAC, PROVEEDOR, ANCHO, LARGO) VALUES
-                ('Clásica', 'Aglomerado', 'Blanco', 0, 22000.00, 'Faplac', 1830, 2400),
-                ('Clásica', 'Aglomerado', 'Gris Humo', 0, 24500.00, 'Faplac', 1830, 2400),
-                ('Naturaleza', 'Aglomerado', 'Roble Dakar', 1, 28000.00, 'Egger', 1830, 2400),
-                ('Naturaleza', 'Aglomerado', 'Nogal', 1, 29500.00, 'Egger', 1830, 2400),
-                ('Fibroplus', 'MDF', 'Blanco', 0, 31000.00, 'Masisa', 1830, 2400),
-                ('Especial', 'MDF', 'Haya Catedral', 1, 34000.00, 'Masisa', 1830, 2400),
-                ('Especial', 'MDF', 'Wengue', 1, 36500.00, 'Egger', 1830, 2400),
-                ('Urbana', 'MDF', 'Gris Ceniza', 0, 33000.00, 'Faplac', 1830, 2400);
+                ('Clásica', 'Aglomerado', 'Blanco', 0, 95000.00, 'Egger', 1830, 2400),
+                ('Clásica', 'Aglomerado', 'Gris Humo', 0, 95500.00, 'Egger', 1830, 2400),
+                ('Naturaleza', 'Aglomerado', 'Roble Dakar', 1, 105000.00, 'Egger', 1830, 2400),
+                ('Naturaleza', 'Aglomerado', 'Nogal', 1, 10500.00, 'Egger', 1830, 2400),
+                ('Fibroplus', 'MDF', 'Blanco', 0, 100000.00, 'Egger', 1830, 2400),
+                ('Especial', 'MDF', 'Haya Catedral', 1, 125000.00, 'Egger', 1830, 2400),
+                ('Especial', 'MDF', 'Wengue', 1, 135000.00, 'Egger', 1830, 2400),
+                ('Urbana', 'MDF', 'Gris Ceniza', 0, 115000.00, 'Egger', 1830, 2400);
             ";
 
             using var cmd = new SqlCommand(insertSql, conn);

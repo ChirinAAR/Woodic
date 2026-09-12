@@ -163,7 +163,7 @@ namespace Woodic.Vistas {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Woodic;component/vistas/configuracionview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Woodic;V0.1.0.0;component/vistas/configuracionview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Vistas\ConfiguracionView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

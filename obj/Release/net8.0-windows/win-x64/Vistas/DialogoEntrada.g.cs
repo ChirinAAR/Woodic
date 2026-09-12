@@ -83,7 +83,7 @@ namespace Woodic.Vistas {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Woodic;component/vistas/dialogoentrada.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Woodic;V0.1.0.0;component/vistas/dialogoentrada.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Vistas\DialogoEntrada.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -131,7 +131,7 @@ namespace Woodic.Vistas {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Woodic;component/vistas/finalview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Woodic;V0.1.0.0;component/vistas/finalview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Vistas\FinalView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
