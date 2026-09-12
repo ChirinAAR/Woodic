@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\App.xaml
-12456012018
+13-986814521
 
-31-666013518
+34530029097
 22755322155
-Themes\DarkTheme.xaml;Themes\LightTheme.xaml;Vistas\ConfiguracionView.xaml;Vistas\CortesView.xaml;Vistas\CrearPedidoView.xaml;Vistas\DialogoEntrada.xaml;Vistas\DisenarModuloView.xaml;Vistas\FinalView.xaml;Vistas\InicioView.xaml;Vistas\ListaPedidosView.xaml;Vistas\MainWindow.xaml;Vistas\MenuPrincipal.xaml;
+Themes\DarkTheme.xaml;Themes\LightTheme.xaml;Vistas\ConfiguracionView.xaml;Vistas\CortesView.xaml;Vistas\CrearPedidoView.xaml;Vistas\DialogoConfigurando.xaml;Vistas\DialogoEntrada.xaml;Vistas\DisenarModuloView.xaml;Vistas\FinalView.xaml;Vistas\InicioView.xaml;Vistas\ListaPedidosView.xaml;Vistas\MainWindow.xaml;Vistas\MenuPrincipal.xaml;
 
 False
 

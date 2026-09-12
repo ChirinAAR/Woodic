@@ -10,7 +10,6 @@ namespace Woodic.Vistas
     {
         private readonly MainWindow? _mainWindow;
         private readonly ConfiguracionController? _controller;
-        private bool _isInitializing = true;
 
         public ConfiguracionView()
         {
@@ -25,18 +24,6 @@ namespace Woodic.Vistas
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _isInitializing = true;
-
-            // Reflejar estado del tema
-            if (_controller != null)
-            {
-                if (_controller.EsTemaOscuro)
-                    rbTemaOscuro.IsChecked = true;
-                else
-                    rbTemaClaro.IsChecked = true;
-            }
-
-            _isInitializing = false;
             CargarPlacas();
         }
 
@@ -45,56 +32,6 @@ namespace Woodic.Vistas
             if (_controller != null)
             {
                 dgPlacas.ItemsSource = _controller.CargarPlacas();
-            }
-        }
-
-        private void rbTemaOscuro_Checked(object sender, RoutedEventArgs e)
-        {
-            if (_isInitializing || _controller == null) return;
-            _controller.CambiarTema(true);
-        }
-
-        private void rbTemaClaro_Checked(object sender, RoutedEventArgs e)
-        {
-            if (_isInitializing || _controller == null) return;
-            _controller.CambiarTema(false);
-        }
-
-        private void btnInicializarDb_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _controller?.InicializarBaseDatos();
-                MessageBox.Show("Base de datos local inicializada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                CargarPlacas();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al inicializar la base de datos: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void btnReiniciarDb_Click(object sender, RoutedEventArgs e)
-        {
-            var confirm = MessageBox.Show(
-                "ADVERTENCIA: Esta acción eliminará todos los pedidos, clientes y placas personalizadas de la base de datos local y restaurará el catálogo de fábrica.\n\n¿Desea continuar?",
-                "Confirmar Reinicio de BD",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning
-            );
-
-            if (confirm == MessageBoxResult.Yes)
-            {
-                try
-                {
-                    _controller?.ReiniciarBaseDatos();
-                    MessageBox.Show("Base de datos reiniciada con éxito a valores de fábrica.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                    CargarPlacas();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al reiniciar la base de datos: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
             }
         }
 
@@ -214,6 +151,11 @@ namespace Woodic.Vistas
             {
                 MessageBox.Show("Ocurrió un error al guardar la placa en la base de datos.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void rbConVeta_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

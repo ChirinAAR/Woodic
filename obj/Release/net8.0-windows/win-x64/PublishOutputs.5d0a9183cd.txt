@@ -1,0 +1,2 @@
+C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\bin\SingleFileTest\Woodic.pdb
+C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\bin\SingleFileTest\Woodic.exe

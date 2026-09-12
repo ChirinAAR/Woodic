@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using Woodic.Controlador;
@@ -110,29 +110,91 @@ namespace Woodic.Vistas
             }
         }
 
+        private void txtNombre_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (lblErrorNombre != null) lblErrorNombre.Visibility = Visibility.Collapsed;
+        }
+
+        private void txtContacto_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (lblErrorContacto != null) lblErrorContacto.Visibility = Visibility.Collapsed;
+        }
+
+        private void txtDireccion_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (lblErrorDireccion != null) lblErrorDireccion.Visibility = Visibility.Collapsed;
+        }
+
+        private void txtCantidadModulos_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (lblErrorCantidadModulos != null) lblErrorCantidadModulos.Visibility = Visibility.Collapsed;
+        }
+
         private void btnConfirmar_Click(object sender, RoutedEventArgs e)
         {
             string nombre = txtNombre.Text.Trim();
             string contactoStr = txtContacto.Text.Trim();
             string direccion = txtDireccion.Text.Trim();
+            string cantidadModulosStr = txtCantidadModulos.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(contactoStr) || string.IsNullOrWhiteSpace(direccion))
+            bool tieneError = false;
+
+            if (string.IsNullOrWhiteSpace(nombre))
             {
-                MessageBox.Show("Por favor complete todos los datos del cliente.", "Campos incompletos", MessageBoxButton.OK, MessageBoxImage.Warning);
+                lblErrorNombre.Text = "*Debe llenar este campo";
+                lblErrorNombre.Visibility = Visibility.Visible;
+                tieneError = true;
+            }
+            else
+            {
+                lblErrorNombre.Visibility = Visibility.Collapsed;
+            }
+
+            if (string.IsNullOrWhiteSpace(contactoStr))
+            {
+                lblErrorContacto.Text = "*Debe llenar este campo";
+                lblErrorContacto.Visibility = Visibility.Visible;
+                tieneError = true;
+            }
+            else if (!long.TryParse(contactoStr, out long _) || !EsSoloDigitos(contactoStr))
+            {
+                lblErrorContacto.Text = "*Solamente Numeros";
+                lblErrorContacto.Visibility = Visibility.Visible;
+                tieneError = true;
+            }
+            else
+            {
+                lblErrorContacto.Visibility = Visibility.Collapsed;
+            }
+
+            if (string.IsNullOrWhiteSpace(direccion))
+            {
+                lblErrorDireccion.Text = "*Debe llenar este campo";
+                lblErrorDireccion.Visibility = Visibility.Visible;
+                tieneError = true;
+            }
+            else
+            {
+                lblErrorDireccion.Visibility = Visibility.Collapsed;
+            }
+
+            if (!int.TryParse(cantidadModulosStr, out int cantidadModulos) || cantidadModulos <= 0)
+            {
+                lblErrorCantidadModulos.Text = "*Debe ser mayor a 0";
+                lblErrorCantidadModulos.Visibility = Visibility.Visible;
+                tieneError = true;
+            }
+            else
+            {
+                lblErrorCantidadModulos.Visibility = Visibility.Collapsed;
+            }
+
+            if (tieneError)
+            {
                 return;
             }
 
-            if (!long.TryParse(contactoStr, out long contacto) || contacto <= 0)
-            {
-                MessageBox.Show("Por favor ingrese un número de contacto válido.", "Dato inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!int.TryParse(txtCantidadModulos.Text.Trim(), out int cantidadModulos) || cantidadModulos <= 0)
-            {
-                MessageBox.Show("La cantidad de módulos debe ser un número entero mayor a 0.", "Dato inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            long contacto = long.Parse(contactoStr);
 
             string compuesto = chkAglomerado.IsChecked == true ? "Aglomerado" : "MDF";
             string linea = cmbLinea.SelectedItem?.ToString() ?? "";
@@ -156,6 +218,15 @@ namespace Woodic.Vistas
 
             // Iniciar diseño de módulos
             _controller.IniciarDisenoModulos(idPedido, cantidadModulos);
+        }
+
+        private static bool EsSoloDigitos(string texto)
+        {
+            foreach (char c in texto)
+            {
+                if (!char.IsDigit(c)) return false;
+            }
+            return true;
         }
     }
 }

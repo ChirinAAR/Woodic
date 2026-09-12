@@ -98,3 +98,5 @@ C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version fina
 C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll
 C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\obj\Debug\net8.0-windows\App.baml
+C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\obj\Debug\net8.0-windows\Vistas\DialogoConfigurando.baml
+C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\obj\Debug\net8.0-windows\Vistas\DialogoConfigurando.g.cs

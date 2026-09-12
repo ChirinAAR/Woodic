@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using Woodic.Services;
 using Woodic.Vistas;
 
 namespace Woodic.Controlador
@@ -46,6 +47,12 @@ namespace Woodic.Controlador
             _mainWindow.ActualizarBotonActivo(_mainWindow.btnConfiguracion);
         }
 
+        public void CargarTemaGuardado()
+        {
+            var settings = SettingsService.LoadSettings();
+            SetTheme(settings.IsDarkTheme);
+        }
+
         public void ToggleTheme()
         {
             SetTheme(!IsDarkTheme);
@@ -65,6 +72,13 @@ namespace Woodic.Controlador
 
                 Application.Current.Resources.MergedDictionaries.Clear();
                 Application.Current.Resources.MergedDictionaries.Add(dict);
+
+                _mainWindow.ActualizarTextoBotonTema(dark);
+                if (_mainWindow.MainContent?.Content is InicioView inicio)
+                {
+                    inicio.ActualizarLogo(dark);
+                }
+                SettingsService.SaveSettings(new UserSettings { IsDarkTheme = dark });
             }
             catch (Exception ex)
             {

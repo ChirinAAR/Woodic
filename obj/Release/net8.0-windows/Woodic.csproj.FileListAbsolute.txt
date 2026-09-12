@@ -98,3 +98,5 @@ C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version fina
 C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\obj\Release\net8.0-windows\Woodic.pdb
 C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\obj\Release\net8.0-windows\Woodic.genruntimeconfig.cache
 C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\obj\Release\net8.0-windows\ref\Woodic.dll
+C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\obj\Release\net8.0-windows\Vistas\DialogoConfigurando.baml
+C:\Users\Usuario\Documents\Facultad\Seminario\Seminario C# (posible version final)\Programa\Woodic\obj\Release\net8.0-windows\Vistas\DialogoConfigurando.g.cs

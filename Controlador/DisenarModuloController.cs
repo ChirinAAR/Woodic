@@ -169,6 +169,11 @@ namespace Woodic.Controlador
             return new SubespacioRect(x1, y1, x2 - x1, y2 - y1);
         }
 
+        public SubespacioRect ObtenerSubespacioModuloCompleto()
+        {
+            return new SubespacioRect(0, 0, AnchoModulo, AlturaModulo);
+        }
+
         public void AgregarPuertasEnSubespacio(SubespacioRect subespacio, bool doblePuerta)
         {
             if (doblePuerta)

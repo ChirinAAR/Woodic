@@ -10,101 +10,24 @@
         <Grid Margin="24">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Header -->
             <StackPanel Grid.Row="0" Margin="0,0,0,16">
-                <TextBlock Text="Configuración y Materiales"
+                <TextBlock Text="Catalogo"
                            FontSize="24"
                            FontWeight="Bold"
-                           Foreground="{DynamicResource TextAccentBrush}" />
-                <TextBlock Text="Administre el catálogo de placas de madera, apariencia de la aplicación y la base de datos local"
+                           Foreground="{DynamicResource TextPrimaryBrush}" />
+                <TextBlock Text="Administre el catálogo de colores disponibles"
                            FontSize="14"
                            Foreground="{DynamicResource TextSecondaryBrush}"
                            Margin="0,4,0,0" />
             </StackPanel>
 
-            <!-- Top Row: Theme Switcher & DB Maintenance Cards -->
-            <Grid Grid.Row="1" Margin="0,0,0,16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="16" />
-                    <ColumnDefinition Width="1.5*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- Theme Settings Card -->
-                <Border Grid.Column="0"
-                        Background="{DynamicResource CardBackgroundBrush}"
-                        BorderBrush="{DynamicResource CardBorderBrush}"
-                        BorderThickness="1"
-                        CornerRadius="10"
-                        Padding="16">
-                    <StackPanel>
-                        <TextBlock Text="🎨 Tema Visual"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextPrimaryBrush}"
-                                   Margin="0,0,0,8" />
-                        <TextBlock Text="Seleccione el tema de interfaz deseado:"
-                                   FontSize="13"
-                                   Foreground="{DynamicResource TextSecondaryBrush}"
-                                   Margin="0,0,0,12" />
-
-                        <StackPanel Orientation="Horizontal">
-                            <RadioButton x:Name="rbTemaOscuro"
-                                         Content="🌙 Oscuro (Predeterminado)"
-                                         FontSize="13"
-                                         Foreground="{DynamicResource TextPrimaryBrush}"
-                                         Margin="0,0,20,0"
-                                         Checked="rbTemaOscuro_Checked" />
-                            <RadioButton x:Name="rbTemaClaro"
-                                         Content="☀️ Claro"
-                                         FontSize="13"
-                                         Foreground="{DynamicResource TextPrimaryBrush}"
-                                         Checked="rbTemaClaro_Checked" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Database Maintenance Card -->
-                <Border Grid.Column="2"
-                        Background="{DynamicResource CardBackgroundBrush}"
-                        BorderBrush="{DynamicResource CardBorderBrush}"
-                        BorderThickness="1"
-                        CornerRadius="10"
-                        Padding="16">
-                    <StackPanel>
-                        <TextBlock Text="💾 Base de Datos SQL Local (.mdf)"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextPrimaryBrush}"
-                                   Margin="0,0,0,8" />
-                        <TextBlock Text="Gestión del archivo local de datos WoodicData.mdf"
-                                   FontSize="13"
-                                   Foreground="{DynamicResource TextSecondaryBrush}"
-                                   Margin="0,0,0,12" />
-
-                        <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btnInicializarDb"
-                                    Content="⚡ Inicializar BD"
-                                    Style="{StaticResource ActionButtonStyle}"
-                                    Margin="0,0,10,0"
-                                    Click="btnInicializarDb_Click" />
-
-                            <Button x:Name="btnReiniciarDb"
-                                    Content="⚠️ Reiniciar BD (Valores de Fábrica)"
-                                    Style="{StaticResource DangerButtonStyle}"
-                                    Click="btnReiniciarDb_Click" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-            </Grid>
-
             <!-- Placas Grid Card -->
-            <Border Grid.Row="2"
+            <Border Grid.Row="1"
                     Background="{DynamicResource CardBackgroundBrush}"
                     BorderBrush="{DynamicResource CardBorderBrush}"
                     BorderThickness="1"
@@ -123,7 +46,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="📋 Catálogo de Placas de Madera Disponibles"
+                        <TextBlock Text="📋 Colores Disponibles"
                                    FontSize="16"
                                    FontWeight="Bold"
                                    Foreground="{DynamicResource TextPrimaryBrush}"
@@ -131,7 +54,7 @@
 
                         <Button x:Name="btnEliminarPlaca"
                                 Grid.Column="1"
-                                Content="🗑️ Borrar Placa Seleccionada"
+                                Content="🗑️ Borrar color seleccionado"
                                 Style="{StaticResource DangerButtonStyle}"
                                 Click="btnEliminarPlaca_Click" />
                     </Grid>
@@ -163,7 +86,7 @@
             </Border>
 
             <!-- Add Placa Form Card -->
-            <Border Grid.Row="3"
+            <Border Grid.Row="2"
                     Background="{DynamicResource CardBackgroundBrush}"
                     BorderBrush="{DynamicResource CardBorderBrush}"
                     BorderThickness="1"
@@ -171,7 +94,7 @@
                     Padding="16">
                 <StackPanel>
                     <DockPanel Margin="0,0,0,12" LastChildFill="False">
-                        <TextBlock Text="➕ Añadir Nueva Placa de Madera"
+                        <TextBlock Text="➕ Añadir Color"
                                    FontSize="16"
                                    FontWeight="Bold"
                                    Foreground="{DynamicResource TextPrimaryBrush}"
@@ -234,10 +157,10 @@
 
                         <!-- Veta / Beta -->
                         <StackPanel Grid.Row="1" Grid.Column="2">
-                            <TextBlock Text="Veta:" Margin="0,0,0,4" Foreground="{DynamicResource TextSecondaryBrush}" />
+                            <TextBlock Text="Tiene Veta:" Margin="0,0,0,4" Foreground="{DynamicResource TextSecondaryBrush}" />
                             <StackPanel Orientation="Horizontal">
-                                <RadioButton x:Name="rbConVeta" Content="Con Veta" IsChecked="True" Margin="0,0,10,0" Foreground="{DynamicResource TextPrimaryBrush}" />
-                                <RadioButton x:Name="rbSinVeta" Content="Sin Veta" Foreground="{DynamicResource TextPrimaryBrush}" />
+                                <RadioButton x:Name="rbConVeta" Content="Si" IsChecked="True" Margin="0,0,10,0" Foreground="{DynamicResource TextPrimaryBrush}" Checked="rbConVeta_Checked" />
+                                <RadioButton x:Name="rbSinVeta" Content="No" Foreground="{DynamicResource TextPrimaryBrush}" />
                             </StackPanel>
                         </StackPanel>
 
@@ -254,7 +177,7 @@
                         <!-- Boton Guardar Placa -->
                         <Button x:Name="btnGuardarPlaca"
                                 Grid.Row="1" Grid.Column="6"
-                                Content="💾 Guardar Placa"
+                                Content="💾 Guardar"
                                 Style="{StaticResource ActionButtonStyle}"
                                 Background="{DynamicResource ButtonSuccessBackgroundBrush}"
                                 BorderBrush="{DynamicResource ButtonSuccessHoverBrush}"

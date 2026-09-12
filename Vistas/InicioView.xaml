@@ -7,22 +7,30 @@
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="901" Height="504">
             <!-- Título Bienvenido -->
-            <TextBlock Text="Bienvenido"
-                       FontSize="46"
+            <TextBlock
+                       FontSize="48"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
                        Foreground="{DynamicResource TextPrimaryBrush}"
-                       Margin="0,0,0,20" />
+                       Margin="0,0,0,20" Width="290" ><Run Language="es-ar" Text="  "/><Run Text="Bienvenido"/></TextBlock>
 
             <!-- Logotipo Woodic de la Sierra -->
             <Border CornerRadius="12"
                     Background="Transparent"
-                    Padding="10">
-                <Image Source="/Vistas/logo.png"
+                    Padding="10" Height="431">
+                <Image x:Name="imgLogo"
+                       Source="{DynamicResource AppLogoImage}"
                        MaxWidth="540"
-                       MaxHeight="360"
-                       Stretch="Uniform"
-                       HorizontalAlignment="Center" Height="343" Width="558">
+                       MaxHeight="560"
+                       HorizontalAlignment="Center" RenderTransformOrigin="1,0" VerticalAlignment="Center">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="0"/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
                     <Image.Effect>
                         <DropShadowEffect BlurRadius="20" ShadowDepth="4" Opacity="0.4" Color="Black" />
                     </Image.Effect>

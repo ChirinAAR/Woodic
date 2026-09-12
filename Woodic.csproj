@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -10,10 +10,12 @@
 
   <ItemGroup>
     <None Remove="Vistas\logo.png" />
+    <None Remove="Vistas\logo2.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Vistas\logo.png" />
+    <Resource Include="Vistas\logo2.png" />
   </ItemGroup>
 
   <ItemGroup>

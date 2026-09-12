@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="Woodic.Vistas.CrearPedidoView"
-             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="808">
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="980">
 
     <Border Background="{DynamicResource CardBackgroundBrush}"
             BorderBrush="{DynamicResource CardBorderBrush}"
@@ -10,7 +10,7 @@
             CornerRadius="10"
             Padding="28"
             MaxWidth="1550"
-            HorizontalAlignment="Center" Width="789">
+            HorizontalAlignment="Center" Width="960">
 
         <Grid>
             <Grid.RowDefinitions>
@@ -20,7 +20,7 @@
 
             <!-- Título Principal -->
             <TextBlock Text="Crear Pedido"
-                       FontSize="22"
+                       FontSize="24"
                        FontWeight="Bold"
                        Foreground="{DynamicResource TextPrimaryBrush}"
                        Margin="0,0,0,24" />
@@ -36,40 +36,61 @@
                 <!-- Columna Izquierda: Datos del Cliente -->
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="Datos del Cliente"
-                               FontSize="16"
+                               FontSize="18"
                                FontWeight="SemiBold"
                                Foreground="{DynamicResource TextPrimaryBrush}"
                                Margin="0,0,0,16" />
 
                     <!-- Nombre -->
-                    <TextBlock Text="- Nombre"
+                    <TextBlock Text="Nombre"
                                FontSize="14"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,6" />
                     <TextBox x:Name="txtNombre"
                              Height="36"
-                             Margin="0,0,0,18"
+                             Margin="0,0,0,12"
+                             TextChanged="txtNombre_TextChanged"
                              ToolTip="Nombre y apellido del cliente" />
+                    <TextBlock x:Name="lblErrorNombre"
+                               Text="*Debe llenar este campo"
+                               Foreground="#EF4444"
+                               FontSize="12"
+                               Margin="0,-6,0,10"
+                               Visibility="Collapsed" />
 
                     <!-- Contacto -->
-                    <TextBlock Text="- Contacto"
+                    <TextBlock Text="Contacto"
                                FontSize="14"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,6" />
                     <TextBox x:Name="txtContacto"
                              Height="36"
-                             Margin="0,0,0,18"
+                             Margin="0,0,0,12"
+                             TextChanged="txtContacto_TextChanged"
                              ToolTip="Teléfono del cliente (solo números)" />
+                    <TextBlock x:Name="lblErrorContacto"
+                               Text="*Debe llenar este campo"
+                               Foreground="#EF4444"
+                               FontSize="12"
+                               Margin="0,-6,0,10"
+                               Visibility="Collapsed" />
 
                     <!-- Dirección -->
-                    <TextBlock Text="- Direccion"
+                    <TextBlock Text="Direccion"
                                FontSize="14"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,6" />
                     <TextBox x:Name="txtDireccion"
                              Height="36"
-                             Margin="0,0,0,26"
+                             Margin="0,0,0,14"
+                             TextChanged="txtDireccion_TextChanged"
                              ToolTip="Dirección del domicilio de entrega" />
+                    <TextBlock x:Name="lblErrorDireccion"
+                               Text="*Debe llenar este campo"
+                               Foreground="#EF4444"
+                               FontSize="12"
+                               Margin="0,-8,0,16"
+                               Visibility="Collapsed" />
 
                     <!-- Botón Confirmar -->
                     <Button x:Name="btnConfirmar"
@@ -85,13 +106,13 @@
                 <!-- Columna Derecha: Datos del Pedido -->
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="Datos del Pedido"
-                               FontSize="16"
+                               FontSize="18"
                                FontWeight="SemiBold"
                                Foreground="{DynamicResource TextPrimaryBrush}"
                                Margin="0,0,0,16" />
 
                     <!-- Compuesto -->
-                    <TextBlock Text="- Compuesto"
+                    <TextBlock Text="Compuesto"
                                FontSize="14"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,6" />
@@ -109,7 +130,7 @@
                     </StackPanel>
 
                     <!-- Línea de colores -->
-                    <TextBlock Text="- Linea de colores"
+                    <TextBlock Text="Linea de colores"
                                FontSize="14"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,6" />
@@ -119,7 +140,7 @@
                               SelectionChanged="cmbLinea_SelectionChanged" />
 
                     <!-- Color -->
-                    <TextBlock Text="- Color"
+                    <TextBlock Text="Color"
                                FontSize="14"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,6" />
@@ -128,7 +149,7 @@
                               Margin="0,0,0,18" />
 
                     <!-- Cantidad de Módulos -->
-                    <TextBlock Text="- Cantidad de Modulos"
+                    <TextBlock Text="Cantidad de Modulos"
                                FontSize="14"
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,6" />
@@ -137,8 +158,15 @@
                              Height="36"
                              Width="120"
                              HorizontalAlignment="Left"
-                             Margin="0,0,0,18"
+                             Margin="0,0,0,12"
+                             TextChanged="txtCantidadModulos_TextChanged"
                              ToolTip="Cantidad de muebles a diseñar" />
+                    <TextBlock x:Name="lblErrorCantidadModulos"
+                               Text="*Debe ser mayor a 0"
+                               Foreground="#EF4444"
+                               FontSize="12"
+                               Margin="0,-6,0,10"
+                               Visibility="Collapsed" />
                 </StackPanel>
             </Grid>
         </Grid>

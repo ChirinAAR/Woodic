@@ -18,11 +18,7 @@
             <TextBlock Text="Listado de Pedidos"
                        FontSize="24"
                        FontWeight="Bold"
-                       Foreground="{DynamicResource TextAccentBrush}" />
-            <TextBlock Text="Consulte, imprima o elimine pedidos guardados en el sistema"
-                       FontSize="14"
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       Margin="0,4,0,0" />
+                       Foreground="{DynamicResource TextPrimaryBrush}" />
         </StackPanel>
 
         <!-- Orders Table Card -->
@@ -81,7 +77,7 @@
                         Click="btnVerCortes_Click" />
 
                 <Button x:Name="btnImprimirPresupuesto"
-                        Content="🖨️ Imprimir Presupuesto"
+                        Content="🖨️ Imprimir"
                         Style="{StaticResource ActionButtonStyle}"
                         Background="{DynamicResource ButtonSuccessBackgroundBrush}"
                         BorderBrush="{DynamicResource ButtonSuccessHoverBrush}"

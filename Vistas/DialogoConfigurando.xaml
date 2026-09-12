@@ -1,0 +1,38 @@
+<Window x:Class="Woodic.Vistas.DialogoConfigurando"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Woodic - Configuración Inicial"
+        Height="180" Width="430"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="ToolWindow"
+        Background="{DynamicResource CardBackgroundBrush}"
+        FontFamily="Segoe UI, Bahnschrift, Arial">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Terminando de configurar, espere por favor"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource TextPrimaryBrush}"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,18" />
+
+        <ProgressBar Grid.Row="1"
+                     IsIndeterminate="True"
+                     Height="8"
+                     Foreground="#3B82F6"
+                     Margin="10,0,10,12" />
+
+        <TextBlock Grid.Row="2"
+                   Text="Inicializando base de datos local..."
+                   FontSize="12"
+                   Foreground="{DynamicResource TextSecondaryBrush}"
+                   HorizontalAlignment="Center" />
+    </Grid>
+</Window>

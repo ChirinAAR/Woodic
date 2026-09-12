@@ -37,22 +37,5 @@ namespace Woodic.Controlador
         {
             return DatabaseHelper.DeletePlacaYPedidos(idPlaca);
         }
-
-        public void InicializarBaseDatos()
-        {
-            DatabaseHelper.InitializeSchema();
-        }
-
-        public void ReiniciarBaseDatos()
-        {
-            DatabaseHelper.ResetDatabase();
-        }
-
-        public void CambiarTema(bool dark)
-        {
-            _mainController.SetTheme(dark);
-        }
-
-        public bool EsTemaOscuro => _mainController.IsDarkTheme;
     }
 }

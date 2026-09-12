@@ -4,6 +4,7 @@
         Title="Woodic - Wood Intelligent Cutter"
         Height="740" Width="1180"
         MinHeight="620" MinWidth="1020"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource AppBackgroundBrush}"
         FontFamily="Segoe UI, Bahnschrift, Arial">
@@ -46,7 +47,7 @@
 
                     <!-- Botón Configuración -->
                     <Button x:Name="btnConfiguracion"
-                            Content="Configuracion"
+                            Content="Catalogo"
                             Style="{DynamicResource NavButtonStyle}"
                             Margin="0,0,10,0"
                             Click="btnConfiguracion_Click" />

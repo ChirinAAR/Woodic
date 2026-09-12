@@ -35,10 +35,8 @@ namespace Woodic.Vistas
         private int _posicionDivisorioTemporal = 0;
         private int _cantidadCajonesTemporal = 2;
         private bool _doblePuertaTemporal = false;
-
-        // Parámetros de Cámara 3D
-        private double _cameraYaw = 25.0;     // Grados horizontal
-        private double _cameraPitch = 15.0;   // Grados vertical
+        private double _cameraYaw = 25.0;
+        private double _cameraPitch = 15.0;
         private double _cameraDistance = 3200;
         private Point _lastMousePos;
         private bool _isOrbiting = false;
@@ -161,7 +159,8 @@ namespace Woodic.Vistas
 
                 _isOrbiting = true;
                 _lastMousePos = e.GetPosition(viewport3D);
-                viewport3D.CaptureMouse();
+                if (gridViewport != null) gridViewport.CaptureMouse();
+                else viewport3D.CaptureMouse();
             }
         }
 
@@ -184,9 +183,35 @@ namespace Woodic.Vistas
             {
                 // Resaltar subespacio bajo el cursor si se proyecta sobre el frente
                 var subespacio = MapearPuntoPantallaASubespacio(currentPos);
+                if (_modoSeleccion == ModoSeleccion.Puertas && subespacio == null)
+                {
+                    subespacio = Controller.ObtenerSubespacioModuloCompleto();
+                }
+
                 if (subespacio != Controller.SubespacioResaltado)
                 {
                     Controller.SubespacioResaltado = subespacio;
+                    ActualizarVisualizacion3D();
+                }
+            }
+        }
+
+        private void gridViewport_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (_modoSeleccion == ModoSeleccion.Puertas)
+            {
+                var full = Controller.ObtenerSubespacioModuloCompleto();
+                if (Controller.SubespacioResaltado != full)
+                {
+                    Controller.SubespacioResaltado = full;
+                    ActualizarVisualizacion3D();
+                }
+            }
+            else if (_modoSeleccion != ModoSeleccion.Ninguno)
+            {
+                if (Controller.SubespacioResaltado != null)
+                {
+                    Controller.SubespacioResaltado = null;
                     ActualizarVisualizacion3D();
                 }
             }
@@ -197,6 +222,7 @@ namespace Woodic.Vistas
             if (_isOrbiting)
             {
                 _isOrbiting = false;
+                if (gridViewport != null) gridViewport.ReleaseMouseCapture();
                 viewport3D.ReleaseMouseCapture();
             }
         }
@@ -229,25 +255,17 @@ namespace Woodic.Vistas
                 return HitTestResultBehavior.Continue;
             }, hitParams);
 
-            if (subespacioDetectado == null)
-            {
-                // Mapeo proporcional de respaldo si la cámara está de frente
-                double vw = viewport3D.ActualWidth;
-                double vh = viewport3D.ActualHeight;
-                if (vw > 0 && vh > 0)
-                {
-                    double nx = (screenPoint.X / vw) * Controller.AnchoModulo;
-                    double ny = (1.0 - (screenPoint.Y / vh)) * Controller.AlturaModulo;
-                    subespacioDetectado = Controller.EncontrarSubespacio(nx, ny);
-                }
-            }
-
             return subespacioDetectado;
         }
 
         private void ManejarClicEnSubespacio(Point screenPoint)
         {
             var subespacio = MapearPuntoPantallaASubespacio(screenPoint);
+            if (_modoSeleccion == ModoSeleccion.Puertas && subespacio == null)
+            {
+                subespacio = Controller.ObtenerSubespacioModuloCompleto();
+            }
+
             if (subespacio == null)
             {
                 lblInstruccion.Text = "Haga clic dentro del módulo para colocar el elemento.";
@@ -268,7 +286,9 @@ namespace Woodic.Vistas
 
                 case ModoSeleccion.Puertas:
                     Controller.AgregarPuertasEnSubespacio(subespacio, _doblePuertaTemporal);
-                    lblInstruccion.Text = "Puerta(s) colocada(s).";
+                    lblInstruccion.Text = (subespacio.Width == Controller.AnchoModulo && subespacio.Height == Controller.AlturaModulo)
+                        ? "Puerta(s) de módulo completo colocada(s)."
+                        : "Puerta(s) colocada(s).";
                     break;
 
                 case ModoSeleccion.Cajones:
@@ -393,8 +413,10 @@ namespace Woodic.Vistas
         {
             _modoSeleccion = ModoSeleccion.Puertas;
             _doblePuertaTemporal = rbPuertaDoble.IsChecked == true;
-            lblInstruccion.Text = $"Haga clic en el compartimiento para colocar la(s) puerta(s) {(_doblePuertaTemporal ? "dobles" : "simple")}.";
+            lblInstruccion.Text = $"Haga clic en un compartimiento o fuera del módulo para cubrirlo por completo.";
             SetCameraView(0, 0);
+            Controller.SubespacioResaltado = Controller.ObtenerSubespacioModuloCompleto();
+            ActualizarVisualizacion3D();
         }
 
         private void btnDeshacerDivisorios_Click(object sender, RoutedEventArgs e)
@@ -438,6 +460,7 @@ namespace Woodic.Vistas
                     ? _descripciones[_moduloActual - 1]
                     : $"Módulo {_moduloActual}";
 
+                int moduloGuardado = _moduloActual;
                 Controller.GuardarModuloYComponentesEnBD(_idPedido, desc);
 
                 if (_moduloActual < _cantidadModulos)
@@ -446,6 +469,12 @@ namespace Woodic.Vistas
                     ActualizarTitulo();
                     // Limpiar y resetear para siguiente módulo
                     AplicarMedidasDesdeUI();
+
+                    if (lblModuloGuardado != null)
+                    {
+                        lblModuloGuardado.Text = $"Modulo {moduloGuardado} guardado!";
+                        lblModuloGuardado.Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {

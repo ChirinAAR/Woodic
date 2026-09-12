@@ -21,12 +21,12 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
-                <TextBlock Text="Resultados Despiece y Presupuesto"
+                <TextBlock Text="Despiece y Presupuesto"
                            FontSize="24"
                            FontWeight="Bold"
-                           Foreground="{DynamicResource TextAccentBrush}" />
+                           Foreground="{DynamicResource TextPrimaryBrush}" />
                 <TextBlock x:Name="lblDetalleSubtitulo"
-                           Text="Resumen de cortes optimizados por módulo y cálculo de costos"
+                           Text=""
                            FontSize="14"
                            Foreground="{DynamicResource TextSecondaryBrush}"
                            Margin="0,4,0,0" />
@@ -101,7 +101,7 @@
                     </StackPanel>
 
                     <TextBlock x:Name="lblDesgloseCostos"
-                               Text="Material: $0.00 | Herrajes (30%): $0.00"
+                               Text="Material: $0.00 | Herrajes: $0.00"
                                FontSize="13"
                                Foreground="{DynamicResource TextSecondaryBrush}" />
                 </StackPanel>

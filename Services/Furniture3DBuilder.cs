@@ -11,7 +11,6 @@ namespace Woodic.Services
         public int Y1 { get; set; }
         public int X2 { get; set; }
         public int Y2 { get; set; }
-
         public Segmento3D(int x1, int y1, int x2, int y2)
         {
             X1 = x1;
@@ -175,7 +174,7 @@ namespace Woodic.Services
                     5,
                     highlightedSubspace.Width,
                     highlightedSubspace.Height,
-                    profundo - 10,
+                    profundo + 5,
                     highlightMaterial);
             }
 

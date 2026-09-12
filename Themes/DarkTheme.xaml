@@ -7,34 +7,37 @@
     <SolidColorBrush x:Key="CardBackgroundBrush" Color="#050505" />
     <SolidColorBrush x:Key="CardBorderBrush" Color="#282B37" />
 
+    <!-- Logo Image for Dark Theme -->
+    <BitmapImage x:Key="AppLogoImage" UriSource="/Vistas/logo.png" />
+
     <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F3F4F6" />
     <SolidColorBrush x:Key="TextSecondaryBrush" Color="#9CA3AF" />
     <SolidColorBrush x:Key="TextAccentBrush" Color="#38BDF8" />
 
     <SolidColorBrush x:Key="InputBackgroundBrush" Color="#191919" />
-    <SolidColorBrush x:Key="InputBorderBrush" Color="#374151" />
+    <SolidColorBrush x:Key="InputBorderBrush" Color="#191919" />
     <SolidColorBrush x:Key="InputForegroundBrush" Color="#F9FAFB" />
 
     <SolidColorBrush x:Key="ButtonDefaultBackgroundBrush" Color="#191919" />
-    <SolidColorBrush x:Key="ButtonDefaultBorderBrush" Color="#374151" />
+    <SolidColorBrush x:Key="ButtonDefaultBorderBrush" Color="#191919" />
     <SolidColorBrush x:Key="ButtonDefaultForegroundBrush" Color="#E5E7EB" />
     <SolidColorBrush x:Key="ButtonDefaultHoverBrush" Color="#32384A" />
 
     <SolidColorBrush x:Key="ButtonActiveBackgroundBrush" Color="#1A224C" />
-    <SolidColorBrush x:Key="ButtonActiveBorderBrush" Color="#3B82F6" />
+    <SolidColorBrush x:Key="ButtonActiveBorderBrush" Color="#1A224C" />
     <SolidColorBrush x:Key="ButtonActiveForegroundBrush" Color="#FFFFFF" />
 
     <SolidColorBrush x:Key="ButtonDangerBackgroundBrush" Color="#7F1D1D" />
-    <SolidColorBrush x:Key="ButtonDangerHoverBrush" Color="#991B1B" />
+    <SolidColorBrush x:Key="ButtonDangerHoverBrush" Color="#A82626" />
     <SolidColorBrush x:Key="ButtonDangerForegroundBrush" Color="#FFFFFF" />
 
     <SolidColorBrush x:Key="ButtonSuccessBackgroundBrush" Color="#065F46" />
-    <SolidColorBrush x:Key="ButtonSuccessHoverBrush" Color="#047857" />
+    <SolidColorBrush x:Key="ButtonSuccessHoverBrush" Color="#065F46" />
 
     <SolidColorBrush x:Key="TableBackgroundBrush" Color="#191919" />
     <SolidColorBrush x:Key="TableHeaderBackgroundBrush" Color="#1A1D27" />
-    <SolidColorBrush x:Key="TableRowAltBrush" Color="#1C1F2B" />
-    <SolidColorBrush x:Key="TableGridLinesBrush" Color="#282B37" />
+    <SolidColorBrush x:Key="TableRowAltBrush" Color="#191919" />
+    <SolidColorBrush x:Key="TableGridLinesBrush" Color="#1A1D27" />
 
     <!-- Control Styles -->
     <Style TargetType="TextBlock">
@@ -266,7 +269,7 @@
     <Style x:Key="DangerButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{DynamicResource ButtonDangerBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ButtonDangerForegroundBrush}" />
-        <Setter Property="BorderBrush" Value="#B91C1C" />
+        <Setter Property="BorderBrush" Value="#7F1D1D" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Bold" />

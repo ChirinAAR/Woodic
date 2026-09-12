@@ -26,9 +26,25 @@ namespace Woodic.Modelo
                         try
                         {
                             File.Copy(candidate, targetPath, true);
-                            string logCand = Path.ChangeExtension(candidate, "_log.ldf");
-                            string logTarget = Path.ChangeExtension(targetPath, "_log.ldf");
-                            if (File.Exists(logCand)) File.Copy(logCand, logTarget, true);
+
+                            string candDir = Path.GetDirectoryName(candidate) ?? baseDir;
+                            string[] candLogs = {
+                                Path.Combine(candDir, "WoodicData_log.ldf"),
+                                Path.Combine(candDir, "WoodicData._log.ldf")
+                            };
+
+                            string logTarget1 = Path.Combine(baseDir, "WoodicData_log.ldf");
+                            string logTarget2 = Path.Combine(baseDir, "WoodicData._log.ldf");
+
+                            foreach (var candLog in candLogs)
+                            {
+                                if (File.Exists(candLog))
+                                {
+                                    File.Copy(candLog, logTarget1, true);
+                                    File.Copy(candLog, logTarget2, true);
+                                    break;
+                                }
+                            }
                             break;
                         }
                         catch { }
@@ -56,9 +72,49 @@ namespace Woodic.Modelo
                 }
 
                 EnsureDatabaseCreated(mdfPath);
+                EnsureDatabaseCleanlyAttached(mdfPath);
 
                 _connectionString = $"Server=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={mdfPath};Database=WoodicDb;Integrated Security=True;Connect Timeout=30;TrustServerCertificate=True;";
                 return _connectionString;
+            }
+        }
+
+        private static void EnsureDatabaseCleanlyAttached(string mdfPath)
+        {
+            try
+            {
+                string masterConnStr = "Server=(LocalDB)\\MSSQLLocalDB;Database=master;Integrated Security=True;Connect Timeout=15;TrustServerCertificate=True;";
+                using var masterConn = new SqlConnection(masterConnStr);
+                masterConn.Open();
+
+                string fixSql = @"
+                    IF DB_ID('WoodicDb') IS NOT NULL
+                    BEGIN
+                        DECLARE @currPath NVARCHAR(500);
+                        SELECT TOP 1 @currPath = physical_name FROM sys.master_files WHERE database_id = DB_ID('WoodicDb');
+                        IF @currPath IS NOT NULL AND LOWER(@currPath) <> LOWER(@targetPath)
+                        BEGIN
+                            BEGIN TRY
+                                ALTER DATABASE [WoodicDb] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                                EXEC sp_detach_db 'WoodicDb';
+                            END TRY
+                            BEGIN CATCH
+                                BEGIN TRY
+                                    DROP DATABASE [WoodicDb];
+                                END TRY
+                                BEGIN CATCH
+                                END CATCH
+                            END CATCH
+                        END
+                    END";
+
+                using var cmd = new SqlCommand(fixSql, masterConn);
+                cmd.Parameters.AddWithValue("@targetPath", mdfPath);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"EnsureDatabaseCleanlyAttached: {ex.Message}");
             }
         }
 
@@ -127,6 +183,28 @@ namespace Woodic.Modelo
                 {
                     System.Diagnostics.Debug.WriteLine($"Error al crear MDF en LocalDB: {ex.Message}");
                 }
+            }
+        }
+
+        public static bool TablesExist()
+        {
+            try
+            {
+                string mdfPath = GetDatabaseFilePath();
+                if (!File.Exists(mdfPath))
+                {
+                    return false;
+                }
+
+                using var conn = CreateConnection();
+                conn.Open();
+                using var cmd = new SqlCommand("SELECT COUNT(*) FROM sys.tables WHERE name IN ('cliente', 'placa', 'pedido', 'modulo', 'componente')", conn);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count >= 5;
+            }
+            catch
+            {
+                return false;
             }
         }
 

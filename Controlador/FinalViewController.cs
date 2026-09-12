@@ -170,7 +170,7 @@ namespace Woodic.Controlador
             {
                 PedidoId = idPedido,
                 PlacaSeleccionada = placa,
-                CantidadModulos = cantidadModulos,
+                CantidadModulos = despiece.Count > 0 ? despiece.Count : cantidadModulos,
                 CantidadPlacas = cantidadPlacas,
                 PrecioPlaca = precioPlaca,
                 PrecioMaterial = precioMaterial,
